@@ -1,5 +1,8 @@
 # Automatic Image Thumbnails for Jekyll
 
+[![Gem Version](https://badge.fury.io/rb/jekyll-auto-thumbnails.svg)](https://rubygems.org/gems/jekyll-auto-thumbnails)
+[![code coverage](https://codecov.io/gh/Texarkanine/jekyll-auto-thumbnails/graph/badge.svg)](https://codecov.io/gh/Texarkanine/jekyll-auto-thumbnails)
+
 Scans your rendered HTML for local images with `width` or `height` attributes, then automatically generates and uses appropriately-sized thumbnails for them, if the `src` image is bigger than that.
 
 Can also take global maximum dimensions (such as for fixed-width layouts) and thumbnail images that don't have explicit size attributes, too.
