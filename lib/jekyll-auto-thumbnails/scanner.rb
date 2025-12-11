@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "nokogiri"
+require "open3"
+
 module JekyllAutoThumbnails
   # HTML scanning for images
   module Scanner
@@ -73,12 +76,12 @@ module JekyllAutoThumbnails
     # @param file_path [String] path to image file
     # @return [Array<Integer, Integer>, nil] [width, height] or nil
     def self.image_dimensions(file_path)
-      # Use ImageMagick identify command
+      # Use ImageMagick identify command (shell-free, cross-platform)
       # Use [0] to get only first frame (important for animated GIFs)
-      output = `identify -format "%wx%h" #{Shellwords.escape(file_path)}[0] 2>/dev/null`.strip
-      return nil if output.empty?
+      output, status = Open3.capture2e("identify", "-format", "%wx%h", "#{file_path}[0]")
+      return nil unless status.success? && !output.strip.empty?
 
-      width, height = output.split("x").map(&:to_i)
+      width, height = output.strip.split("x").map(&:to_i)
       [width, height]
     rescue StandardError
       nil
