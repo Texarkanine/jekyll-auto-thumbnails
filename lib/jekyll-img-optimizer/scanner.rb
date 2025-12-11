@@ -67,7 +67,8 @@ module JekyllImgOptimizer
     # @return [Array<Integer, Integer>, nil] [width, height] or nil
     def self.image_dimensions(file_path)
       # Use ImageMagick identify command
-      output = `identify -format "%wx%h" #{Shellwords.escape(file_path)} 2>/dev/null`.strip
+      # Use [0] to get only first frame (important for animated GIFs)
+      output = `identify -format "%wx%h" #{Shellwords.escape(file_path)}[0] 2>/dev/null`.strip
       return nil if output.empty?
 
       width, height = output.split("x").map(&:to_i)

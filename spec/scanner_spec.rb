@@ -83,6 +83,31 @@ RSpec.describe JekyllImgOptimizer::Scanner do
         expect(registry.registered?("https://example.com/photo.jpg")).to be false
       end
     end
+
+    context "with animated GIF (multiple frames)" do
+      let(:html) do
+        <<~HTML
+          <article>
+            <img src="/banner.gif" height="60">
+          </article>
+        HTML
+      end
+
+      before do
+        # Mock animated GIF with dimensions like: 468x605x511x...
+        allow(File).to receive(:exist?).with("/site/banner.gif").and_return(true)
+        allow(described_class).to receive(:image_dimensions).with("/site/banner.gif")
+          .and_return([468, 60])  # Should parse first frame correctly
+      end
+
+      it "uses first frame dimensions only" do
+        described_class.scan_html(html, registry, config, "/site")
+
+        reqs = registry.requirements_for("/banner.gif")
+        expect(reqs[:width]).to eq(468)  # Not 468 from wrong parse
+        expect(reqs[:height]).to eq(60)
+      end
+    end
   end
 end
 
