@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module JekyllImgOptimizer
+module JekyllAutoThumbnails
   # Jekyll hook integration
   module Hooks
     # Initialize optimization system
@@ -14,7 +14,7 @@ module JekyllImgOptimizer
       site.data["img_optimizer_registry"] = Registry.new
       site.data["img_optimizer_generator"] = Generator.new(config, site.source)
 
-      Jekyll.logger.info "ImgOptimizer:", "System initialized"
+      Jekyll.logger.info "AutoThumbnails:", "System initialized"
     end
 
     # Process site - scan, generate, replace
@@ -29,7 +29,7 @@ module JekyllImgOptimizer
 
       # Check ImageMagick
       unless generator.imagemagick_available?
-        Jekyll.logger.warn "ImgOptimizer:", "ImageMagick not found - skipping"
+        Jekyll.logger.warn "AutoThumbnails:", "ImageMagick not found - skipping"
         return
       end
 
@@ -40,7 +40,7 @@ module JekyllImgOptimizer
         Scanner.scan_html(doc.output, registry, config, site.source)
       end
 
-      Jekyll.logger.info "ImgOptimizer:", "Found #{registry.entries.size} images to optimize"
+      Jekyll.logger.info "AutoThumbnails:", "Found #{registry.entries.size} images to optimize"
 
       # Generate thumbnails
       url_map = {}
@@ -54,7 +54,7 @@ module JekyllImgOptimizer
           thumb_url = File.join(url_dir, thumb_filename)
           url_map[url] = thumb_url
         else
-          Jekyll.logger.warn "ImgOptimizer:", "Failed to generate thumbnail for #{url}"
+          Jekyll.logger.warn "AutoThumbnails:", "Failed to generate thumbnail for #{url}"
         end
       end
 
@@ -68,7 +68,7 @@ module JekyllImgOptimizer
         doc.output = replace_urls(doc.output, url_map)
       end
 
-      Jekyll.logger.info "ImgOptimizer:", "Generated #{url_map.size} thumbnails"
+      Jekyll.logger.info "AutoThumbnails:", "Generated #{url_map.size} thumbnails"
     end
 
     # Copy thumbnails from cache to _site
@@ -81,7 +81,7 @@ module JekyllImgOptimizer
       url_map = site.data["img_optimizer_url_map"]
       return unless url_map && !url_map.empty?
 
-      Jekyll.logger.info "ImgOptimizer:", "Copying #{url_map.size} thumbnails to _site"
+      Jekyll.logger.info "AutoThumbnails:", "Copying #{url_map.size} thumbnails to _site"
 
       url_map.each_value do |thumb_url|
         thumb_filename = File.basename(thumb_url)
@@ -95,7 +95,7 @@ module JekyllImgOptimizer
         FileUtils.cp(cached_path, dest_path)
       end
 
-      Jekyll.logger.info "ImgOptimizer:", "All thumbnails copied"
+      Jekyll.logger.info "AutoThumbnails:", "All thumbnails copied"
     end
 
     # Replace image URLs in HTML
@@ -124,13 +124,13 @@ end
 
 # Register Jekyll hooks
 Jekyll::Hooks.register :site, :post_read do |site|
-  JekyllImgOptimizer::Hooks.initialize_system(site)
+  JekyllAutoThumbnails::Hooks.initialize_system(site)
 end
 
 Jekyll::Hooks.register :site, :post_render do |site|
-  JekyllImgOptimizer::Hooks.process_site(site)
+  JekyllAutoThumbnails::Hooks.process_site(site)
 end
 
 Jekyll::Hooks.register :site, :post_write do |site|
-  JekyllImgOptimizer::Hooks.copy_thumbnails(site)
+  JekyllAutoThumbnails::Hooks.copy_thumbnails(site)
 end

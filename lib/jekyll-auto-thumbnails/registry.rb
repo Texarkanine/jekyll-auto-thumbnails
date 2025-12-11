@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module JekyllImgOptimizer
+module JekyllAutoThumbnails
   # Image requirement registry
   #
   # Tracks images needing thumbnails and their required dimensions.

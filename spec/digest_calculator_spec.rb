@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe JekyllImgOptimizer::DigestCalculator do
+RSpec.describe JekyllAutoThumbnails::DigestCalculator do
   describe ".short_digest" do
     let(:test_file) { File.join(__dir__, "fixtures/images/test.jpg") }
 

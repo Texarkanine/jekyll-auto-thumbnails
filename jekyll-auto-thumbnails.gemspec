@@ -4,7 +4,7 @@ require_relative "lib/jekyll-auto-thumbnails/version"
 
 Gem::Specification.new do |spec|
   spec.name = "jekyll-auto-thumbnails"
-  spec.version = JekyllImgOptimizer::VERSION
+  spec.version = JekyllAutoThumbnails::VERSION
   spec.authors = ["Texarkanine"]
   spec.email = ["texarkanine@protonmail.com"]
 
@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
                      "caching, and seamlessly replaces img src attributes."
   spec.homepage = "https://github.com/Texarkanine/jekyll-auto-thumbnails"
   spec.license = "AGPL-3.0-or-later"
-  spec.required_ruby_version = ">= 3.1.0"
+  spec.required_ruby_version = ">= 2.7.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/Texarkanine/jekyll-auto-thumbnails"

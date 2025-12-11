@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe JekyllImgOptimizer::Registry do
+RSpec.describe JekyllAutoThumbnails::Registry do
   let(:registry) { described_class.new }
 
   describe "#register" do

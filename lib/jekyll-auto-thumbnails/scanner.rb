@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module JekyllImgOptimizer
+module JekyllAutoThumbnails
   # HTML scanning for images
   module Scanner
     # Scan HTML for images needing optimization
@@ -25,18 +25,18 @@ module JekyllImgOptimizer
         if width || height
           # Explicitly sized - calculate missing dimension if needed
           if site_source && (width.nil? || height.nil?)
-            Jekyll.logger.debug "ImgOptimizer:", "Calculating dimensions for #{src} (#{width}x#{height})"
+            Jekyll.logger.debug "AutoThumbnails:", "Calculating dimensions for #{src} (#{width}x#{height})"
             width, height = calculate_dimensions(src, width, height, site_source)
-            Jekyll.logger.debug "ImgOptimizer:", "Calculated: #{width}x#{height}"
+            Jekyll.logger.debug "AutoThumbnails:", "Calculated: #{width}x#{height}"
           end
 
           # Skip if dimensions match original (no thumbnail needed)
           if site_source && dimensions_match_original?(src, width, height, site_source)
-            Jekyll.logger.debug "ImgOptimizer:", "Skipping #{src} - dimensions match original"
+            Jekyll.logger.debug "AutoThumbnails:", "Skipping #{src} - dimensions match original"
             next
           end
 
-          Jekyll.logger.debug "ImgOptimizer:", "Registering #{src} at #{width}x#{height}"
+          Jekyll.logger.debug "AutoThumbnails:", "Registering #{src} at #{width}x#{height}"
           registry.register(src, width, height)
         elsif site_source && (config.max_width || config.max_height)
           # Unsized but max config exists - check actual dimensions
@@ -101,11 +101,11 @@ module JekyllImgOptimizer
       # Calculate missing dimension preserving aspect ratio
       if width && !height
         # Width specified, calculate height
-        aspect_ratio = actual_height.to_f / actual_width.to_f
+        aspect_ratio = actual_height.to_f / actual_width
         height = (width * aspect_ratio).round
       elsif height && !width
         # Height specified, calculate width
-        aspect_ratio = actual_width.to_f / actual_height.to_f
+        aspect_ratio = actual_width.to_f / actual_height
         width = (height * aspect_ratio).round
       end
 

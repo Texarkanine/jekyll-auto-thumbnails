@@ -2,9 +2,9 @@
 
 require "spec_helper"
 
-RSpec.describe JekyllImgOptimizer::Scanner do
+RSpec.describe JekyllAutoThumbnails::Scanner do
   let(:config) { double("Configuration", max_width: 800, max_height: 600) }
-  let(:registry) { JekyllImgOptimizer::Registry.new }
+  let(:registry) { JekyllAutoThumbnails::Registry.new }
 
   describe ".scan_html" do
     context "with images in article tags" do
@@ -57,7 +57,7 @@ RSpec.describe JekyllImgOptimizer::Scanner do
         # Mock that image exists and is oversized
         allow(File).to receive(:exist?).with("/site/big-photo.jpg").and_return(true)
         allow(described_class).to receive(:image_dimensions).with("/site/big-photo.jpg")
-          .and_return([1200, 900])
+                                                            .and_return([1200, 900])
       end
 
       it "registers with max dimensions" do
@@ -97,14 +97,14 @@ RSpec.describe JekyllImgOptimizer::Scanner do
         # Mock animated GIF with actual dimensions 468x60, but requesting smaller (60 height)
         allow(File).to receive(:exist?).with("/site/banner.gif").and_return(true)
         allow(described_class).to receive(:image_dimensions).with("/site/banner.gif")
-          .and_return([468, 90])  # Original is larger than requested
+                                                            .and_return([468, 90]) # Original is larger than requested
       end
 
       it "uses first frame dimensions only" do
         described_class.scan_html(html, registry, config, "/site")
 
         reqs = registry.requirements_for("/banner.gif")
-        expect(reqs[:width]).to eq(312)  # Calculated from 60 height with 468:90 ratio
+        expect(reqs[:width]).to eq(312) # Calculated from 60 height with 468:90 ratio
         expect(reqs[:height]).to eq(60)
       end
     end
@@ -121,7 +121,7 @@ RSpec.describe JekyllImgOptimizer::Scanner do
       before do
         allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
         allow(described_class).to receive(:image_dimensions).with("/site/photo.jpg")
-          .and_return([300, 200])  # Same as specified dimensions
+                                                            .and_return([300, 200]) # Same as specified dimensions
       end
 
       it "does not register (no thumbnail needed)" do
@@ -132,4 +132,3 @@ RSpec.describe JekyllImgOptimizer::Scanner do
     end
   end
 end
-

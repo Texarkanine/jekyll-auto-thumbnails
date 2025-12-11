@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe JekyllImgOptimizer::Configuration do
+RSpec.describe JekyllAutoThumbnails::Configuration do
   let(:site) { double("Jekyll::Site") }
   let(:config_hash) { {} }
 

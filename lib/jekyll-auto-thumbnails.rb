@@ -12,6 +12,6 @@ require_relative "jekyll-auto-thumbnails/generator"
 require_relative "jekyll-auto-thumbnails/scanner"
 require_relative "jekyll-auto-thumbnails/hooks"
 
-module JekyllImgOptimizer
+module JekyllAutoThumbnails
   # Main plugin module
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module JekyllImgOptimizer
+module JekyllAutoThumbnails
   # Configuration parser for img_optimizer settings
   #
   # Parses Jekyll site config for img_optimizer options and provides

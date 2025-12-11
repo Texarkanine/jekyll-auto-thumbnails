@@ -1,6 +1,6 @@
-# Jekyll Image Optimizer - Implementation Tasks
+# Jekyll Auto Thumbnails - Implementation Tasks
 
-Extraction and implementation of standalone image optimization plugin for Jekyll.
+Extraction and implementation of standalone automatic thumbnail generation plugin for Jekyll.
 
 ## Visual Architecture
 
@@ -76,7 +76,14 @@ graph TD
 
 ## Project Complete! 🎉
 
-**Total: 53 tests passing, 89.22% coverage**
+**Total: 57 tests passing, 89.92% coverage**
+
+### Recent Updates
+- ✅ Renamed to `jekyll-auto-thumbnails`
+- ✅ Fixed cross-platform ImageMagick detection (Windows + Unix)
+- ✅ Fixed shell command injection vulnerability (array-based system calls)
+- ✅ Added sanity checks (skip if dimensions match, delete if larger)
+- ✅ Fixed animated GIF dimension parsing
 
 ## In Progress Tasks
 

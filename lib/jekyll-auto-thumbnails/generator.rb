@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require "fileutils"
-require "shellwords"
 
-module JekyllImgOptimizer
+module JekyllAutoThumbnails
   # Thumbnail generation via ImageMagick
   class Generator
     # Initialize generator
@@ -15,11 +14,17 @@ module JekyllImgOptimizer
       @site_source = site_source
     end
 
-    # Check if ImageMagick is available
+    # Check if ImageMagick is available (cross-platform)
     #
-    # @return [Boolean] true if convert command found
+    # @return [Boolean] true if convert command found in PATH
     def imagemagick_available?
-      system("which convert > /dev/null 2>&1")
+      cmd_name = Gem.win_platform? ? "convert.exe" : "convert"
+      path_dirs = ENV["PATH"].to_s.split(File::PATH_SEPARATOR)
+
+      path_dirs.any? do |dir|
+        executable = File.join(dir, cmd_name)
+        File.executable?(executable)
+      end
     end
 
     # Generate thumbnail (with caching)
@@ -53,7 +58,7 @@ module JekyllImgOptimizer
 
       # Check if thumbnail is larger than original
       if File.size(cached_path) > File.size(source_path)
-        Jekyll.logger.warn "ImgOptimizer:",
+        Jekyll.logger.warn "AutoThumbnails:",
                            "Thumbnail larger than original (#{File.size(cached_path)} > #{File.size(source_path)}), " \
                            "deleting #{cached_path}"
         FileUtils.rm_f(cached_path)
@@ -89,18 +94,20 @@ module JekyllImgOptimizer
     def shell_generate(source_path, dest_path, width, height)
       geometry = build_geometry(width, height)
       ext = File.extname(source_path)
-      quality = quality_param(ext)
 
-      cmd_parts = [
-        "convert",
-        Shellwords.escape(source_path),
-        "-resize",
-        Shellwords.escape(geometry)
-      ]
-      cmd_parts << quality if quality
-      cmd_parts << Shellwords.escape(dest_path)
+      # Build command array (no shell interpretation)
+      cmd = ["convert", source_path, "-resize", geometry]
 
-      system(cmd_parts.join(" "))
+      # Add quality for lossy formats
+      if quality_needed?(ext)
+        cmd << "-quality"
+        cmd << @config.quality.to_s
+      end
+
+      cmd << dest_path
+
+      # Call system with array (bypasses shell)
+      system(*cmd)
     end
 
     # Build ImageMagick geometry string
@@ -114,15 +121,12 @@ module JekyllImgOptimizer
       "#{width_str}x#{height_str}>"
     end
 
-    # Get quality parameter for image format
+    # Check if quality parameter needed for image format
     #
     # @param ext [String] file extension
-    # @return [String, nil] quality parameter or nil for lossless
-    def quality_param(ext)
-      case ext.downcase
-      when ".jpg", ".jpeg"
-        "-quality #{@config.quality}"
-      end
+    # @return [Boolean] true if quality parameter should be used
+    def quality_needed?(ext)
+      %w[.jpg .jpeg].include?(ext.downcase)
     end
   end
 end

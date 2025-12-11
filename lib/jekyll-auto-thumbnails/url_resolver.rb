@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module JekyllImgOptimizer
+module JekyllAutoThumbnails
   # URL resolution and path handling
   #
   # Handles conversion between URLs (as seen in HTML) and filesystem paths,

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe JekyllImgOptimizer::Hooks do
+RSpec.describe JekyllAutoThumbnails::Hooks do
   let(:site_data) { {} }
   let(:site) do
     double("Jekyll::Site",
@@ -17,9 +17,9 @@ RSpec.describe JekyllImgOptimizer::Hooks do
     it "creates configuration, registry, and generator" do
       described_class.initialize_system(site)
 
-      expect(site.data["img_optimizer_config"]).to be_a(JekyllImgOptimizer::Configuration)
-      expect(site.data["img_optimizer_registry"]).to be_a(JekyllImgOptimizer::Registry)
-      expect(site.data["img_optimizer_generator"]).to be_a(JekyllImgOptimizer::Generator)
+      expect(site.data["img_optimizer_config"]).to be_a(JekyllAutoThumbnails::Configuration)
+      expect(site.data["img_optimizer_registry"]).to be_a(JekyllAutoThumbnails::Registry)
+      expect(site.data["img_optimizer_generator"]).to be_a(JekyllAutoThumbnails::Generator)
     end
 
     it "skips when disabled" do
@@ -36,7 +36,7 @@ RSpec.describe JekyllImgOptimizer::Hooks do
 
   describe ".process_site" do
     let(:config) { double("Configuration", enabled?: true, max_width: 800, max_height: 600, cache_dir: "/cache") }
-    let(:registry) { JekyllImgOptimizer::Registry.new }
+    let(:registry) { JekyllAutoThumbnails::Registry.new }
     let(:generator) { double("Generator") }
     let(:doc1) { double("Document", output: "<article><img src='/p1.jpg' width='300'></article>") }
     let(:doc2) { double("Document", output: "<article><img src='/p2.jpg' width='400'></article>") }

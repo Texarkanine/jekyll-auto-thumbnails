@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe JekyllImgOptimizer::UrlResolver do
+RSpec.describe JekyllAutoThumbnails::UrlResolver do
   describe ".external?" do
     context "with http URL" do
       it "returns true" do

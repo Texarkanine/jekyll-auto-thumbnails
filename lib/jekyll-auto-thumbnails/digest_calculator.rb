@@ -2,7 +2,7 @@
 
 require "digest/md5"
 
-module JekyllImgOptimizer
+module JekyllAutoThumbnails
   # MD5 digest calculation for cache keys
   #
   # Computes short MD5 digests of image files for use in thumbnail filenames.
