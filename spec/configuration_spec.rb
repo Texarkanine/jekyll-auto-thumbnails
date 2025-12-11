@@ -149,7 +149,7 @@ RSpec.describe JekyllImgOptimizer::Configuration do
   describe "#cache_dir" do
     it "returns cache directory path" do
       config = described_class.new(site)
-      expect(config.cache_dir).to eq("/test/site/.jekyll-cache/jekyll-img-optimizer")
+      expect(config.cache_dir).to eq("/test/site/.jekyll-cache/jekyll-auto-thumbnails")
     end
   end
 end

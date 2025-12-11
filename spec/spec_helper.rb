@@ -7,7 +7,7 @@ end
 
 require "tmpdir"
 require "jekyll"
-require "jekyll-img-optimizer"
+require "jekyll-auto-thumbnails"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

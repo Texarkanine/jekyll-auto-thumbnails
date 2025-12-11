@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-`jekyll-img-optimizer` is a Jekyll plugin that automatically optimizes images for web delivery by generating appropriately-sized thumbnails. It scans rendered HTML for images within `<article>` tags, generates optimized versions with intelligent caching, and seamlessly replaces URLs to serve smaller files to users.
+`jekyll-auto-thumbnails` is a Jekyll plugin that automatically optimizes images for web delivery by generating appropriately-sized thumbnails. It scans rendered HTML for images within `<article>` tags, generates optimized versions with intelligent caching, and seamlessly replaces URLs to serve smaller files to users.
 
 ## Problem Statement
 
@@ -32,7 +32,7 @@ Scans `<article>` tags in rendered HTML for:
 
 - **MD5-based naming**: `{basename}_thumb-{md5}-{width}x{height}.{ext}`
   - Enables change detection and cache invalidation
-- **Cached storage**: Generated thumbnails stored in `.jekyll-cache/jekyll-img-optimizer/`
+- **Cached storage**: Generated thumbnails stored in `.jekyll-cache/jekyll-auto-thumbnails/`
 - **Format preservation**: Maintains source format (JPEG, PNG, GIF)
 - **Quality control**: Configurable JPEG quality (default: 85)
 
@@ -213,7 +213,7 @@ Uses **ImageMagick** via shell `convert` command:
 ```ruby
 # Gemfile
 group :jekyll_plugins do
-  gem "jekyll-img-optimizer"
+  gem "jekyll-auto-thumbnails"
 end
 ```
 
@@ -237,7 +237,7 @@ bundle install
 
 ## Summary
 
-`jekyll-img-optimizer` provides automatic, transparent image optimization for Jekyll sites. By scanning final HTML and generating appropriately-sized thumbnails with intelligent caching, it delivers significant performance improvements without requiring manual intervention or code changes.
+`jekyll-auto-thumbnails` provides automatic, transparent image optimization for Jekyll sites. By scanning final HTML and generating appropriately-sized thumbnails with intelligent caching, it delivers significant performance improvements without requiring manual intervention or code changes.
 
 **Key Differentiators:**
 - ✅ Scans final HTML (plugin-agnostic)

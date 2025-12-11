@@ -1,4 +1,4 @@
-# Contributing to jekyll-img-optimizer
+# Contributing to jekyll-auto-thumbnails
 
 ## Development Setup
 
@@ -11,8 +11,8 @@
 ### Clone and Setup
 
 ```bash
-git clone https://github.com/KeenerA/jekyll-img-optimizer.git
-cd jekyll-img-optimizer
+git clone https://github.com/KeenerA/jekyll-auto-thumbnails.git
+cd jekyll-auto-thumbnails
 bundle install
 ```
 
@@ -116,10 +116,10 @@ end
 ## Project Structure
 
 ```
-jekyll-img-optimizer/
+jekyll-auto-thumbnails/
 ├── lib/
-│   ├── jekyll-img-optimizer.rb          # Main entry point
-│   └── jekyll-img-optimizer/
+│   ├── jekyll-auto-thumbnails.rb          # Main entry point
+│   └── jekyll-auto-thumbnails/
 │       ├── version.rb                   # Version constant
 │       ├── configuration.rb             # Config parsing
 │       ├── url_resolver.rb              # Path resolution
@@ -132,7 +132,7 @@ jekyll-img-optimizer/
 │   ├── spec_helper.rb
 │   ├── *_spec.rb                        # Tests for each module
 │   └── fixtures/                        # Test fixtures
-└── jekyll-img-optimizer.gemspec         # Gem specification
+└── jekyll-auto-thumbnails.gemspec         # Gem specification
 ```
 
 ## Building and Installing
@@ -140,21 +140,21 @@ jekyll-img-optimizer/
 ### Build the Gem
 
 ```bash
-gem build jekyll-img-optimizer.gemspec
+gem build jekyll-auto-thumbnails.gemspec
 ```
 
-This creates `jekyll-img-optimizer-VERSION.gem`.
+This creates `jekyll-auto-thumbnails-VERSION.gem`.
 
 ### Install Locally
 
 ```bash
-gem install ./jekyll-img-optimizer-*.gem
+gem install ./jekyll-auto-thumbnails-*.gem
 ```
 
 Or in a test Jekyll site's Gemfile:
 
 ```ruby
-gem 'jekyll-img-optimizer', path: '/path/to/jekyll-img-optimizer'
+gem 'jekyll-auto-thumbnails', path: '/path/to/jekyll-auto-thumbnails'
 ```
 
 ## Troubleshooting
@@ -176,7 +176,7 @@ If auto-correct doesn't work, manually fix reported issues.
 
 ### Gem won't build
 
-1. Check `jekyll-img-optimizer.gemspec` for errors
+1. Check `jekyll-auto-thumbnails.gemspec` for errors
 2. Verify all required files exist
 3. Check Ruby version compatibility
 

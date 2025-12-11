@@ -16,7 +16,7 @@ Add to your `Gemfile`:
 
 ```ruby
 group :jekyll_plugins do
-  gem "jekyll-img-optimizer"
+  gem "jekyll-auto-thumbnails"
 end
 ```
 
@@ -134,7 +134,7 @@ bundle exec jekyll build --verbose
 ### Clear Cache
 
 ```bash
-rm -rf .jekyll-cache/jekyll-img-optimizer/
+rm -rf .jekyll-cache/jekyll-auto-thumbnails/
 ```
 
 ## Development

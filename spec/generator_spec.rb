@@ -52,7 +52,7 @@ RSpec.describe JekyllImgOptimizer::Generator do
     context "when thumbnail exists in cache" do
       it "returns cached path without regenerating" do
         allow(File).to receive(:exist?).with(cached_path).and_return(true)
-
+        
         result = generator.generate("/photo.jpg", 300, 200)
         expect(result).to eq(cached_path)
       end
@@ -89,7 +89,7 @@ RSpec.describe JekyllImgOptimizer::Generator do
         allow(File).to receive(:exist?).with(cached_path).and_return(false)
         allow(generator).to receive(:shell_generate).and_return(true)
         allow(File).to receive(:size).with(source_path).and_return(50_000)
-        allow(File).to receive(:size).with(cached_path).and_return(60_000) # Larger!
+        allow(File).to receive(:size).with(cached_path).and_return(60_000)  # Larger!
         allow(FileUtils).to receive(:rm_f)
       end
 
@@ -102,3 +102,4 @@ RSpec.describe JekyllImgOptimizer::Generator do
     end
   end
 end
+

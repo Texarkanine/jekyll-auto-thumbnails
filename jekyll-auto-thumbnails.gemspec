@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "lib/jekyll-img-optimizer/version"
+require_relative "lib/jekyll-auto-thumbnails/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "jekyll-img-optimizer"
+  spec.name = "jekyll-auto-thumbnails"
   spec.version = JekyllImgOptimizer::VERSION
   spec.authors = ["Austin Keener"]
   spec.email = ["keener.austin@gmail.com"]
@@ -12,13 +12,13 @@ Gem::Specification.new do |spec|
   spec.description = "Jekyll plugin that automatically generates and serves optimized image thumbnails " \
                      "for faster page loads. Scans rendered HTML, generates thumbnails with intelligent " \
                      "caching, and seamlessly replaces URLs."
-  spec.homepage = "https://github.com/KeenerA/jekyll-img-optimizer"
+  spec.homepage = "https://github.com/KeenerA/jekyll-auto-thumbnails"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.7.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/KeenerA/jekyll-img-optimizer"
-  spec.metadata["changelog_uri"] = "https://github.com/KeenerA/jekyll-img-optimizer/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/KeenerA/jekyll-auto-thumbnails"
+  spec.metadata["changelog_uri"] = "https://github.com/KeenerA/jekyll-auto-thumbnails/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.

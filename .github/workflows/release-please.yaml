@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  GEM_NAME: jekyll-img-optimizer
+  GEM_NAME: jekyll-auto-thumbnails
 
 jobs:
   release-please:

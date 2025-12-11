@@ -18,7 +18,7 @@ module JekyllImgOptimizer
       @max_width = parse_dimension(config_hash["max_width"])
       @max_height = parse_dimension(config_hash["max_height"])
       @quality = parse_quality(config_hash.fetch("quality", 85))
-      @cache_dir = File.join(site.source, ".jekyll-cache", "jekyll-img-optimizer")
+      @cache_dir = File.join(site.source, ".jekyll-cache", "jekyll-auto-thumbnails")
     end
 
     # Check if image optimization is enabled

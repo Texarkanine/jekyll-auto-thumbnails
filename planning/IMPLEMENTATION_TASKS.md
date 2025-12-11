@@ -6,7 +6,7 @@ Extraction and implementation of standalone image optimization plugin for Jekyll
 
 ```mermaid
 graph TD
-    A["🎯 jekyll-img-optimizer Plugin"] --> B["🔧 Core Components"]
+    A["🎯 jekyll-auto-thumbnails Plugin"] --> B["🔧 Core Components"]
     A --> C["🎨 Jekyll Integration"]
     A --> D["📊 Configuration"]
     
@@ -167,7 +167,7 @@ _None_
 - Resolve relative paths against site source directory
 
 **Cache Strategy**
-- Store in `.jekyll-cache/jekyll-img-optimizer/`
+- Store in `.jekyll-cache/jekyll-auto-thumbnails/`
 - MD5 digest in filename for change detection
 - Flat structure (no subdirectories in cache)
 - Copy to `_site/` in `:post_write` hook preserving original paths
@@ -179,10 +179,10 @@ _None_
 
 ### File Structure
 ```
-jekyll-img-optimizer/
+jekyll-auto-thumbnails/
 ├── lib/
-│   ├── jekyll-img-optimizer.rb           # Main entry point
-│   └── jekyll-img-optimizer/
+│   ├── jekyll-auto-thumbnails.rb           # Main entry point
+│   └── jekyll-auto-thumbnails/
 │       ├── version.rb
 │       ├── configuration.rb               # Config parsing
 │       ├── url_resolver.rb                # Path resolution
@@ -202,7 +202,7 @@ jekyll-img-optimizer/
 │   ├── hooks_spec.rb
 │   └── fixtures/
 │       └── images/
-├── jekyll-img-optimizer.gemspec
+├── jekyll-auto-thumbnails.gemspec
 ├── Gemfile
 ├── README.md
 └── planning/

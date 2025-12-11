@@ -35,7 +35,7 @@ Gemspec/DevelopmentDependencies:
 
 Naming/FileName:
   Exclude:
-    - 'lib/jekyll-img-optimizer.rb'
+    - 'lib/jekyll-auto-thumbnails.rb'
 
 Metrics/AbcSize:
   Max: 50
