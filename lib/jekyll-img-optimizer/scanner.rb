@@ -29,6 +29,13 @@ module JekyllImgOptimizer
             width, height = calculate_dimensions(src, width, height, site_source)
             Jekyll.logger.debug "ImgOptimizer:", "Calculated: #{width}x#{height}"
           end
+
+          # Skip if dimensions match original (no thumbnail needed)
+          if site_source && dimensions_match_original?(src, width, height, site_source)
+            Jekyll.logger.debug "ImgOptimizer:", "Skipping #{src} - dimensions match original"
+            next
+          end
+
           Jekyll.logger.debug "ImgOptimizer:", "Registering #{src} at #{width}x#{height}"
           registry.register(src, width, height)
         elsif site_source && (config.max_width || config.max_height)
@@ -119,6 +126,24 @@ module JekyllImgOptimizer
       numeric.to_i
     end
 
-    private_class_method :check_and_register_oversized, :calculate_dimensions, :parse_dimension
+    # Check if requested dimensions match original dimensions
+    #
+    # @param url [String] image URL
+    # @param width [Integer] requested width
+    # @param height [Integer] requested height
+    # @param site_source [String] site source directory
+    # @return [Boolean] true if dimensions match original
+    def self.dimensions_match_original?(url, width, height, site_source)
+      file_path = UrlResolver.to_filesystem_path(url, site_source)
+      return false unless file_path && File.exist?(file_path)
+
+      actual_width, actual_height = image_dimensions(file_path)
+      return false unless actual_width && actual_height
+
+      width == actual_width && height == actual_height
+    end
+
+    private_class_method :check_and_register_oversized, :calculate_dimensions, :parse_dimension,
+                         :dimensions_match_original?
   end
 end

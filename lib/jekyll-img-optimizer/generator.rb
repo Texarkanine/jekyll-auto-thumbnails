@@ -49,7 +49,18 @@ module JekyllImgOptimizer
       FileUtils.mkdir_p(@config.cache_dir)
       success = shell_generate(source_path, cached_path, width, height)
 
-      success ? cached_path : nil
+      return nil unless success
+
+      # Check if thumbnail is larger than original
+      if File.size(cached_path) > File.size(source_path)
+        Jekyll.logger.warn "ImgOptimizer:",
+                           "Thumbnail larger than original (#{File.size(cached_path)} > #{File.size(source_path)}), " \
+                           "deleting #{cached_path}"
+        FileUtils.rm_f(cached_path)
+        return nil
+      end
+
+      cached_path
     end
 
     # Build thumbnail filename

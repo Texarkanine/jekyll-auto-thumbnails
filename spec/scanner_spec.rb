@@ -94,18 +94,40 @@ RSpec.describe JekyllImgOptimizer::Scanner do
       end
 
       before do
-        # Mock animated GIF with dimensions like: 468x605x511x...
+        # Mock animated GIF with actual dimensions 468x60, but requesting smaller (60 height)
         allow(File).to receive(:exist?).with("/site/banner.gif").and_return(true)
         allow(described_class).to receive(:image_dimensions).with("/site/banner.gif")
-                                                            .and_return([468, 60]) # Should parse first frame correctly
+                                                            .and_return([468, 90]) # Original is larger than requested
       end
 
       it "uses first frame dimensions only" do
         described_class.scan_html(html, registry, config, "/site")
 
         reqs = registry.requirements_for("/banner.gif")
-        expect(reqs[:width]).to eq(468) # Not 468 from wrong parse
+        expect(reqs[:width]).to eq(312) # Calculated from 60 height with 468:90 ratio
         expect(reqs[:height]).to eq(60)
+      end
+    end
+
+    context "with image dimensions matching original" do
+      let(:html) do
+        <<~HTML
+          <article>
+            <img src="/photo.jpg" width="300" height="200">
+          </article>
+        HTML
+      end
+
+      before do
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
+        allow(described_class).to receive(:image_dimensions).with("/site/photo.jpg")
+                                                            .and_return([300, 200]) # Same as specified dimensions
+      end
+
+      it "does not register (no thumbnail needed)" do
+        described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.registered?("/photo.jpg")).to be false
       end
     end
   end

@@ -62,6 +62,9 @@ RSpec.describe JekyllImgOptimizer::Generator do
       before do
         allow(File).to receive(:exist?).with(cached_path).and_return(false)
         allow(generator).to receive(:shell_generate).and_return(true)
+        # Mock file sizes: thumbnail smaller than original (good)
+        allow(File).to receive(:size).with(source_path).and_return(100_000)
+        allow(File).to receive(:size).with(cached_path).and_return(40_000)
       end
 
       it "generates thumbnail and returns path" do
@@ -77,6 +80,23 @@ RSpec.describe JekyllImgOptimizer::Generator do
         allow(File).to receive(:exist?).with(source_path).and_return(false)
 
         result = generator.generate("/photo.jpg", 300, 200)
+        expect(result).to be_nil
+      end
+    end
+
+    context "when generated thumbnail is larger than original" do
+      before do
+        allow(File).to receive(:exist?).with(cached_path).and_return(false)
+        allow(generator).to receive(:shell_generate).and_return(true)
+        allow(File).to receive(:size).with(source_path).and_return(50_000)
+        allow(File).to receive(:size).with(cached_path).and_return(60_000) # Larger!
+        allow(FileUtils).to receive(:rm_f)
+      end
+
+      it "deletes thumbnail and returns nil" do
+        result = generator.generate("/photo.jpg", 300, 200)
+
+        expect(FileUtils).to have_received(:rm_f).with(cached_path)
         expect(result).to be_nil
       end
     end
