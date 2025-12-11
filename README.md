@@ -28,7 +28,7 @@ bundle install
 
 ```yaml
 # _config.yml
-img_optimizer:
+auto_thumbnails:
   enabled: true  # default: true
   
   # Maximum dimensions for automatic thumbnailing
@@ -65,7 +65,7 @@ img_optimizer:
 
 ```yaml
 # _config.yml
-img_optimizer:
+auto_thumbnails:
   max_width: 800
 ```
 
@@ -113,7 +113,7 @@ Check build output for warnings:
 
 ```bash
 bundle exec jekyll build --verbose
-# Look for "ImgOptimizer:" messages
+# Look for "AutoThumbnails:" messages
 ```
 
 ### Clear Cache

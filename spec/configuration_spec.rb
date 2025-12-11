@@ -15,7 +15,7 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
     context "with full valid configuration" do
       let(:config_hash) do
         {
-          "img_optimizer" => {
+          "auto_thumbnails" => {
             "enabled" => true,
             "max_width" => 1200,
             "max_height" => 800,
@@ -37,7 +37,7 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
     context "with partial configuration" do
       let(:config_hash) do
         {
-          "img_optimizer" => {
+          "auto_thumbnails" => {
             "max_width" => 800
           }
         }
@@ -53,7 +53,7 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
       end
     end
 
-    context "with no img_optimizer configuration" do
+    context "with no auto_thumbnails configuration" do
       let(:config_hash) { {} }
 
       it "uses all defaults" do
@@ -69,7 +69,7 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
     context "with invalid quality value" do
       let(:config_hash) do
         {
-          "img_optimizer" => {
+          "auto_thumbnails" => {
             "quality" => 150 # invalid, must be 0-100
           }
         }
@@ -84,7 +84,7 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
     context "with negative quality" do
       let(:config_hash) do
         {
-          "img_optimizer" => {
+          "auto_thumbnails" => {
             "quality" => -10
           }
         }
@@ -99,7 +99,7 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
     context "with invalid max dimensions" do
       let(:config_hash) do
         {
-          "img_optimizer" => {
+          "auto_thumbnails" => {
             "max_width" => -100,
             "max_height" => 0
           }
@@ -118,7 +118,7 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
     context "when explicitly disabled" do
       let(:config_hash) do
         {
-          "img_optimizer" => {
+          "auto_thumbnails" => {
             "enabled" => false
           }
         }
@@ -133,7 +133,7 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
     context "when explicitly enabled" do
       let(:config_hash) do
         {
-          "img_optimizer" => {
+          "auto_thumbnails" => {
             "enabled" => true
           }
         }

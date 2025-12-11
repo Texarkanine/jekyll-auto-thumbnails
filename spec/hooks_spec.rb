@@ -17,14 +17,14 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     it "creates configuration, registry, and generator" do
       described_class.initialize_system(site)
 
-      expect(site.data["img_optimizer_config"]).to be_a(JekyllAutoThumbnails::Configuration)
-      expect(site.data["img_optimizer_registry"]).to be_a(JekyllAutoThumbnails::Registry)
-      expect(site.data["img_optimizer_generator"]).to be_a(JekyllAutoThumbnails::Generator)
+      expect(site.data["auto_thumbnails_config"]).to be_a(JekyllAutoThumbnails::Configuration)
+      expect(site.data["auto_thumbnails_registry"]).to be_a(JekyllAutoThumbnails::Registry)
+      expect(site.data["auto_thumbnails_generator"]).to be_a(JekyllAutoThumbnails::Generator)
     end
 
     it "skips when disabled" do
       disabled_site = double("Jekyll::Site",
-                             config: { "img_optimizer" => { "enabled" => false } },
+                             config: { "auto_thumbnails" => { "enabled" => false } },
                              source: "/test/site",
                              data: {})
 
@@ -42,9 +42,9 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     let(:doc2) { double("Document", output: "<article><img src='/p2.jpg' width='400'></article>") }
 
     before do
-      site_data["img_optimizer_config"] = config
-      site_data["img_optimizer_registry"] = registry
-      site_data["img_optimizer_generator"] = generator
+      site_data["auto_thumbnails_config"] = config
+      site_data["auto_thumbnails_registry"] = registry
+      site_data["auto_thumbnails_generator"] = generator
 
       allow(site).to receive(:documents).and_return([doc1])
       allow(site).to receive(:pages).and_return([doc2])
@@ -80,8 +80,8 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     let(:url_map) { { "/photo.jpg" => "/photo_thumb-abc123-300x200.jpg" } }
 
     before do
-      site_data["img_optimizer_config"] = config
-      site_data["img_optimizer_url_map"] = url_map
+      site_data["auto_thumbnails_config"] = config
+      site_data["auto_thumbnails_url_map"] = url_map
 
       allow(FileUtils).to receive(:mkdir_p)
       allow(FileUtils).to receive(:cp)

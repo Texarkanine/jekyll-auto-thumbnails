@@ -10,9 +10,9 @@ module JekyllAutoThumbnails
       config = Configuration.new(site)
       return unless config.enabled?
 
-      site.data["img_optimizer_config"] = config
-      site.data["img_optimizer_registry"] = Registry.new
-      site.data["img_optimizer_generator"] = Generator.new(config, site.source)
+      site.data["auto_thumbnails_config"] = config
+      site.data["auto_thumbnails_registry"] = Registry.new
+      site.data["auto_thumbnails_generator"] = Generator.new(config, site.source)
 
       Jekyll.logger.info "AutoThumbnails:", "System initialized"
     end
@@ -21,11 +21,11 @@ module JekyllAutoThumbnails
     #
     # @param site [Jekyll::Site] Jekyll site
     def self.process_site(site)
-      config = site.data["img_optimizer_config"]
+      config = site.data["auto_thumbnails_config"]
       return unless config&.enabled?
 
-      registry = site.data["img_optimizer_registry"]
-      generator = site.data["img_optimizer_generator"]
+      registry = site.data["auto_thumbnails_registry"]
+      generator = site.data["auto_thumbnails_generator"]
 
       # Check ImageMagick
       unless generator.imagemagick_available?
@@ -59,7 +59,7 @@ module JekyllAutoThumbnails
       end
 
       # Store url_map for post_write hook
-      site.data["img_optimizer_url_map"] = url_map
+      site.data["auto_thumbnails_url_map"] = url_map
 
       # Replace URLs in HTML
       (site.documents + site.pages).each do |doc|
@@ -75,10 +75,10 @@ module JekyllAutoThumbnails
     #
     # @param site [Jekyll::Site] Jekyll site
     def self.copy_thumbnails(site)
-      config = site.data["img_optimizer_config"]
+      config = site.data["auto_thumbnails_config"]
       return unless config&.enabled?
 
-      url_map = site.data["img_optimizer_url_map"]
+      url_map = site.data["auto_thumbnails_url_map"]
       return unless url_map && !url_map.empty?
 
       Jekyll.logger.info "AutoThumbnails:", "Copying #{url_map.size} thumbnails to _site"

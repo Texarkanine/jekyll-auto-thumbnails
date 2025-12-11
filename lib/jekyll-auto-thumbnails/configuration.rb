@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module JekyllAutoThumbnails
-  # Configuration parser for img_optimizer settings
+  # Configuration parser for auto_thumbnails settings
   #
-  # Parses Jekyll site config for img_optimizer options and provides
+  # Parses Jekyll site config for auto_thumbnails options and provides
   # accessor methods with appropriate defaults and validation.
   class Configuration
     attr_reader :max_width, :max_height, :quality, :cache_dir
@@ -12,7 +12,7 @@ module JekyllAutoThumbnails
     #
     # @param site [Jekyll::Site] The Jekyll site object
     def initialize(site)
-      config_hash = site.config["img_optimizer"] || {}
+      config_hash = site.config["auto_thumbnails"] || {}
 
       @enabled = config_hash.fetch("enabled", true)
       @max_width = parse_dimension(config_hash["max_width"])
