@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.2.0...v0.2.1) (2025-12-11)
+
+
+### Bug Fixes
+
+* **deps-dev:** add simplecov-cobertura to generate coverage reports for CodeCov ([e8f53a9](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/e8f53a9af44cf6d8249a46e4eadf7ff1420bc151))
+
 ## [0.2.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.1.0...v0.2.0) (2025-12-11)
 
 
