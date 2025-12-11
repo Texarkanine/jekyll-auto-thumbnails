@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jekyll-auto-thumbnails (0.2.1)
+    jekyll-auto-thumbnails (0.3.0)
       jekyll (>= 4.0, < 5.0)
       nokogiri (~> 1.15)
 
