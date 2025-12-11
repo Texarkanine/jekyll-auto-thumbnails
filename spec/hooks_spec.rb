@@ -73,6 +73,21 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       expect(generator).to have_received(:generate).with("/p1.jpg", 300, 200).at_least(:once)
       expect(doc1).to have_received(:output=)
     end
+
+    it "builds thumbnail URLs with forward slashes (cross-platform)" do
+      registry.register("/assets/img/photo.jpg", 300, 200)
+      allow(generator).to receive(:generate).with("/assets/img/photo.jpg", 300, 200)
+                                            .and_return("/cache/photo_thumb-abc123-300x200.jpg")
+
+      described_class.process_site(site)
+
+      url_map = site.data["auto_thumbnails_url_map"]
+      thumb_url = url_map["/assets/img/photo.jpg"]
+      
+      # URL must use forward slashes, not backslashes (Windows File.join would use \)
+      expect(thumb_url).to eq("/assets/img/photo_thumb-abc123-300x200.jpg")
+      expect(thumb_url).not_to include("\\")
+    end
   end
 
   describe ".copy_thumbnails" do
