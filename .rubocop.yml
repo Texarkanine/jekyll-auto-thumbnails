@@ -30,3 +30,22 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: true
 
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+Naming/FileName:
+  Exclude:
+    - 'lib/jekyll-img-optimizer.rb'
+
+Metrics/AbcSize:
+  Max: 50
+
+Metrics/MethodLength:
+  Max: 35
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/PerceivedComplexity:
+  Max: 15
+

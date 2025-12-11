@@ -57,7 +57,7 @@ RSpec.describe JekyllImgOptimizer::Scanner do
         # Mock that image exists and is oversized
         allow(File).to receive(:exist?).with("/site/big-photo.jpg").and_return(true)
         allow(described_class).to receive(:image_dimensions).with("/site/big-photo.jpg")
-          .and_return([1200, 900])
+                                                            .and_return([1200, 900])
       end
 
       it "registers with max dimensions" do
@@ -97,17 +97,16 @@ RSpec.describe JekyllImgOptimizer::Scanner do
         # Mock animated GIF with dimensions like: 468x605x511x...
         allow(File).to receive(:exist?).with("/site/banner.gif").and_return(true)
         allow(described_class).to receive(:image_dimensions).with("/site/banner.gif")
-          .and_return([468, 60])  # Should parse first frame correctly
+                                                            .and_return([468, 60]) # Should parse first frame correctly
       end
 
       it "uses first frame dimensions only" do
         described_class.scan_html(html, registry, config, "/site")
 
         reqs = registry.requirements_for("/banner.gif")
-        expect(reqs[:width]).to eq(468)  # Not 468 from wrong parse
+        expect(reqs[:width]).to eq(468) # Not 468 from wrong parse
         expect(reqs[:height]).to eq(60)
       end
     end
   end
 end
-

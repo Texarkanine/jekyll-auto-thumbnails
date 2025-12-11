@@ -49,4 +49,3 @@ module JekyllImgOptimizer
     end
   end
 end
-

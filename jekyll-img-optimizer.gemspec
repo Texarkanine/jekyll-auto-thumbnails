@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/KeenerA/jekyll-img-optimizer"
   spec.metadata["changelog_uri"] = "https://github.com/KeenerA/jekyll-img-optimizer/blob/main/CHANGELOG.md"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.
   spec.files = Dir[
@@ -42,4 +43,3 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop-rspec", "~> 2.20"
   spec.add_development_dependency "simplecov", "~> 0.22"
 end
-

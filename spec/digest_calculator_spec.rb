@@ -19,7 +19,7 @@ RSpec.describe JekyllImgOptimizer::DigestCalculator do
     context "with existing file" do
       it "computes 6-character MD5 digest" do
         digest = described_class.short_digest(test_file)
-        
+
         expect(digest).to be_a(String)
         expect(digest.length).to eq(6)
         expect(digest).to match(/^[0-9a-f]{6}$/)
@@ -30,7 +30,7 @@ RSpec.describe JekyllImgOptimizer::DigestCalculator do
       it "returns consistent digest" do
         digest1 = described_class.short_digest(test_file)
         digest2 = described_class.short_digest(test_file)
-        
+
         expect(digest1).to eq(digest2)
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe JekyllImgOptimizer::DigestCalculator do
       it "produces different digests" do
         digest1 = described_class.short_digest(test_file)
         digest2 = described_class.short_digest(test_file2)
-        
+
         expect(digest1).not_to eq(digest2)
       end
     end
@@ -63,4 +63,3 @@ RSpec.describe JekyllImgOptimizer::DigestCalculator do
     end
   end
 end
-

@@ -14,7 +14,7 @@ RSpec.describe JekyllImgOptimizer::Registry do
     it "updates to larger width on duplicate" do
       registry.register("/assets/photo.jpg", 300, 200)
       registry.register("/assets/photo.jpg", 400, 200)
-      
+
       reqs = registry.requirements_for("/assets/photo.jpg")
       expect(reqs[:width]).to eq(400)
       expect(reqs[:height]).to eq(200)
@@ -23,7 +23,7 @@ RSpec.describe JekyllImgOptimizer::Registry do
     it "updates to larger height on duplicate" do
       registry.register("/assets/photo.jpg", 300, 200)
       registry.register("/assets/photo.jpg", 300, 300)
-      
+
       reqs = registry.requirements_for("/assets/photo.jpg")
       expect(reqs[:width]).to eq(300)
       expect(reqs[:height]).to eq(300)
@@ -41,7 +41,7 @@ RSpec.describe JekyllImgOptimizer::Registry do
     it "returns all registered images" do
       registry.register("/photo1.jpg", 300, 200)
       registry.register("/photo2.jpg", 400, 300)
-      
+
       entries = registry.entries
       expect(entries.size).to eq(2)
       expect(entries).to have_key("/photo1.jpg")
@@ -64,7 +64,7 @@ RSpec.describe JekyllImgOptimizer::Registry do
     it "returns requirements hash" do
       registry.register("/photo.jpg", 300, 200)
       reqs = registry.requirements_for("/photo.jpg")
-      
+
       expect(reqs).to be_a(Hash)
       expect(reqs[:width]).to eq(300)
       expect(reqs[:height]).to eq(200)
@@ -75,4 +75,3 @@ RSpec.describe JekyllImgOptimizer::Registry do
     end
   end
 end
-

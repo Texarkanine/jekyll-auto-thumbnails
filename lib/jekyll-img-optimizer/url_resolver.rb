@@ -26,7 +26,7 @@ module JekyllImgOptimizer
       # Relative path - resolve against base_dir
       # Remove ./ prefix if present
       cleaned_url = url.sub(%r{^\./}, "")
-      
+
       # Join with base_dir and normalize
       require "pathname"
       Pathname.new(File.join(base_dir, cleaned_url)).cleanpath.to_s
@@ -46,4 +46,3 @@ module JekyllImgOptimizer
     end
   end
 end
-

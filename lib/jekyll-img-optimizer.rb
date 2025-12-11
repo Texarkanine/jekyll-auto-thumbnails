@@ -15,4 +15,3 @@ require_relative "jekyll-img-optimizer/hooks"
 module JekyllImgOptimizer
   # Main plugin module
 end
-

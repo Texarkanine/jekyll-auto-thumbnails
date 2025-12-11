@@ -83,10 +83,10 @@ module JekyllImgOptimizer
 
       Jekyll.logger.info "ImgOptimizer:", "Copying #{url_map.size} thumbnails to _site"
 
-      url_map.each do |_original_url, thumb_url|
+      url_map.each_value do |thumb_url|
         thumb_filename = File.basename(thumb_url)
         cached_path = File.join(config.cache_dir, thumb_filename)
-        
+
         # Build destination path in _site preserving directory structure
         dest_path = File.join(site.dest, thumb_url.sub(%r{^/}, ""))
         dest_dir = File.dirname(dest_path)

@@ -111,8 +111,6 @@ module JekyllImgOptimizer
       case ext.downcase
       when ".jpg", ".jpeg"
         "-quality #{@config.quality}"
-      else
-        nil
       end
     end
   end

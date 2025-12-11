@@ -94,11 +94,11 @@ module JekyllImgOptimizer
       # Calculate missing dimension preserving aspect ratio
       if width && !height
         # Width specified, calculate height
-        aspect_ratio = actual_height.to_f / actual_width.to_f
+        aspect_ratio = actual_height.to_f / actual_width
         height = (width * aspect_ratio).round
       elsif height && !width
         # Height specified, calculate width
-        aspect_ratio = actual_width.to_f / actual_height.to_f
+        aspect_ratio = actual_width.to_f / actual_height
         width = (height * aspect_ratio).round
       end
 

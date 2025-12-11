@@ -29,4 +29,3 @@ RSpec.configure do |config|
     FileUtils.rm_rf(@temp_dir) if @temp_dir && File.exist?(@temp_dir)
   end
 end
-

@@ -26,7 +26,7 @@ RSpec.describe JekyllImgOptimizer::Configuration do
 
       it "parses all configuration options correctly" do
         config = described_class.new(site)
-        
+
         expect(config.enabled?).to be true
         expect(config.max_width).to eq(1200)
         expect(config.max_height).to eq(800)
@@ -45,11 +45,11 @@ RSpec.describe JekyllImgOptimizer::Configuration do
 
       it "uses defaults for missing values" do
         config = described_class.new(site)
-        
-        expect(config.enabled?).to be true  # default
+
+        expect(config.enabled?).to be true # default
         expect(config.max_width).to eq(800)  # specified
         expect(config.max_height).to be_nil  # not specified
-        expect(config.quality).to eq(85)  # default
+        expect(config.quality).to eq(85) # default
       end
     end
 
@@ -58,7 +58,7 @@ RSpec.describe JekyllImgOptimizer::Configuration do
 
       it "uses all defaults" do
         config = described_class.new(site)
-        
+
         expect(config.enabled?).to be true
         expect(config.max_width).to be_nil
         expect(config.max_height).to be_nil
@@ -70,7 +70,7 @@ RSpec.describe JekyllImgOptimizer::Configuration do
       let(:config_hash) do
         {
           "img_optimizer" => {
-            "quality" => 150  # invalid, must be 0-100
+            "quality" => 150 # invalid, must be 0-100
           }
         }
       end
@@ -153,4 +153,3 @@ RSpec.describe JekyllImgOptimizer::Configuration do
     end
   end
 end
-

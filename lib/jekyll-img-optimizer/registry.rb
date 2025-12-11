@@ -19,15 +19,15 @@ module JekyllImgOptimizer
     def register(url, width, height)
       existing = @entries[url]
 
-      if existing
-        # Update to max dimensions
-        @entries[url] = {
-          width: [existing[:width], width].compact.max,
-          height: [existing[:height], height].compact.max
-        }
-      else
-        @entries[url] = { width: width, height: height }
-      end
+      @entries[url] = if existing
+                        # Update to max dimensions
+                        {
+                          width: [existing[:width], width].compact.max,
+                          height: [existing[:height], height].compact.max
+                        }
+                      else
+                        { width: width, height: height }
+                      end
     end
 
     # Check if image is registered
@@ -54,5 +54,3 @@ module JekyllImgOptimizer
     end
   end
 end
-
-

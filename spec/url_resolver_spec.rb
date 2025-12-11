@@ -101,4 +101,3 @@ RSpec.describe JekyllImgOptimizer::UrlResolver do
     end
   end
 end
-

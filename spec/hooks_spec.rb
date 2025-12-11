@@ -66,7 +66,7 @@ RSpec.describe JekyllImgOptimizer::Hooks do
     it "generates thumbnails and replaces URLs" do
       registry.register("/p1.jpg", 300, 200)
       allow(generator).to receive(:generate).with("/p1.jpg", 300, 200)
-        .and_return("/cache/p1_thumb-abc123-300x200.jpg")
+                                            .and_return("/cache/p1_thumb-abc123-300x200.jpg")
 
       described_class.process_site(site)
 
@@ -97,4 +97,3 @@ RSpec.describe JekyllImgOptimizer::Hooks do
     end
   end
 end
-
