@@ -21,9 +21,6 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - '*.gemspec'
 
-Metrics/MethodLength:
-  Max: 20
-
 Style/Documentation:
   Enabled: false
 
