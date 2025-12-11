@@ -1,0 +1,14 @@
+# Changelog
+
+## [0.2.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.1.0...v0.2.0) (2025-12-11)
+
+
+### Features
+
+* initial release ([#1](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/1)) ([e8847f8](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/e8847f8e4d8f00b12484141297e8ac1c5b3b5307))
+
+
+### Bug Fixes
+
+* **ci:** add release-please bootstrap ([ad79ca7](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/ad79ca77aefcc9d2928bbb825f38e7fa63ef18c6))
+* **ci:** update Gemfile.lock in rp prs ([02638aa](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/02638aa2774847ccad2e2f151a800085857b8329))
