@@ -1,14 +1,10 @@
-# Jekyll Image Optimizer
+# Automatic Image Thumbnails for Jekyll
 
-Automatic image optimization for Jekyll sites. Scans rendered HTML, generates thumbnails with intelligent caching, and serves optimized images for faster page loads.
+Scans your rendered HTML for local images with `width` or `height` attributes, then automatically generates and uses appropriately-sized thumbnails for them, if the `src` image is bigger than that.
 
-## Features
+Can also take global maximum dimensions (such as for fixed-width layouts) and thumbnail images that don't have explicit size attributes, too.
 
-- 🚀 **Automatic optimization** - Scans `<article>` tags for images
-- 📏 **Size detection** - Handles explicitly sized images and auto-detects oversized ones
-- 💾 **Smart caching** - MD5-based filenames prevent redundant regeneration
-- 🔄 **Plugin-agnostic** - Works with any URL-transforming plugins (runs after rendering)
-- ⚡ **Fast builds** - Incremental caching keeps build times low
+Requires [ImageMagick](https://imagemagick.org) to be installed.
 
 ## Installation
 
@@ -26,7 +22,7 @@ Run:
 bundle install
 ```
 
-**System Requirement**: ImageMagick must be installed (provides `convert` and `identify` commands).
+**System Requirement**: ImageMagick must be installed (gem requires the `convert` and `identify` commands to be available).
 
 ## Configuration
 
@@ -82,17 +78,12 @@ img_optimizer:
 
 ### With Markdown
 
-Works automatically with any Markdown processor:
+Works automatically with any Markdown processor, because it checks the rendered HTML!
 
 ```markdown
 ![Photo](photo.jpg)  <!-- Auto-detects size -->
 ```
 
-If using extended Markdown sizing syntax:
-
-```markdown
-![Photo](photo.jpg =300x200)  <!-- Uses explicit size -->
-```
 
 ## Cache Behavior
 
@@ -100,12 +91,6 @@ If using extended Markdown sizing syntax:
 - Subsequent builds: Reuses cached thumbnails (fast!)
 - Source changed: MD5 mismatch detected, regenerates automatically
 - Dimensions changed: Different filename, generates new thumbnail
-
-## Performance
-
-- **Initial build**: +1-3 seconds per 10 images (one-time)
-- **Incremental builds**: < 1 second overhead (cache hit)
-- **Page load improvement**: 70-90% reduction in image size
 
 ## Troubleshooting
 
@@ -136,36 +121,3 @@ bundle exec jekyll build --verbose
 ```bash
 rm -rf .jekyll-cache/jekyll-auto-thumbnails/
 ```
-
-## Development
-
-```bash
-# Install dependencies
-bundle install
-
-# Run tests
-bundle exec rspec
-
-# Check coverage
-open coverage/index.html
-
-# Run linter
-bundle exec rubocop
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass: `bundle exec rspec`
-5. Submit a pull request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-Extracted and refactored from `jekyll-highlight-cards` thumbnail feature.
-
