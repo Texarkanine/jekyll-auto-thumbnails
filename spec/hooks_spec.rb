@@ -83,7 +83,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       url_map = site.data["auto_thumbnails_url_map"]
       thumb_url = url_map["/assets/img/photo.jpg"]
-      
+
       # URL must use forward slashes, not backslashes (Windows File.join would use \)
       expect(thumb_url).to eq("/assets/img/photo_thumb-abc123-300x200.jpg")
       expect(thumb_url).not_to include("\\")

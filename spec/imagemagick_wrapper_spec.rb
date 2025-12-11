@@ -52,7 +52,7 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       end
 
       it "returns magick convert command" do
-        expect(described_class.convert_command).to eq(["magick", "convert"])
+        expect(described_class.convert_command).to eq(%w[magick convert])
       end
     end
 
@@ -74,7 +74,7 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       end
 
       it "returns magick identify command" do
-        expect(described_class.identify_command).to eq(["magick", "identify"])
+        expect(described_class.identify_command).to eq(%w[magick identify])
       end
     end
 
@@ -93,11 +93,12 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
     context "with ImageMagick 7" do
       before do
         allow(described_class).to receive(:detect_version).and_return(:v7)
-        allow(described_class).to receive(:convert_command).and_return(["magick", "convert"])
+        allow(described_class).to receive(:convert_command).and_return(%w[magick convert])
       end
 
       it "executes magick convert with arguments" do
-        expect(described_class).to receive(:system).with("magick", "convert", "input.jpg", "-resize", "300x200", "output.jpg")
+        expect(described_class).to receive(:system).with("magick", "convert", "input.jpg", "-resize", "300x200",
+                                                         "output.jpg")
         described_class.execute_convert("input.jpg", "-resize", "300x200", "output.jpg")
       end
     end
@@ -119,14 +120,14 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
     context "with ImageMagick 7" do
       before do
         allow(described_class).to receive(:detect_version).and_return(:v7)
-        allow(described_class).to receive(:identify_command).and_return(["magick", "identify"])
+        allow(described_class).to receive(:identify_command).and_return(%w[magick identify])
       end
 
       it "executes magick identify with arguments" do
         output = "300x200"
         status = double("Status", success?: true)
         expect(Open3).to receive(:capture2e).with("magick", "identify", "-format", "%wx%h", "image.jpg[0]")
-          .and_return([output, status])
+                                            .and_return([output, status])
         result = described_class.execute_identify("-format", "%wx%h", "image.jpg[0]")
         expect(result).to eq([output, status])
       end
@@ -142,7 +143,7 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
         output = "300x200"
         status = double("Status", success?: true)
         expect(Open3).to receive(:capture2e).with("identify", "-format", "%wx%h", "image.jpg[0]")
-          .and_return([output, status])
+                                            .and_return([output, status])
         result = described_class.execute_identify("-format", "%wx%h", "image.jpg[0]")
         expect(result).to eq([output, status])
       end
@@ -225,4 +226,3 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
     end
   end
 end
-

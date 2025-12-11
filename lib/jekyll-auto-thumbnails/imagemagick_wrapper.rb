@@ -15,7 +15,7 @@ module JekyllAutoThumbnails
     # @return [Boolean] true if ImageMagick is available
     def self.available?
       version = detect_version
-      version == :v6 || version == :v7
+      %i[v6 v7].include?(version)
     end
 
     # Get the convert command array for the detected ImageMagick version
@@ -24,7 +24,7 @@ module JekyllAutoThumbnails
     def self.convert_command
       case detect_version
       when :v7
-        ["magick", "convert"]
+        %w[magick convert]
       when :v6
         ["convert"]
       else
@@ -38,7 +38,7 @@ module JekyllAutoThumbnails
     def self.identify_command
       case detect_version
       when :v7
-        ["magick", "identify"]
+        %w[magick identify]
       when :v6
         ["identify"]
       else
@@ -63,8 +63,6 @@ module JekyllAutoThumbnails
       cmd = identify_command + args
       Open3.capture2e(*cmd)
     end
-
-    private
 
     # Detect which ImageMagick version is available
     #
@@ -98,4 +96,3 @@ module JekyllAutoThumbnails
     end
   end
 end
-
