@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "fileutils"
+require_relative "imagemagick_wrapper"
 
 module JekyllAutoThumbnails
   # Thumbnail generation via ImageMagick
@@ -16,15 +17,9 @@ module JekyllAutoThumbnails
 
     # Check if ImageMagick is available (cross-platform)
     #
-    # @return [Boolean] true if convert command found in PATH
+    # @return [Boolean] true if ImageMagick (v6 or v7) is available
     def imagemagick_available?
-      cmd_name = Gem.win_platform? ? "convert.exe" : "convert"
-      path_dirs = ENV["PATH"].to_s.split(File::PATH_SEPARATOR)
-
-      path_dirs.any? do |dir|
-        executable = File.join(dir, cmd_name)
-        File.executable?(executable)
-      end
+      ImageMagickWrapper.available?
     end
 
     # Generate thumbnail (with caching)
@@ -95,19 +90,19 @@ module JekyllAutoThumbnails
       geometry = build_geometry(width, height)
       ext = File.extname(source_path)
 
-      # Build command array (no shell interpretation)
-      cmd = ["convert", source_path, "-resize", geometry]
+      # Build arguments array
+      args = [source_path, "-resize", geometry]
 
       # Add quality for lossy formats
       if quality_needed?(ext)
-        cmd << "-quality"
-        cmd << @config.quality.to_s
+        args << "-quality"
+        args << @config.quality.to_s
       end
 
-      cmd << dest_path
+      args << dest_path
 
-      # Call system with array (bypasses shell)
-      system(*cmd)
+      # Use wrapper to execute convert (handles both v6 and v7)
+      ImageMagickWrapper.execute_convert(*args)
     end
 
     # Build ImageMagick geometry string

@@ -25,7 +25,9 @@ Run:
 bundle install
 ```
 
-**System Requirement**: ImageMagick must be installed (gem requires the `convert` and `identify` commands to be available).
+**System Requirement**: ImageMagick must be installed. The gem supports both:
+- **ImageMagick 6**: Uses `convert` and `identify` commands directly
+- **ImageMagick 7**: Uses `magick convert` and `magick identify` (automatically detected)
 
 ## Configuration
 
@@ -107,8 +109,13 @@ sudo apt-get install imagemagick
 brew install imagemagick
 
 # Verify installation
+# ImageMagick 6:
 which convert identify
+# ImageMagick 7:
+which magick
 ```
+
+The gem automatically detects which version you have installed and uses the appropriate commands.
 
 ### Thumbnails Not Generating
 

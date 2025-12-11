@@ -2,6 +2,7 @@
 
 require "nokogiri"
 require "open3"
+require_relative "imagemagick_wrapper"
 
 module JekyllAutoThumbnails
   # HTML scanning for images
@@ -78,7 +79,8 @@ module JekyllAutoThumbnails
     def self.image_dimensions(file_path)
       # Use ImageMagick identify command (shell-free, cross-platform)
       # Use [0] to get only first frame (important for animated GIFs)
-      output, status = Open3.capture2e("identify", "-format", "%wx%h", "#{file_path}[0]")
+      # Wrapper handles both ImageMagick v6 and v7
+      output, status = ImageMagickWrapper.execute_identify("-format", "%wx%h", "#{file_path}[0]")
       return nil unless status.success? && !output.strip.empty?
 
       width, height = output.strip.split("x").map(&:to_i)

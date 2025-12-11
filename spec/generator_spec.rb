@@ -8,26 +8,15 @@ RSpec.describe JekyllAutoThumbnails::Generator do
   let(:generator) { described_class.new(config, site_source) }
 
   describe "#imagemagick_available?" do
-    before do
-      allow(Gem).to receive(:win_platform?).and_return(false)
-      allow(ENV).to receive(:[]).with("PATH").and_return("/usr/bin:/usr/local/bin")
-    end
-
-    it "returns true when convert executable found in PATH" do
-      allow(File).to receive(:executable?).with("/usr/bin/convert").and_return(false)
-      allow(File).to receive(:executable?).with("/usr/local/bin/convert").and_return(true)
+    it "delegates to ImageMagickWrapper.available?" do
+      allow(JekyllAutoThumbnails::ImageMagickWrapper).to receive(:available?).and_return(true)
       expect(generator.imagemagick_available?).to be true
+      expect(JekyllAutoThumbnails::ImageMagickWrapper).to have_received(:available?)
     end
 
-    it "returns false when convert not found in PATH" do
-      allow(File).to receive(:executable?).with("/usr/bin/convert").and_return(false)
-      allow(File).to receive(:executable?).with("/usr/local/bin/convert").and_return(false)
+    it "returns false when ImageMagick is not available" do
+      allow(JekyllAutoThumbnails::ImageMagickWrapper).to receive(:available?).and_return(false)
       expect(generator.imagemagick_available?).to be false
-    end
-
-    it "searches PATH directories for executable" do
-      expect(ENV).to receive(:[]).with("PATH")
-      generator.imagemagick_available?
     end
   end
 
