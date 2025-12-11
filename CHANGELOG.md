@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.2.1...v0.3.0) (2025-12-11)
+
+
+### Features
+
+* Handle imagemagick 6 or 7 interface ([#4](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/4)) ([345ac4c](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/345ac4caf45a7d112d02fb394ad58759083448cc))
+
 ## [0.2.1](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.2.0...v0.2.1) (2025-12-11)
 
 
