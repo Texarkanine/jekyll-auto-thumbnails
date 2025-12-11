@@ -23,7 +23,13 @@ module JekyllImgOptimizer
         height = parse_dimension(img["height"])
 
         if width || height
-          # Explicitly sized - register as-is
+          # Explicitly sized - calculate missing dimension if needed
+          if site_source && (width.nil? || height.nil?)
+            Jekyll.logger.debug "ImgOptimizer:", "Calculating dimensions for #{src} (#{width}x#{height})"
+            width, height = calculate_dimensions(src, width, height, site_source)
+            Jekyll.logger.debug "ImgOptimizer:", "Calculated: #{width}x#{height}"
+          end
+          Jekyll.logger.debug "ImgOptimizer:", "Registering #{src} at #{width}x#{height}"
           registry.register(src, width, height)
         elsif site_source && (config.max_width || config.max_height)
           # Unsized but max config exists - check actual dimensions
@@ -70,6 +76,34 @@ module JekyllImgOptimizer
       nil
     end
 
+    # Calculate missing dimension based on aspect ratio
+    #
+    # @param url [String] image URL
+    # @param width [Integer, nil] specified width
+    # @param height [Integer, nil] specified height
+    # @param site_source [String] site source directory
+    # @return [Array<Integer, Integer>] [width, height] with calculated dimension
+    def self.calculate_dimensions(url, width, height, site_source)
+      file_path = UrlResolver.to_filesystem_path(url, site_source)
+      return [width, height] unless file_path && File.exist?(file_path)
+
+      actual_width, actual_height = image_dimensions(file_path)
+      return [width, height] unless actual_width && actual_height
+
+      # Calculate missing dimension preserving aspect ratio
+      if width && !height
+        # Width specified, calculate height
+        aspect_ratio = actual_height.to_f / actual_width.to_f
+        height = (width * aspect_ratio).round
+      elsif height && !width
+        # Height specified, calculate width
+        aspect_ratio = actual_width.to_f / actual_height.to_f
+        width = (height * aspect_ratio).round
+      end
+
+      [width, height]
+    end
+
     # Parse dimension attribute (width or height)
     #
     # @param value [String, nil] attribute value
@@ -84,6 +118,6 @@ module JekyllImgOptimizer
       numeric.to_i
     end
 
-    private_class_method :check_and_register_oversized, :parse_dimension
+    private_class_method :check_and_register_oversized, :calculate_dimensions, :parse_dimension
   end
 end
