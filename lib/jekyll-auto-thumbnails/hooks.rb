@@ -36,6 +36,7 @@ module JekyllAutoThumbnails
       # Scan all documents and pages
       (site.documents + site.pages).each do |doc|
         next unless doc.output
+        next unless html_document?(doc)
 
         Scanner.scan_html(doc.output, registry, config, site.source)
       end
@@ -69,6 +70,7 @@ module JekyllAutoThumbnails
       # Replace URLs in HTML
       (site.documents + site.pages).each do |doc|
         next unless doc.output
+        next unless html_document?(doc)
 
         doc.output = replace_urls(doc.output, url_map)
       end
@@ -127,7 +129,43 @@ module JekyllAutoThumbnails
       doc.to_html
     end
 
-    private_class_method :replace_urls
+    # Check if a document is HTML (not CSS, JS, etc.)
+    #
+    # @param doc [Jekyll::Document, Jekyll::Page] the document to check
+    # @return [Boolean] true if the document appears to be HTML
+    def self.html_document?(doc)
+      # Check file extension from path or URL
+      path = doc.path || doc.url || ""
+      ext = File.extname(path).downcase
+      return false if [".css", ".scss", ".sass", ".js", ".json", ".xml", ".txt"].include?(ext)
+
+      # Check output content - if it looks like CSS (contains CSS selectors), skip it
+      output = doc.output.to_s.strip
+      return false if output.empty?
+      
+      # If output starts with CSS-like content (selectors, @media, etc.), it's not HTML
+      css_indicators = [
+        /^[a-zA-Z0-9_\-\[\]\.#:,\s]+\{/,  # CSS selector pattern
+        /^@(media|import|use|forward|keyframes|supports)/,  # CSS at-rules
+        /^\/\*/,  # CSS comment
+        /^:\w+/,  # CSS pseudo-class
+      ]
+      return false if css_indicators.any? { |pattern| output.match?(pattern) }
+
+      # Check if output looks like HTML (starts with < or DOCTYPE)
+      return true if output.start_with?("<!DOCTYPE", "<html", "<!doctype", "<HTML", "<")
+
+      # Check content type if available
+      if doc.respond_to?(:data) && doc.data["content_type"]
+        return doc.data["content_type"].include?("text/html")
+      end
+
+      # Default: assume HTML if we can't determine otherwise
+      # (This is safe because Nokogiri will handle non-HTML gracefully in scan_html)
+      true
+    end
+
+    private_class_method :replace_urls, :html_document?
   end
 end
 
