@@ -134,35 +134,26 @@ module JekyllAutoThumbnails
     # @param doc [Jekyll::Document, Jekyll::Page] the document to check
     # @return [Boolean] true if the document appears to be HTML
     def self.html_document?(doc)
-      # Check file extension from path or URL
+      # Check file extension from path or URL - only process .html/.htm files
       path = doc.path || doc.url || ""
       ext = File.extname(path).downcase
-      return false if [".css", ".scss", ".sass", ".js", ".json", ".xml", ".txt"].include?(ext)
+      return true if [".html", ".htm"].include?(ext)
 
-      # Check output content - if it looks like CSS (contains CSS selectors), skip it
+      # Check output content - must clearly look like HTML
       output = doc.output.to_s.strip
       return false if output.empty?
       
-      # If output starts with CSS-like content (selectors, @media, etc.), it's not HTML
-      css_indicators = [
-        /^[a-zA-Z0-9_\-\[\]\.#:,\s]+\{/,  # CSS selector pattern
-        /^@(media|import|use|forward|keyframes|supports)/,  # CSS at-rules
-        /^\/\*/,  # CSS comment
-        /^:\w+/,  # CSS pseudo-class
-      ]
-      return false if css_indicators.any? { |pattern| output.match?(pattern) }
-
-      # Check if output looks like HTML (starts with < or DOCTYPE)
-      return true if output.start_with?("<!DOCTYPE", "<html", "<!doctype", "<HTML", "<")
+      # If output starts with HTML indicators, it's HTML
+      return true if output.start_with?("<!DOCTYPE", "<html", "<!doctype", "<HTML")
 
       # Check content type if available
       if doc.respond_to?(:data) && doc.data["content_type"]
         return doc.data["content_type"].include?("text/html")
       end
 
-      # Default: assume HTML if we can't determine otherwise
-      # (This is safe because Nokogiri will handle non-HTML gracefully in scan_html)
-      true
+      # Default: skip if we can't confidently identify as HTML
+      # This is safer than assuming HTML, as non-HTML files (like CSS) can be processed as pages
+      false
     end
 
     private_class_method :replace_urls, :html_document?
