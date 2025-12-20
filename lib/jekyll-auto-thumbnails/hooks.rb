@@ -129,31 +129,13 @@ module JekyllAutoThumbnails
       doc.to_html
     end
 
-    # Check if a document is HTML (not CSS, JS, etc.)
+    # Check if a document outputs HTML (not CSS, JS, etc.)
     #
     # @param doc [Jekyll::Document, Jekyll::Page] the document to check
-    # @return [Boolean] true if the document appears to be HTML
+    # @return [Boolean] true if the document outputs HTML
     def self.html_document?(doc)
-      # Check file extension from path or URL - only process .html/.htm files
-      path = doc.path || doc.url || ""
-      ext = File.extname(path).downcase
-      return true if [".html", ".htm"].include?(ext)
-
-      # Check output content - must clearly look like HTML
-      output = doc.output.to_s.strip
-      return false if output.empty?
-      
-      # If output starts with HTML indicators, it's HTML
-      return true if output.start_with?("<!DOCTYPE", "<html", "<!doctype", "<HTML")
-
-      # Check content type if available
-      if doc.respond_to?(:data) && doc.data["content_type"]
-        return doc.data["content_type"].include?("text/html")
-      end
-
-      # Default: skip if we can't confidently identify as HTML
-      # This is safer than assuming HTML, as non-HTML files (like CSS) can be processed as pages
-      false
+      ext = File.extname(doc.path || doc.url || "").downcase
+      [".html", ".htm", ".md", ".markdown"].include?(ext)
     end
 
     private_class_method :replace_urls, :html_document?
