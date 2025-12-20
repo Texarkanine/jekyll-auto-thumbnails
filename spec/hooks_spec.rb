@@ -38,8 +38,14 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     let(:config) { double("Configuration", enabled?: true, max_width: 800, max_height: 600, cache_dir: "/cache") }
     let(:registry) { JekyllAutoThumbnails::Registry.new }
     let(:generator) { double("Generator") }
-    let(:doc1) { double("Document", output: "<article><img src='/p1.jpg' width='300'></article>", path: "_posts/2023-01-01-post.md", url: "/posts/post.html") }
-    let(:doc2) { double("Document", output: "<article><img src='/p2.jpg' width='400'></article>", path: "index.md", url: "/index.html") }
+    let(:doc1) do
+      double("Document", output: "<article><img src='/p1.jpg' width='300'></article>", path: "_posts/2023-01-01-post.md",
+                         url: "/posts/post.html")
+    end
+    let(:doc2) do
+      double("Document", output: "<article><img src='/p2.jpg' width='400'></article>", path: "index.md",
+                         url: "/index.html")
+    end
 
     before do
       site_data["auto_thumbnails_config"] = config
@@ -90,10 +96,19 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     end
 
     context "with non-HTML documents" do
-      let(:css_doc) { double("Document", output: "body { color: red; }", path: "assets/style.css", url: "/assets/style.css") }
-      let(:scss_doc) { double("Document", output: "@use 'variables';", path: "assets/main.scss", url: "/assets/main.css") }
-      let(:js_doc) { double("Document", output: "function test() {}", path: "assets/script.js", url: "/assets/script.js") }
-      let(:html_doc) { double("Document", output: "<article><img src='/photo.jpg' width='300'></article>", path: "page.html", url: "/page.html") }
+      let(:css_doc) do
+        double("Document", output: "body { color: red; }", path: "assets/style.css", url: "/assets/style.css")
+      end
+      let(:scss_doc) do
+        double("Document", output: "@use 'variables';", path: "assets/main.scss", url: "/assets/main.css")
+      end
+      let(:js_doc) do
+        double("Document", output: "function test() {}", path: "assets/script.js", url: "/assets/script.js")
+      end
+      let(:html_doc) do
+        double("Document", output: "<article><img src='/photo.jpg' width='300'></article>", path: "page.html",
+                           url: "/page.html")
+      end
 
       describe ".html_document?" do
         it "returns true for HTML documents" do
@@ -156,9 +171,12 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
         described_class.process_site(site)
 
-        expect(JekyllAutoThumbnails::Scanner).to have_received(:scan_html).with(html_doc.output, registry, config, site.source).once
-        expect(JekyllAutoThumbnails::Scanner).not_to have_received(:scan_html).with(css_doc.output, anything, anything, anything)
-        expect(JekyllAutoThumbnails::Scanner).not_to have_received(:scan_html).with(scss_doc.output, anything, anything, anything)
+        expect(JekyllAutoThumbnails::Scanner).to have_received(:scan_html).with(html_doc.output, registry, config,
+                                                                                site.source).once
+        expect(JekyllAutoThumbnails::Scanner).not_to have_received(:scan_html).with(css_doc.output, anything, anything,
+                                                                                    anything)
+        expect(JekyllAutoThumbnails::Scanner).not_to have_received(:scan_html).with(scss_doc.output, anything,
+                                                                                    anything, anything)
       end
     end
   end
