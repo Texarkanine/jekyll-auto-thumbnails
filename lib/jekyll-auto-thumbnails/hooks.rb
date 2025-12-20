@@ -36,6 +36,7 @@ module JekyllAutoThumbnails
       # Scan all documents and pages
       (site.documents + site.pages).each do |doc|
         next unless doc.output
+        next unless html_document?(doc)
 
         Scanner.scan_html(doc.output, registry, config, site.source)
       end
@@ -69,6 +70,7 @@ module JekyllAutoThumbnails
       # Replace URLs in HTML
       (site.documents + site.pages).each do |doc|
         next unless doc.output
+        next unless html_document?(doc)
 
         doc.output = replace_urls(doc.output, url_map)
       end
@@ -127,7 +129,16 @@ module JekyllAutoThumbnails
       doc.to_html
     end
 
-    private_class_method :replace_urls
+    # Check if a document outputs HTML (not CSS, JS, etc.)
+    #
+    # @param doc [Jekyll::Document, Jekyll::Page] the document to check
+    # @return [Boolean] true if the document outputs HTML
+    def self.html_document?(doc)
+      ext = File.extname(doc.path || doc.url || "").downcase
+      [".html", ".htm", ".md", ".markdown"].include?(ext)
+    end
+
+    private_class_method :replace_urls, :html_document?
   end
 end
 
