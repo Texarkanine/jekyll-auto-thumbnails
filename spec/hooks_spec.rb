@@ -38,8 +38,14 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     let(:config) { double("Configuration", enabled?: true, max_width: 800, max_height: 600, cache_dir: "/cache") }
     let(:registry) { JekyllAutoThumbnails::Registry.new }
     let(:generator) { double("Generator") }
-    let(:doc1) { double("Document", output: "<article><img src='/p1.jpg' width='300'></article>", path: "_posts/2023-01-01-post.md", url: "/posts/post.html") }
-    let(:doc2) { double("Document", output: "<article><img src='/p2.jpg' width='400'></article>", path: "index.md", url: "/index.html") }
+    let(:doc1) do
+      double("Document", output: "<article><img src='/p1.jpg' width='300'></article>", path: "_posts/2023-01-01-post.md",
+                         url: "/posts/post.html")
+    end
+    let(:doc2) do
+      double("Document", output: "<article><img src='/p2.jpg' width='400'></article>", path: "index.md",
+                         url: "/index.html")
+    end
 
     before do
       site_data["auto_thumbnails_config"] = config
