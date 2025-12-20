@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.3.0...v0.3.1) (2025-12-20)
+
+
+### Bug Fixes
+
+* skip non-HTML documents to prevent CSS/SCSS wrapping ([#7](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/7)) ([c0d71f9](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/c0d71f971be6098342c1dd4a5070639129c6bce2))
+
 ## [0.3.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.2.1...v0.3.0) (2025-12-11)
 
 
