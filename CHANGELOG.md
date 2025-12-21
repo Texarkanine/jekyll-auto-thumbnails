@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.3.1...v0.3.2) (2025-12-20)
+
+
+### Bug Fixes
+
+* **build:** I think we were supposed to be including the gemspec...! ([#9](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/9)) ([0432039](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/043203953f020140c6507e0bfb338859164fc842))
+
 ## [0.3.1](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.3.0...v0.3.1) (2025-12-20)
 
 
