@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.3.2...v0.3.3) (2025-12-21)
+
+
+### Bug Fixes
+
+* **gemspec:** Ruby 2.7 was never actually supported ([436104b](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/436104b50748be919120763c428a9573e6bf490d))
+
 ## [0.3.2](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.3.1...v0.3.2) (2025-12-20)
 
 
