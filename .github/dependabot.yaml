@@ -20,7 +20,7 @@ updates:
           - 'patch'
     open-pull-requests-limit: 10
     assignees:
-      - 'KeenerA'
+      - 'Texarkanine'
     commit-message:
       prefix: 'fix'
       include: 'scope'
@@ -41,7 +41,7 @@ updates:
           - 'patch'
     open-pull-requests-limit: 5
     assignees:
-      - 'KeenerA'
+      - 'Texarkanine'
     commit-message:
       prefix: 'chore(deps-ci)'
 
