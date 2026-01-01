@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.4](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.3.3...v0.3.4) (2026-01-01)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump rubocop from 1.81.7 to 1.82.0 in the dev-deps-minor-patch group ([#12](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/12)) ([965c63c](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/965c63c3bd20737a81465e52f64f46ab8c2631e2))
+* **deps-dev:** bump rubocop from 1.82.0 to 1.82.1 in the dev-deps-minor-patch group ([#14](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/14)) ([7cb95c7](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/7cb95c70a6982cd33ea5c76470417d1def5fb48f))
+* **deps-dev:** bump rubocop in the dev-deps-minor-patch group ([7cb95c7](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/7cb95c70a6982cd33ea5c76470417d1def5fb48f))
+* **deps-dev:** bump rubocop in the dev-deps-minor-patch group ([965c63c](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/965c63c3bd20737a81465e52f64f46ab8c2631e2))
+
 ## [0.3.3](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.3.2...v0.3.3) (2025-12-21)
 
 
