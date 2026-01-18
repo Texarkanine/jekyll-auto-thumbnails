@@ -1,25 +1,23 @@
+# RuboCop configuration for jekyll-auto-thumbnails
+# Relaxed, convention-focused linting - not overly strict
+
+plugins:
+  - rubocop-rake
+  - rubocop-rspec
+
 AllCops:
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.3
   NewCops: enable
   Exclude:
     - 'vendor/**/*'
     - 'spec/fixtures/**/*'
 
+# Style preferences
 Style/StringLiterals:
-  Enabled: true
   EnforcedStyle: double_quotes
 
 Style/StringLiteralsInInterpolation:
-  Enabled: true
   EnforcedStyle: double_quotes
-
-Layout/LineLength:
-  Max: 120
-
-Metrics/BlockLength:
-  Exclude:
-    - 'spec/**/*'
-    - '*.gemspec'
 
 Style/Documentation:
   Enabled: false
@@ -27,22 +25,93 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: true
 
+# Lint
+Lint/DuplicateBranch:
+  Enabled: false
+
+# Layout
+Layout/LineLength:
+  Max: 120
+
+# Metrics - relaxed limits for Jekyll plugin code
+Metrics/AbcSize:
+  Max: 100
+  Exclude:
+    - 'lib/**/hooks.rb'
+
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+    - 'spec/**/*'
+    - '*.gemspec'
+    - 'lib/**/hooks.rb'
+
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/ModuleLength:
+  Max: 200
+
+Metrics/MethodLength:
+  Max: 60
+  Exclude:
+    - 'lib/**/hooks.rb'
+
+Metrics/CyclomaticComplexity:
+  Max: 25
+  Exclude:
+    - 'lib/**/hooks.rb'
+
+Metrics/PerceivedComplexity:
+  Max: 25
+  Exclude:
+    - 'lib/**/hooks.rb'
+
+Metrics/ParameterLists:
+  Max: 10
+
+# Gemspec
 Gemspec/DevelopmentDependencies:
   Enabled: false
 
+# Naming
 Naming/FileName:
   Exclude:
     - 'lib/jekyll-auto-thumbnails.rb'
 
-Metrics/AbcSize:
-  Max: 50
+# RSpec - relaxed for practical test writing
+RSpec/ExampleLength:
+  Max: 20
 
-Metrics/MethodLength:
-  Max: 35
+RSpec/MultipleExpectations:
+  Max: 8
 
-Metrics/CyclomaticComplexity:
+RSpec/NestedGroups:
+  Max: 5
+
+RSpec/MultipleMemoizedHelpers:
   Max: 15
 
-Metrics/PerceivedComplexity:
-  Max: 15
+RSpec/InstanceVariable:
+  Enabled: false
 
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/StubbedMock:
+  Enabled: false
+
+RSpec/ReceiveMessages:
+  Enabled: false
+
+RSpec/IndexedLet:
+  Enabled: false
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false

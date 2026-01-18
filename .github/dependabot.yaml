@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # bundler's rubygem dependencies
+  # Bundler (rubygem) dependencies
   - package-ecosystem: 'bundler'
     directory: '/'
     schedule:
@@ -8,12 +8,12 @@ updates:
       day: 'monday'
       time: '09:00'
     groups:
-      deps-minor-patch:
+      production-deps:
         dependency-type: 'production'
         update-types:
           - 'minor'
           - 'patch'
-      dev-deps-minor-patch:
+      development-deps:
         dependency-type: 'development'
         update-types:
           - 'minor'
@@ -22,8 +22,8 @@ updates:
     assignees:
       - 'Texarkanine'
     commit-message:
-      prefix: 'fix'
-      include: 'scope'
+      prefix: 'fix(deps)'
+      prefix-development: 'chore(deps-dev)'
 
   # GitHub Actions dependencies
   - package-ecosystem: 'github-actions'
@@ -33,7 +33,7 @@ updates:
       day: 'monday'
       time: '09:00'
     groups:
-      github-actions-minor-patch:
+      github-actions:
         patterns:
           - '*'
         update-types:
@@ -44,4 +44,3 @@ updates:
       - 'Texarkanine'
     commit-message:
       prefix: 'chore(deps-ci)'
-
