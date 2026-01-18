@@ -10,8 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Automatic image optimization for Jekyll sites"
   spec.description = "Jekyll plugin that automatically generates and serves optimized image thumbnails " \
-                     "for faster page loads. Scans rendered HTML, generates thumbnails with intelligent " \
-                     "caching, and seamlessly replaces img src attributes."
+                     "for faster page loads."
   spec.homepage = "https://github.com/Texarkanine/jekyll-auto-thumbnails"
   spec.license = "AGPL-3.0-or-later"
   spec.required_ruby_version = ">= 3.3.0"
