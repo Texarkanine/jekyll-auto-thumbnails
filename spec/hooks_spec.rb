@@ -39,8 +39,10 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     let(:registry) { JekyllAutoThumbnails::Registry.new }
     let(:generator) { double("Generator") }
     let(:doc1) do
-      double("Document", output: "<article><img src='/p1.jpg' width='300'></article>", path: "_posts/2023-01-01-post.md",
-                         url: "/posts/post.html")
+      double("Document",
+             output: "<article><img src='/p1.jpg' width='300'></article>",
+             path: "_posts/2023-01-01-post.md",
+             url: "/posts/post.html")
     end
     let(:doc2) do
       double("Document", output: "<article><img src='/p2.jpg' width='400'></article>", path: "index.md",
