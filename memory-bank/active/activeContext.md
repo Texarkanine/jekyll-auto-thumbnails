@@ -9,7 +9,7 @@ HTML4 behavior behind a new `auto_thumbnails.parser: html4|html5` config
 
 ## Phase
 
-QA - PASS
+REFLECT COMPLETE
 
 ## Files Modified
 

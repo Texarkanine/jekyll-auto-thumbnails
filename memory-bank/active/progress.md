@@ -46,3 +46,11 @@ Release Please issues a major version bump.
   inside comments/scripts), never under-include; `HtmlParser`'s :html5
   branch is CRuby-only by design and protected upstream by
   `Configuration#parse_parser`'s JRuby hard-error.
+- **REFLECT — COMPLETE** — Wrote reflection at
+  `memory-bank/active/reflection/reflection-issue-29-html5-parser.md`.
+  Reconciled persistent files: surgical updates to `systemPatterns.md`
+  (HTML4 footgun narrative rewritten to reflect the HTML5-by-default
+  contract and the identity-return short-circuit), `techContext.md`
+  (Nokogiri entry updated with the new config exposure + JRuby policy),
+  and `productContext.md` (key constraints note JRuby-needs-`html4`).
+  Ready for archive.

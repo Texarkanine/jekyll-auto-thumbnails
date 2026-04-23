@@ -22,5 +22,5 @@ Ruby gem (Jekyll plugin) targeting Ruby 3.3+ and Jekyll 4.x. HTML rewriting is p
 
 ## Runtime Dependencies Worth Knowing
 
-- **Nokogiri ~> 1.15**: used for HTML parsing and serialization in `lib/jekyll-auto-thumbnails/hooks.rb`. Nokogiri ships both an HTML4 parser (`Nokogiri::HTML`, libxml2-based) and an HTML5 parser (`Nokogiri::HTML5`, CRuby-only; JRuby lacks native HTML5 support at the time of writing). The two produce meaningfully different serialized output, so any change to parser choice is user-visible.
+- **Nokogiri ~> 1.15**: used for HTML parsing and serialization in `lib/jekyll-auto-thumbnails/html_parser.rb` (called from `hooks.rb` and `scanner.rb`). Nokogiri ships both an HTML4 parser (`Nokogiri::HTML`, libxml2-based) and an HTML5 parser (`Nokogiri::HTML5`, CRuby-only; JRuby lacks native HTML5 support at the time of writing). The plugin defaults to HTML5 and exposes HTML4 as an opt-in via `auto_thumbnails.parser: html4` in `_config.yml`. JRuby users **must** set `parser: html4` explicitly — `Configuration` hard-errors at site-boot if `parser: html5` (including the default) is selected under JRuby.
 - **Jekyll >= 4.0, < 5.0**: the plugin registers three `Jekyll::Hooks` on `:site` (`post_read`, `post_render`, `post_write`). Jekyll 5 is explicitly not supported yet.

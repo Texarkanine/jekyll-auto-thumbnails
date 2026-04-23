@@ -34,5 +34,5 @@ Jekyll site authors who want automatic image optimization without manually produ
 - **ImageMagick dependency**: Requires either ImageMagick 6 (`convert`/`identify`) or ImageMagick 7 (`magick convert`/`magick identify`) on the build host. If missing, the plugin logs and skips rather than failing the build.
 - **Content scope**: Only images inside `<article>` elements are eligible. Images in headers, sidebars, or non-article regions are deliberately ignored.
 - **Licensing**: AGPL-3.0-or-later. Any redistribution or SaaS use must honor AGPL obligations.
-- **Ruby / Jekyll floor**: Ruby >= 3.3, Jekyll 4.x (< 5). Nokogiri ~> 1.15 is a hard runtime dependency for HTML rewriting.
+- **Ruby / Jekyll floor**: Ruby >= 3.3, Jekyll 4.x (< 5). Nokogiri ~> 1.15 is a hard runtime dependency for HTML rewriting. JRuby is supported only with `auto_thumbnails.parser: html4` explicitly set (HTML5 parsing is CRuby-only in Nokogiri).
 - **Safety**: Thumbnails are served from `.jekyll-cache/` and copied into `_site/`. The plugin must never mutate source images or author-provided files in place.
