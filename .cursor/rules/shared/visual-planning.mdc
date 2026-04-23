@@ -1,36 +1,39 @@
 ---
 alwaysApply: false
-description: REQUIRED comprehensive visual planning guidelines that must be followed when planning complex multi-component implementations, system architecture changes, user flow designs, API integrations, and feature development requiring detailed coordination.
+description: Guidelines for using Mermaid diagrams during planning. Apply when planning non-trivial work involving multiple components, interactions, data models, or process flows.
 ---
-## Visual Planning for Complex Tasks
+# Visual Planning with Mermaid Diagrams
 
-**When planning or implementing complex technical tasks (3+ components or multi-step processes), always create a visual diagram using Mermaid syntax before beginning implementation.**
+When planning non-trivial work, **use Mermaid diagrams whenever they communicate structure, flow, or relationships more clearly than prose.** Don't diagram for the sake of diagramming - use diagrams when they earn their keep.
 
-### Required for:
-- Multi-component features
-- User flow implementations 
-- System architecture changes
-- Complex refactoring tasks
-- Cross-page functionality
-- API integrations
+## When to Diagram
 
-### Diagram should include:
-- **Planning phase**: Break down the task into logical components
-- **Dependencies**: Show relationships between components 
-- **User flow**: How users will interact with the feature
-- **Technical structure**: Key files, components, or systems involved
-- **Success criteria**: Clear indicators of completion
+- **Architecture & component relationships** - what depends on what, how things connect
+- **Sequences of interactions** - API calls, user flows, event chains, multi-step processes
+- **Data models & entity relationships** - schemas, table relationships, domain models
+- **State machines & decision logic** - status transitions, branching workflows
+- **Class/module structure** - inheritance hierarchies, interface contracts, module boundaries
 
-### Visual Conventions
+If it takes more than a paragraph of prose to explain the structure and you keep wanting to say "and then" or "which connects to," or "if ...," it should be a diagram.
 
-#### Layout Standards
-- Use `graph TD` (top-down) for most architectural diagrams
-- Use `graph LR` (left-right) for user flow sequences
-- Group related components using `subgraph` containers
-- Maintain consistent visual hierarchy and spacing
-- **Always quote node labels** with double quotes: `A["Node Label"]`. If labels must contain double quotes, use HTML entity `#quot;` but avoid this if possible.
+## Choosing the Right Diagram Type
 
-#### Visual Elements for Rapid Scanning
+Pick the diagram type that matches what you're communicating:
+
+| What you're showing | Diagram type | Mermaid syntax |
+|---|---|---|
+| Component dependencies, system topology, task breakdowns | **Flowchart** | `graph TD` or `graph LR` |
+| Request/response flows, API call sequences, multi-actor interactions | **Sequence diagram** | `sequenceDiagram` |
+| Database schemas, domain models, data relationships | **ER diagram** | `erDiagram` |
+| Inheritance, interfaces, module contracts | **Class diagram** | `classDiagram` |
+| Status lifecycles, workflow states | **State diagram** | `stateDiagram-v2` |
+
+Use `TD` (top-down) for hierarchies and dependencies. Use `LR` (left-right) for sequential flows.
+
+## Visual Elements for Rapid Scanning
+
+Use these visual elements sparingly to draw attention to critical areas of a diagram:
+
 ```
 🎯 Main goals and objectives
 ✅ Completed components  
@@ -42,36 +45,117 @@ description: REQUIRED comprehensive visual planning guidelines that must be foll
 🌐 External integrations or APIs
 ```
 
-#### Color Coding with Style Statements
+## Syntax Rules
 
-Use reusable `classDef` for consistent styling across diagrams:
+These prevent rendering failures:
+
+1. **Always quote node labels** with double quotes: `A["Node Label"]`
+2. **Escape special characters** - use `#quot;` for quotes inside labels, `#amp;` for ampersands. The `#` instead of `&` on-purpose and important: because Mermaid often renders within HTML documents, it uses its own entity format to ensure that the HTML renderer does NOT process it - only the Mermaid renderer.
+3. **Use `subgraph` blocks** to group related nodes - label them clearly
+4. **Use `classDef` + `:::className`** for styling - never inline `style` statements
+5. **Keep diagrams focused.** If a single diagram exceeds ~15-20 nodes, split it into multiple diagrams with clear titles explaining what each one covers.
+
+## Flowcharts
+
+Best for: architecture overviews, dependency graphs, decision trees, task breakdowns.
 
 ```mermaid
 graph TD
-    %% Define reusable style classes once
-    classDef goal fill:#e1f5fe,stroke:#01579b;
-    classDef done fill:#e8f5e8,stroke:#2e7d32;
-    classDef tech fill:#f3e5f5,stroke:#7b1fa2;
-    classDef ux fill:#e8eaf6,stroke:#3f51b5;
-    classDef risk fill:#ffebee,stroke:#c62828;
-    classDef iterative fill:#fff3e0,stroke:#ef6c00;
-    classDef dataflow fill:#f1f8e9,stroke:#558b2f;
-    classDef integration fill:#fce4ec,stroke:#ad1457;
+    classDef service fill:#e1f5fe,stroke:#01579b;
+    classDef store fill:#f3e5f5,stroke:#7b1fa2;
+    classDef external fill:#fff3e0,stroke:#ef6c00;
 
-    %% Apply classes to nodes
-    A["🎯 User Dashboard (v2.0)"]:::goal --> B["🔧 Backend API"]:::tech
-    B --> C["🎨 Frontend Components"]:::ux
-    B --> D["✅ Authentication [OAuth]"]:::done
-    C --> E["📊 Data Processing (real-time)"]:::dataflow
-    C --> F["🌐 Third-party API (Stripe)"]:::integration
-    G["⚠️ Database Migration [PostgreSQL → MongoDB]"]:::risk
-    H["🔄 Auto-refresh (30s intervals)"]:::iterative
+    API["API Gateway"]:::service --> Auth["Auth Service"]:::service
+    API --> Orders["Order Service"]:::service
+    Orders --> DB["PostgreSQL"]:::store
+    Orders --> Queue["Event Bus"]:::external
+    Auth --> Cache["Redis Sessions"]:::store
 ```
 
-**Benefits of classDef:**
-- Define styles once, reuse everywhere
-- Consistent visual language across diagrams
-- Easier to maintain than inline `style` statements
-- Clear semantic meaning
+## Sequence Diagrams
 
-**This visual-first approach helps ensure clear communication, proper planning, and comprehensive implementation of complex features.**
+Best for: API flows, user interactions, multi-service choreography, anything where **order matters**.
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant G as API Gateway
+    participant A as Auth Service
+    participant S as Order Service
+
+    C->>G: POST /orders
+    G->>A: Validate token
+    A-->>G: 200 OK
+    G->>S: Create order
+    S-->>G: 201 Created
+    G-->>C: 201 Created
+```
+
+## ER Diagrams
+
+Best for: database design, domain modeling, data relationships.
+
+```mermaid
+erDiagram
+    USER ||--o{ ORDER : places
+    ORDER ||--|{ LINE_ITEM : contains
+    PRODUCT ||--o{ LINE_ITEM : "appears in"
+    USER {
+        int id PK
+        string email
+        string name
+    }
+    ORDER {
+        int id PK
+        int user_id FK
+        string status
+    }
+```
+
+## Class Diagrams
+
+Best for: OOP design, interface contracts, module boundaries.
+
+```mermaid
+classDiagram
+    class PaymentProcessor {
+        <<interface>>
+        +processPayment(amount, currency) Result
+        +refund(transactionId) Result
+    }
+    class StripeProcessor {
+        +processPayment(amount, currency) Result
+        +refund(transactionId) Result
+    }
+    class PayPalProcessor {
+        +processPayment(amount, currency) Result
+        +refund(transactionId) Result
+    }
+    PaymentProcessor <|.. StripeProcessor
+    PaymentProcessor <|.. PayPalProcessor
+```
+
+## State Diagrams
+
+Best for: lifecycle management, status workflows, FSMs.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> Submitted : submit()
+    Submitted --> InReview : assign_reviewer()
+    InReview --> Approved : approve()
+    InReview --> Rejected : reject()
+    Rejected --> Draft : revise()
+    Approved --> [*]
+```
+
+## Planning Workflow
+
+When planning a non-trivial task:
+
+1. **Start with a flowchart** to map the components and their relationships
+2. **Add sequence diagrams** for any multi-step interactions that need to happen in a specific order
+3. **Add ER/class diagrams** if the work involves data model or interface design
+4. **Add state diagrams** if the work involves status/lifecycle management
+5. **Reference the diagrams** in your implementation plan - they are the plan's backbone, not decoration
