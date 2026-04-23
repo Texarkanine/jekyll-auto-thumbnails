@@ -4,6 +4,7 @@ require "jekyll"
 require "nokogiri"
 
 require_relative "jekyll-auto-thumbnails/version"
+require_relative "jekyll-auto-thumbnails/html_parser"
 require_relative "jekyll-auto-thumbnails/configuration"
 require_relative "jekyll-auto-thumbnails/url_resolver"
 require_relative "jekyll-auto-thumbnails/digest_calculator"

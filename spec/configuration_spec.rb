@@ -152,4 +152,93 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
       expect(config.cache_dir).to eq("/test/site/.jekyll-cache/jekyll-auto-thumbnails")
     end
   end
+
+  describe "#parser" do
+    context "on CRuby" do
+      before { stub_const("RUBY_ENGINE", "ruby") }
+
+      context "with no parser specified" do
+        let(:config_hash) { {} }
+
+        it "defaults to :html5" do
+          config = described_class.new(site)
+          expect(config.parser).to eq(:html5)
+        end
+      end
+
+      context "with parser: html5" do
+        let(:config_hash) { { "auto_thumbnails" => { "parser" => "html5" } } }
+
+        it "parses to :html5" do
+          config = described_class.new(site)
+          expect(config.parser).to eq(:html5)
+        end
+      end
+
+      context "with parser: html4" do
+        let(:config_hash) { { "auto_thumbnails" => { "parser" => "html4" } } }
+
+        it "parses to :html4" do
+          config = described_class.new(site)
+          expect(config.parser).to eq(:html4)
+        end
+      end
+
+      context "with parser: HTML5 (uppercase)" do
+        let(:config_hash) { { "auto_thumbnails" => { "parser" => "HTML5" } } }
+
+        it "is case-insensitive and parses to :html5" do
+          config = described_class.new(site)
+          expect(config.parser).to eq(:html5)
+        end
+      end
+
+      context "with invalid parser value" do
+        let(:config_hash) { { "auto_thumbnails" => { "parser" => "html6" } } }
+
+        it "raises ArgumentError with a message listing valid values" do
+          expect { described_class.new(site) }.to raise_error(ArgumentError, /parser.*html4.*html5/i)
+        end
+      end
+
+      context "with non-string parser value" do
+        let(:config_hash) { { "auto_thumbnails" => { "parser" => 5 } } }
+
+        it "raises ArgumentError" do
+          expect { described_class.new(site) }.to raise_error(ArgumentError, /parser/i)
+        end
+      end
+    end
+
+    context "on JRuby" do
+      before { stub_const("RUBY_ENGINE", "jruby") }
+
+      context "with default (html5)" do
+        let(:config_hash) { {} }
+
+        it "raises ArgumentError directing the user to parser: html4" do
+          expect { described_class.new(site) }
+            .to raise_error(ArgumentError, /jruby.*parser: html4/im)
+        end
+      end
+
+      context "with explicit parser: html5" do
+        let(:config_hash) { { "auto_thumbnails" => { "parser" => "html5" } } }
+
+        it "raises ArgumentError" do
+          expect { described_class.new(site) }
+            .to raise_error(ArgumentError, /jruby.*parser: html4/im)
+        end
+      end
+
+      context "with parser: html4" do
+        let(:config_hash) { { "auto_thumbnails" => { "parser" => "html4" } } }
+
+        it "is accepted without raising" do
+          expect { described_class.new(site) }.not_to raise_error
+          expect(described_class.new(site).parser).to eq(:html4)
+        end
+      end
+    end
+  end
 end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "html_parser"
+
 module JekyllAutoThumbnails
   # Jekyll hook integration
   module Hooks
@@ -72,7 +74,7 @@ module JekyllAutoThumbnails
         next unless doc.output
         next unless html_document?(doc)
 
-        doc.output = replace_urls(doc.output, url_map)
+        doc.output = replace_urls(doc.output, url_map, parser: config.parser)
       end
 
       Jekyll.logger.info "AutoThumbnails:", "Generated #{url_map.size} thumbnails"
@@ -105,28 +107,37 @@ module JekyllAutoThumbnails
       Jekyll.logger.info "AutoThumbnails:", "All thumbnails copied"
     end
 
-    # Replace image URLs in HTML
+    # Replace image URLs in HTML.
+    #
+    # Returns the input string unchanged (object identity) when no replacement
+    # was actually made. This is both a perf win for pages with no matching
+    # images and a correctness win: the HTML4 path otherwise round-trips every
+    # page through libxml2's serializer, which injects a spurious
+    # `<meta http-equiv="Content-Type">` on HTML5 sites.
     #
     # @param html [String] HTML content
     # @param url_map [Hash] original URL => thumbnail URL
-    # @return [String] modified HTML
-    def self.replace_urls(html, url_map)
-      # Return early if no replacements needed
+    # @param parser [Symbol] :html5 (default) or :html4
+    # @return [String] modified HTML (or the input itself, unchanged)
+    def self.replace_urls(html, url_map, parser: :html5)
       return html if url_map.empty?
+      return html unless html.include?("<img")
 
-      doc = Nokogiri::HTML(html)
+      doc = HtmlParser.parse(html, parser)
 
+      modified = false
       doc.css("article img").each do |img|
         src = img["src"]
         next unless src
 
-        # Find thumbnail URL for this image
         thumb_url = url_map[src]
-        img["src"] = thumb_url if thumb_url
+        next unless thumb_url
+
+        img["src"] = thumb_url
+        modified = true
       end
 
-      # Serialize with encoding declaration to match Jekyll output
-      doc.to_html
+      modified ? doc.to_html : html
     end
 
     # Check if a document outputs HTML (not CSS, JS, etc.)

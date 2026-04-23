@@ -28,3 +28,14 @@ Release Please issues a major version bump.
   test/convention alignment. One advisory: extract a tiny shared HTML-parser
   helper to concentrate the JRuby `require` guard — within scope, will do
   during build.
+- **BUILD — COMPLETE** — Implemented all 7 plan steps.
+  `Configuration#parser` validates strictly and hard-errors on JRuby+html5.
+  New `JekyllAutoThumbnails::HtmlParser` module dispatches between
+  `Nokogiri::HTML5.parse` and `Nokogiri::HTML`. `Hooks.replace_urls` now
+  short-circuits on empty `url_map`, missing `<img`, and no-match
+  iterations — returning the input by identity to avoid spurious
+  round-trips. `Scanner.scan_html` uses the same helper. README updated.
+  Issue-29 scenario reproduced and fixed end-to-end. Tests: 102 examples,
+  0 failures, 90.94% coverage. RuboCop: 22 files, 0 offenses. The
+  substantive `feat(hooks)!:` commit will be created at the end of the
+  workflow so it carries all build + QA + reflect changes together.

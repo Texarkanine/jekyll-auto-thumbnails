@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe JekyllAutoThumbnails::Scanner do
-  let(:config) { double("Configuration", max_width: 800, max_height: 600) }
+  let(:config) { double("Configuration", max_width: 800, max_height: 600, parser: :html5) }
   let(:registry) { JekyllAutoThumbnails::Registry.new }
 
   describe ".scan_html" do
@@ -128,6 +128,22 @@ RSpec.describe JekyllAutoThumbnails::Scanner do
         described_class.scan_html(html, registry, config, "/site")
 
         expect(registry.registered?("/photo.jpg")).to be false
+      end
+    end
+
+    context "with parser: :html4 (legacy opt-in)" do
+      let(:html4_config) { double("Configuration", max_width: 800, max_height: 600, parser: :html4) }
+      let(:html) do
+        <<~HTML
+          <article>
+            <img src="/legacy.jpg" width="200" height="150">
+          </article>
+        HTML
+      end
+
+      it "still finds article images under the legacy parser" do
+        described_class.scan_html(html, registry, html4_config)
+        expect(registry.registered?("/legacy.jpg")).to be true
       end
     end
   end

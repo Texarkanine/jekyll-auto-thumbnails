@@ -233,6 +233,38 @@ No gemspec version bumps are required. No build tool changes.
 - [x] Test planning complete (TDD)
 - [x] Implementation plan complete
 - [x] Technology validation complete
-- [ ] Preflight
-- [ ] Build
+- [x] Preflight
+- [x] Build
 - [ ] QA
+
+## Build Log
+
+- **Step 1 ✅** — `Configuration#parser`: `VALID_PARSERS = %i[html4 html5]`,
+  `attr_reader :parser`, private `parse_parser` that validates string type,
+  case-insensitive value, and JRuby hard-error for `:html5`. 9 new spec
+  examples, all green.
+- **Step 2 ✅** — `Hooks.replace_urls(html, url_map, parser: :html5)`:
+  added two short-circuits (`url_map.empty?` and `html.include?("<img")`),
+  changed the loop to track `modified` and return the input unchanged when
+  no replacement was made. 9 new spec examples, all green. Scenario from
+  issue #29 reproduced and verified: HTML5 output contains no
+  `<meta http-equiv="Content-Type">`, no-match/no-`<img>` pages are
+  returned by object identity.
+- **Step 3 ✅** — New `JekyllAutoThumbnails::HtmlParser` module (preflight
+  advisory taken): single `parse(html, parser)` dispatch with the
+  `require "nokogiri/html5" unless RUBY_ENGINE == "jruby"` guard at the
+  top. `Scanner.scan_html` and `Hooks.replace_urls` both delegate.
+  1 new scanner spec example covering `parser: :html4`.
+- **Step 4 ✅** — `process_site` passes `config.parser` to
+  `Hooks.replace_urls`. `Scanner.scan_html` already received `config` and
+  now reads `config.parser` internally. Existing hooks specs updated to
+  stub `parser: :html5` on the Configuration double.
+- **Step 5 ✅** — `README.md` updated: new `parser` line in the YAML
+  config block plus an "HTML parser" subsection documenting the default
+  flip, the opt-out, and the JRuby constraint. Release Please owns the
+  CHANGELOG.
+- **Step 6 ✅** — `bundle exec rspec` clean (102 examples, 0 failures,
+  90.94% coverage). `bundle exec rubocop` clean (22 files, 0 offenses
+  after autocorrecting two minor Style offenses in `parse_parser`).
+- **Step 7** — Deferred to QA phase so the breaking-change commit ships
+  at the end of the workflow.
