@@ -39,3 +39,10 @@ Release Please issues a major version bump.
   0 failures, 90.94% coverage. RuboCop: 22 files, 0 offenses. The
   substantive `feat(hooks)!:` commit will be created at the end of the
   workflow so it carries all build + QA + reflect changes together.
+- **QA — PASS** — Semantic review against KISS/DRY/YAGNI/Completeness/
+  Regression/Integrity/Documentation: clean, no fixable issues. Minor
+  observations documented but non-blocking: the cheap `html.include?(
+  "<img")` pre-filter can over-include (false-positive short-circuit miss
+  inside comments/scripts), never under-include; `HtmlParser`'s :html5
+  branch is CRuby-only by design and protected upstream by
+  `Configuration#parse_parser`'s JRuby hard-error.

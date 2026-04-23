@@ -235,7 +235,7 @@ No gemspec version bumps are required. No build tool changes.
 - [x] Technology validation complete
 - [x] Preflight
 - [x] Build
-- [ ] QA
+- [x] QA
 
 ## Build Log
 
