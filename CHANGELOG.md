@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.0.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v1.0.0...v2.0.0) (2026-04-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* Incorrectly round-tripped all content through HTML4 parser ([#30](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/30))
+
+### Bug Fixes
+
+* **deps:** bump nokogiri from 1.19.0 to 1.19.1 in the production-deps group ([#20](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/20)) ([0ed6c0c](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/0ed6c0cf65aa17ed0182ff7eb1f85d8b053188e1))
+* **deps:** bump nokogiri from 1.19.1 to 1.19.2 in the production-deps group across 1 directory ([#24](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/24)) ([023882c](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/023882c815b26f1d1143635c56f2adc78a124b85))
+* **deps:** bump nokogiri in the production-deps group ([023882c](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/023882c815b26f1d1143635c56f2adc78a124b85))
+* **deps:** bump nokogiri in the production-deps group ([0ed6c0c](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/0ed6c0cf65aa17ed0182ff7eb1f85d8b053188e1))
+* Incorrectly round-tripped all content through HTML4 parser ([#30](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/30)) ([75640c8](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/75640c8c0de097e1ebb9e615e1acf8a00c0ef7e6))
+
 ## [1.0.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v0.3.3...v1.0.0) (2026-01-18)
 
 
