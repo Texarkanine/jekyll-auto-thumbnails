@@ -54,13 +54,13 @@ auto_thumbnails:
 
 ### HTML parser (`parser: html5 | html4`)
 
-As of `v2.0.0`, `jekyll-auto-thumbnails` parses and serializes HTML with Nokogiri's HTML5 parser by default. On HTML5 sites this fixes a validity regression where libxml2's HTML4 serializer injected a spurious `<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">` alongside the theme's existing `<meta charset="utf-8">`, which violates the HTML5 spec.
+As of `v2.0.0`, `jekyll-auto-thumbnails` parses and serializes HTML with Nokogiri's HTML5 parser by default.
 
 Set `parser: html4` to restore the previous behavior (the libxml2-based `Nokogiri::HTML` parser) if you depended on its serialization quirks.
 
 **JRuby note**: `Nokogiri::HTML5` is not available on JRuby. Under JRuby, you **must** explicitly set `parser: html4`; otherwise the plugin will raise a configuration error at build time.
 
-Pages that contain no replaceable `<article><img>` are no longer re-serialized at all — they are passed through byte-for-byte, regardless of which parser is selected.
+Pages that contain no replaceable `<article><img>` are no longer re-serialized at all - they are passed through byte-for-byte, regardless of which parser is selected.
 
 ## How It Works
 
