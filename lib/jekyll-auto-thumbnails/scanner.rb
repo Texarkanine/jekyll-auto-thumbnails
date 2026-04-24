@@ -2,6 +2,7 @@
 
 require "nokogiri"
 require "open3"
+require_relative "html_parser"
 require_relative "imagemagick_wrapper"
 
 module JekyllAutoThumbnails
@@ -14,7 +15,7 @@ module JekyllAutoThumbnails
     # @param config [Configuration] configuration
     # @param site_source [String] Jekyll site source (optional, for unsized image checking)
     def self.scan_html(html, registry, config, site_source = nil)
-      doc = Nokogiri::HTML(html)
+      doc = HtmlParser.parse(html, config.parser)
 
       # Only process images in <article> tags
       doc.css("article img").each do |img|

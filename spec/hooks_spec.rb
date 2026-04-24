@@ -35,7 +35,10 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
   end
 
   describe ".process_site" do
-    let(:config) { double("Configuration", enabled?: true, max_width: 800, max_height: 600, cache_dir: "/cache") }
+    let(:config) do
+      double("Configuration",
+             enabled?: true, max_width: 800, max_height: 600, cache_dir: "/cache", parser: :html5)
+    end
     let(:registry) { JekyllAutoThumbnails::Registry.new }
     let(:generator) { double("Generator") }
     let(:doc1) do
@@ -179,6 +182,107 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
                                                                                     anything)
         expect(JekyllAutoThumbnails::Scanner).not_to have_received(:scan_html).with(scss_doc.output, anything,
                                                                                     anything, anything)
+      end
+    end
+  end
+
+  describe ".replace_urls" do
+    # replace_urls is private_class_method; invoke via .send
+    def call(html, url_map, parser: :html5)
+      described_class.send(:replace_urls, html, url_map, parser: parser)
+    end
+
+    context "with an empty url_map" do
+      let(:html) { "<article><img src='/a.jpg'></article>" }
+
+      it "returns the input unchanged (no parse, no serialization)" do
+        expect(call(html, {})).to equal(html) # object identity: no round-trip
+      end
+    end
+
+    context "with no <img in the document" do
+      let(:html) do
+        "<!DOCTYPE html><html><head><meta charset='utf-8'></head>" \
+          "<body><p>hi</p></body></html>"
+      end
+
+      it "short-circuits before parsing and returns the input unchanged" do
+        expect(call(html, { "/a.jpg" => "/a_thumb.jpg" })).to equal(html)
+      end
+    end
+
+    context "when url_map has no matching src" do
+      let(:html) do
+        "<!DOCTYPE html><html><head><meta charset='utf-8'></head>" \
+          "<body><article><img src='/a.jpg'></article></body></html>"
+      end
+
+      it "returns the input unchanged (identity, no re-serialization)" do
+        expect(call(html, { "/other.jpg" => "/other_thumb.jpg" })).to equal(html)
+      end
+    end
+
+    context "when the only matching <img> is outside <article>" do
+      let(:html) do
+        "<!DOCTYPE html><html><head><meta charset='utf-8'></head>" \
+          "<body><header><img src='/logo.jpg'></header></body></html>"
+      end
+
+      it "returns the input unchanged (non-article images are not rewritten)" do
+        expect(call(html, { "/logo.jpg" => "/logo_thumb.jpg" })).to equal(html)
+      end
+    end
+
+    context "with an uppercase <IMG> tag" do
+      let(:html) do
+        "<!DOCTYPE html><html><head><meta charset='utf-8'></head>" \
+          "<body><article><IMG SRC='/a.jpg'></article></body></html>"
+      end
+
+      it "does not short-circuit; rewrites the src after parse" do
+        out = call(html, { "/a.jpg" => "/a_thumb.jpg" })
+        expect(out).to include("/a_thumb.jpg")
+      end
+    end
+
+    context "with parser: :html5 (default) and a real replacement" do
+      let(:html) do
+        "<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'>" \
+          "<title>t</title></head><body><article><img src='/a.jpg'></article></body></html>"
+      end
+
+      it "rewrites <article><img src>" do
+        out = call(html, { "/a.jpg" => "/a_thumb.jpg" })
+        expect(out).to include("/a_thumb.jpg")
+        expect(out).not_to include("src=\"/a.jpg\"")
+        expect(out).not_to include("src='/a.jpg'")
+      end
+
+      it "does NOT inject <meta http-equiv=\"Content-Type\">" do
+        out = call(html, { "/a.jpg" => "/a_thumb.jpg" })
+        expect(out).not_to match(/meta\s+http-equiv=["']Content-Type["']/i)
+      end
+
+      it "preserves the single <meta charset=\"utf-8\">" do
+        out = call(html, { "/a.jpg" => "/a_thumb.jpg" })
+        expect(out.scan(/<meta[^>]*charset/i).size).to eq(1)
+      end
+    end
+
+    context "with parser: :html4 (legacy opt-in) and a real replacement" do
+      let(:html) do
+        "<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'>" \
+          "<title>t</title></head><body><article><img src='/a.jpg'></article></body></html>"
+      end
+
+      it "rewrites <article><img src>" do
+        out = call(html, { "/a.jpg" => "/a_thumb.jpg" }, parser: :html4)
+        expect(out).to include("/a_thumb.jpg")
+      end
+
+      it "preserves the legacy behavior of injecting <meta http-equiv> on serialize" do
+        out = call(html, { "/a.jpg" => "/a_thumb.jpg" }, parser: :html4)
+        expect(out).to match(/meta\s+http-equiv=["']Content-Type["']/i)
       end
     end
   end
