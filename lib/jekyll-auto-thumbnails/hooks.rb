@@ -121,7 +121,7 @@ module JekyllAutoThumbnails
     # @return [String] modified HTML (or the input itself, unchanged)
     def self.replace_urls(html, url_map, parser: :html5)
       return html if url_map.empty?
-      return html unless html.include?("<img")
+      return html unless html.match?(/<img/i)
 
       doc = HtmlParser.parse(html, parser)
 

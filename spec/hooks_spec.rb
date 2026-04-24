@@ -233,6 +233,18 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       end
     end
 
+    context "with an uppercase <IMG> tag" do
+      let(:html) do
+        "<!DOCTYPE html><html><head><meta charset='utf-8'></head>" \
+          "<body><article><IMG SRC='/a.jpg'></article></body></html>"
+      end
+
+      it "does not short-circuit; rewrites the src after parse" do
+        out = call(html, { "/a.jpg" => "/a_thumb.jpg" })
+        expect(out).to include("/a_thumb.jpg")
+      end
+    end
+
     context "with parser: :html5 (default) and a real replacement" do
       let(:html) do
         "<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'>" \
