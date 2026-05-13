@@ -115,29 +115,6 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
                            url: "/page.html")
       end
 
-      describe ".html_document?" do
-        it "returns true for HTML documents" do
-          expect(described_class.send(:html_document?, html_doc)).to be true
-        end
-
-        it "returns true for markdown documents" do
-          md_doc = double("Document", path: "post.md", url: "/post.html")
-          expect(described_class.send(:html_document?, md_doc)).to be true
-        end
-
-        it "returns false for CSS documents" do
-          expect(described_class.send(:html_document?, css_doc)).to be false
-        end
-
-        it "returns false for SCSS documents" do
-          expect(described_class.send(:html_document?, scss_doc)).to be false
-        end
-
-        it "returns false for JS documents" do
-          expect(described_class.send(:html_document?, js_doc)).to be false
-        end
-      end
-
       it "skips CSS documents" do
         allow(site).to receive(:documents).and_return([css_doc])
         allow(site).to receive(:pages).and_return([])
@@ -186,6 +163,14 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     end
   end
 
+  # replace_urls is private_class_method. It is tested directly via .send rather
+  # than through process_site because its most important behavioral guarantee —
+  # returning the *same object* (object identity, not just equal value) when no
+  # replacement is needed — cannot be observed through the public hook API.
+  # process_site always assigns `doc.output = replace_urls(...)`, so the
+  # identity short-circuit is invisible from outside. Direct testing is the only
+  # way to pin this perf/correctness contract (no libxml2 round-trip on pages
+  # with no matching images).
   describe ".replace_urls" do
     # replace_urls is private_class_method; invoke via .send
     def call(html, url_map, parser: :html5)

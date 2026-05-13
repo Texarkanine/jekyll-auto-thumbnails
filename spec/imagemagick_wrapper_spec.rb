@@ -157,7 +157,7 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       end
 
       it "returns :v7" do
-        expect(described_class.send(:detect_version)).to eq(:v7)
+        expect(described_class.detect_version).to eq(:v7)
       end
     end
 
@@ -168,7 +168,7 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       end
 
       it "returns :v6" do
-        expect(described_class.send(:detect_version)).to eq(:v6)
+        expect(described_class.detect_version).to eq(:v6)
       end
     end
 
@@ -179,11 +179,17 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       end
 
       it "returns :none" do
-        expect(described_class.send(:detect_version)).to eq(:none)
+        expect(described_class.detect_version).to eq(:none)
       end
     end
   end
 
+  # command_exists? is private_class_method. It is tested directly via .send
+  # because its Windows .exe-extension branch cannot be isolated through the
+  # public API: available?/convert_command only probe "magick" and "convert",
+  # so testing the generic extension-appending logic through them would conflate
+  # two unrelated concerns. Direct testing is the only way to pin the
+  # Windows PATH-probe behavior independently.
   describe ".command_exists?" do
     before do
       allow(Gem).to receive(:win_platform?).and_return(false)

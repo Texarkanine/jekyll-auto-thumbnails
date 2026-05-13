@@ -83,7 +83,7 @@ module JekyllAutoThumbnails
     #
     # @param cmd [String] command name
     # @return [Boolean] true if command found
-    def self.command_exists?(cmd)
+    private_class_method def self.command_exists?(cmd)
       cmd_name = Gem.win_platform? ? "#{cmd}.exe" : cmd
       path_dirs = ENV["PATH"].to_s.split(File::PATH_SEPARATOR)
 
