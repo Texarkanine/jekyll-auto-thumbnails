@@ -66,4 +66,4 @@ Existing development dependencies at new major versions (not net-new tech). Vali
 - [x] Technology validation complete
 - [x] Preflight — PASS (no plan amendments; advisory: Gemfile.lock DEPENDENCIES lines sync via `bundle update`)
 - [x] Build — PASS (103 examples, 0 failures; RuboCop clean)
-- [ ] QA
+- [x] QA — PASS (KISS/DRY/YAGNI/completeness/regression/integrity/docs all clear; no fixes needed)
