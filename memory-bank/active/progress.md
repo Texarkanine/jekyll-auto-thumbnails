@@ -13,3 +13,14 @@ Bump `simplecov` ~> 1.0 and `simplecov-cobertura` ~> 4.0 (gemspec + lockfile) an
     - Level 2: self-contained dependency + config migration; no creative/architecture phase required
 * Insights
     - Issue #48 intentionally folds the Dependabot bump and the deprecation migration into one human PR
+
+## 2026-07-15 - PLAN - COMPLETE
+
+* Work completed
+    - Created feature branch from up-to-date `main`
+    - Wrote Level 2 TDD plan: contract specs + gemspec/lockfile/`skip` migration
+* Decisions made
+    - New `spec/simplecov_setup_spec.rb` for gemspec/version/`skip` contracts rather than inventing parallel tooling
+    - Keep filter path strings `/spec/` and `/vendor/` unless verification forces change
+* Insights
+    - SimpleCov 1.0.1 and simplecov-cobertura 4.0.0 are published on RubyGems

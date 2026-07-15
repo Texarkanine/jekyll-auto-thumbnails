@@ -1,11 +1,12 @@
 # Active Context
 
 ## Current Task: issue-48-simplecov-1.0-skip-migration
-**Phase:** COMPLEXITY-ANALYSIS - COMPLETE
+**Phase:** PLAN - COMPLETE
 
 ## What Was Done
-- Intent clarified and approved against https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/48
-- Classified as Level 2 (Simple Enhancement): dependency bump + coordinated one-file config migration; self-contained, no architectural design needed
+- Classified Level 2; branch `fix/48-simplecov-1.0-skip-migration` cut from updated `main`
+- Planned TDD contract specs in `spec/simplecov_setup_spec.rb` plus gemspec/lockfile/`spec_helper` migration
+- Confirmed SimpleCov 1.0 replaces `add_filter` with `skip` (same matcher grammar)
 
 ## Next Step
-- Load Level 2 workflow and execute Plan phase
+- Preflight validation, then Build
