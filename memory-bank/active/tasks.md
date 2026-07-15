@@ -64,6 +64,6 @@ Existing development dependencies at new major versions (not net-new tech). Vali
 - [x] Test planning complete (TDD)
 - [x] Implementation plan complete
 - [x] Technology validation complete
-- [ ] Preflight
+- [x] Preflight — PASS (no plan amendments; advisory: Gemfile.lock DEPENDENCIES lines sync via `bundle update`)
 - [ ] Build
 - [ ] QA
