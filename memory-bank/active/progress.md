@@ -34,3 +34,14 @@ Bump `simplecov` ~> 1.0 and `simplecov-cobertura` ~> 4.0 (gemspec + lockfile) an
     - No plan amendments required
 * Insights
     - Only touchpoints are gemspec, lockfile, and `spec/spec_helper.rb` plus new contract spec — no plugin runtime impact
+
+## 2026-07-15 - BUILD - COMPLETE
+
+* Work completed
+    - TDD contract specs + gemspec/lockfile/`skip` migration
+    - Verified: 103 examples, 0 failures; RuboCop clean
+* Decisions made
+    - Describe `SimpleCov` (not a string) for RSpec/DescribeClass
+    - Kept `/spec/` and `/vendor/` filter string forms
+* Insights
+    - `bundle update simplecov simplecov-cobertura` resolved cleanly to 1.0.1 / 4.0.0

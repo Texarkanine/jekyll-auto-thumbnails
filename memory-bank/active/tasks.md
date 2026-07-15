@@ -26,21 +26,21 @@ Bump `simplecov` ~> 1.0 and `simplecov-cobertura` ~> 4.0 (gemspec + lockfile) an
 
 ## Implementation Plan
 
-1. Stub + implement failing contract tests in `spec/simplecov_setup_spec.rb` for gemspec constraints, resolved majors, and `skip`/`add_filter` source contract; run to confirm red.
+1. [x] Stub + implement failing contract tests in `spec/simplecov_setup_spec.rb` for gemspec constraints, resolved majors, and `skip`/`add_filter` source contract; run to confirm red.
    - Files: `spec/simplecov_setup_spec.rb` (new)
    - Changes: add RSpec examples covering the behaviors above
-2. Bump gemspec development dependencies to `simplecov ~> 1.0` and `simplecov-cobertura ~> 4.0`.
+2. [x] Bump gemspec development dependencies to `simplecov ~> 1.0` and `simplecov-cobertura ~> 4.0`.
    - Files: `jekyll-auto-thumbnails.gemspec`
    - Changes: update the two `add_development_dependency` lines
-3. Refresh lockfile for those gems (`bundle update simplecov simplecov-cobertura`).
+3. [x] Refresh lockfile for those gems (`bundle update simplecov simplecov-cobertura`).
    - Files: `Gemfile.lock`
    - Changes: resolve simplecov 1.x and simplecov-cobertura 4.x (and any required transitive bumps)
-4. Migrate SimpleCov config: replace `add_filter` with `skip` for `/spec/` and `/vendor/` (or `spec/` / `vendor/`).
+4. [x] Migrate SimpleCov config: replace `add_filter` with `skip` for `/spec/` and `/vendor/` (or `spec/` / `vendor/`).
    - Files: `spec/spec_helper.rb`
    - Changes: two-line API rename; no behavior change intended
-5. Re-run new contract specs (expect green) then full suite + RuboCop.
+5. [x] Re-run new contract specs (expect green) then full suite + RuboCop.
    - Files: none beyond fixes if verification fails
-   - Changes: verification only
+   - Changes: verification only (RuboCop: describe `SimpleCov`; `%r` literals)
 
 ## Technology Validation
 
@@ -65,5 +65,5 @@ Existing development dependencies at new major versions (not net-new tech). Vali
 - [x] Implementation plan complete
 - [x] Technology validation complete
 - [x] Preflight — PASS (no plan amendments; advisory: Gemfile.lock DEPENDENCIES lines sync via `bundle update`)
-- [ ] Build
+- [x] Build — PASS (103 examples, 0 failures; RuboCop clean)
 - [ ] QA
