@@ -1,11 +1,11 @@
 # Active Context
 
 ## Current Task: mutation-testing
-**Phase:** QA - COMPLETE
+**Phase:** REFLECT - COMPLETE
 
 ## What Was Done
-- Build delivered 100% mutation coverage + draft PR #50
-- QA PASS with trivial doc/wording fixes
+- Reflection written: `memory-bank/active/reflection/reflection-mutation-testing.md`
+- Persistent reconcile: techContext already updated in QA; productContext/systemPatterns unchanged
 
 ## Next Step
-- Reflect phase, then operator runs `/niko-archive`
+- Operator runs `/niko-archive`
