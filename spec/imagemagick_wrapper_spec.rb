@@ -3,113 +3,175 @@
 require "spec_helper"
 
 RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
-  before do
-    # Reset memoization between tests
+  def reset_detected_version
     described_class.instance_variable_set(:@detected_version, nil)
   end
 
+  def with_path(commands, path: nil, win: false)
+    Dir.mktmpdir do |dir|
+      Array(commands).each do |name|
+        filename = win ? "#{name}.exe" : name
+        executable = File.join(dir, filename)
+        File.write(executable, "#!/bin/sh\n")
+        File.chmod(0o755, executable)
+      end
+
+      allow(Gem).to receive(:win_platform?).and_return(win)
+      previous_path = ENV["PATH"]
+      ENV["PATH"] = path.nil? ? dir : path
+      reset_detected_version
+      yield dir
+    ensure
+      ENV["PATH"] = previous_path
+      reset_detected_version
+    end
+  end
+
+  before do
+    reset_detected_version
+  end
+
+  describe ".detect_version" do
+    it "returns :v7 when magick is in PATH" do
+      with_path("magick") do
+        expect(described_class.detect_version).to eq(:v7)
+      end
+    end
+
+    it "returns :v6 when convert exists but magick does not" do
+      with_path("convert") do
+        expect(described_class.detect_version).to eq(:v6)
+      end
+    end
+
+    it "returns :none when neither command exists" do
+      with_path([]) do
+        expect(described_class.detect_version).to eq(:none)
+      end
+    end
+
+    it "memoizes the detected version" do
+      with_path("magick") do
+        expect(described_class.detect_version).to eq(:v7)
+
+        empty_dir = Dir.mktmpdir
+        ENV["PATH"] = empty_dir
+        expect(described_class.detect_version).to eq(:v7)
+      ensure
+        FileUtils.rm_rf(empty_dir) if defined?(empty_dir) && empty_dir
+      end
+    end
+
+    it "searches every PATH directory" do
+      first = Dir.mktmpdir
+      second = Dir.mktmpdir
+      magick = File.join(second, "magick")
+      File.write(magick, "#!/bin/sh\n")
+      File.chmod(0o755, magick)
+
+      allow(Gem).to receive(:win_platform?).and_return(false)
+      previous_path = ENV["PATH"]
+      ENV["PATH"] = [first, second].join(File::PATH_SEPARATOR)
+
+      expect(described_class.detect_version).to eq(:v7)
+    ensure
+      ENV["PATH"] = previous_path if defined?(previous_path)
+      FileUtils.rm_rf(first) if defined?(first) && first
+      FileUtils.rm_rf(second) if defined?(second) && second
+      reset_detected_version
+    end
+
+    it "handles nil PATH" do
+      allow(Gem).to receive(:win_platform?).and_return(false)
+      previous_path = ENV["PATH"]
+      ENV["PATH"] = nil
+
+      expect(described_class.detect_version).to eq(:none)
+    ensure
+      ENV["PATH"] = previous_path
+      reset_detected_version
+    end
+
+    context "on Windows" do
+      it "checks for .exe extension" do
+        with_path("magick", win: true) do
+          expect(described_class.detect_version).to eq(:v7)
+        end
+      end
+    end
+  end
+
   describe ".available?" do
-    context "when ImageMagick 7 (magick) is available" do
-      before do
-        allow(described_class).to receive(:command_exists?).with("magick").and_return(true)
-        allow(described_class).to receive(:detect_version).and_return(:v7)
-      end
-
-      it "returns true" do
+    it "returns true when ImageMagick 7 is available" do
+      with_path("magick") do
         expect(described_class.available?).to be true
       end
     end
 
-    context "when ImageMagick 6 (convert) is available" do
-      before do
-        allow(described_class).to receive(:command_exists?).with("magick").and_return(false)
-        allow(described_class).to receive(:command_exists?).with("convert").and_return(true)
-        allow(described_class).to receive(:detect_version).and_return(:v6)
-      end
-
-      it "returns true" do
+    it "returns true when ImageMagick 6 is available" do
+      with_path("convert") do
         expect(described_class.available?).to be true
       end
     end
 
-    context "when ImageMagick is not available" do
-      before do
-        allow(described_class).to receive(:command_exists?).with("magick").and_return(false)
-        allow(described_class).to receive(:command_exists?).with("convert").and_return(false)
-        allow(described_class).to receive(:detect_version).and_return(:none)
-      end
-
-      it "returns false" do
+    it "returns false when ImageMagick is not available" do
+      with_path([]) do
         expect(described_class.available?).to be false
       end
     end
   end
 
   describe ".convert_command" do
-    context "with ImageMagick 7" do
-      before do
-        allow(described_class).to receive(:detect_version).and_return(:v7)
-      end
-
-      it "returns magick convert command" do
+    it "returns magick convert for ImageMagick 7" do
+      with_path("magick") do
         expect(described_class.convert_command).to eq(%w[magick convert])
       end
     end
 
-    context "with ImageMagick 6" do
-      before do
-        allow(described_class).to receive(:detect_version).and_return(:v6)
+    it "returns convert for ImageMagick 6" do
+      with_path("convert") do
+        expect(described_class.convert_command).to eq(["convert"])
       end
+    end
 
-      it "returns convert command" do
+    it "returns convert fallback when ImageMagick is unavailable" do
+      with_path([]) do
         expect(described_class.convert_command).to eq(["convert"])
       end
     end
   end
 
   describe ".identify_command" do
-    context "with ImageMagick 7" do
-      before do
-        allow(described_class).to receive(:detect_version).and_return(:v7)
-      end
-
-      it "returns magick identify command" do
+    it "returns magick identify for ImageMagick 7" do
+      with_path("magick") do
         expect(described_class.identify_command).to eq(%w[magick identify])
       end
     end
 
-    context "with ImageMagick 6" do
-      before do
-        allow(described_class).to receive(:detect_version).and_return(:v6)
+    it "returns identify for ImageMagick 6" do
+      with_path("convert") do
+        expect(described_class.identify_command).to eq(["identify"])
       end
+    end
 
-      it "returns identify command" do
+    it "returns identify fallback when ImageMagick is unavailable" do
+      with_path([]) do
         expect(described_class.identify_command).to eq(["identify"])
       end
     end
   end
 
   describe ".execute_convert" do
-    context "with ImageMagick 7" do
-      before do
-        allow(described_class).to receive(:detect_version).and_return(:v7)
-        allow(described_class).to receive(:convert_command).and_return(%w[magick convert])
-      end
-
-      it "executes magick convert with arguments" do
+    it "executes magick convert with arguments for ImageMagick 7" do
+      with_path("magick") do
         expect(described_class).to receive(:system).with("magick", "convert", "input.jpg", "-resize", "300x200",
                                                          "output.jpg")
         described_class.execute_convert("input.jpg", "-resize", "300x200", "output.jpg")
       end
     end
 
-    context "with ImageMagick 6" do
-      before do
-        allow(described_class).to receive(:detect_version).and_return(:v6)
-        allow(described_class).to receive(:convert_command).and_return(["convert"])
-      end
-
-      it "executes convert with arguments" do
+    it "executes convert with arguments for ImageMagick 6" do
+      with_path("convert") do
         expect(described_class).to receive(:system).with("convert", "input.jpg", "-resize", "300x200", "output.jpg")
         described_class.execute_convert("input.jpg", "-resize", "300x200", "output.jpg")
       end
@@ -117,13 +179,8 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
   end
 
   describe ".execute_identify" do
-    context "with ImageMagick 7" do
-      before do
-        allow(described_class).to receive(:detect_version).and_return(:v7)
-        allow(described_class).to receive(:identify_command).and_return(%w[magick identify])
-      end
-
-      it "executes magick identify with arguments" do
+    it "executes magick identify with arguments for ImageMagick 7" do
+      with_path("magick") do
         output = "300x200"
         status = double("Status", success?: true)
         expect(Open3).to receive(:capture2e).with("magick", "identify", "-format", "%wx%h", "image.jpg[0]")
@@ -133,101 +190,14 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       end
     end
 
-    context "with ImageMagick 6" do
-      before do
-        allow(described_class).to receive(:detect_version).and_return(:v6)
-        allow(described_class).to receive(:identify_command).and_return(["identify"])
-      end
-
-      it "executes identify with arguments" do
+    it "executes identify with arguments for ImageMagick 6" do
+      with_path("convert") do
         output = "300x200"
         status = double("Status", success?: true)
         expect(Open3).to receive(:capture2e).with("identify", "-format", "%wx%h", "image.jpg[0]")
                                             .and_return([output, status])
         result = described_class.execute_identify("-format", "%wx%h", "image.jpg[0]")
         expect(result).to eq([output, status])
-      end
-    end
-  end
-
-  describe ".detect_version" do
-    context "when magick command exists" do
-      before do
-        allow(described_class).to receive(:command_exists?).with("magick").and_return(true)
-      end
-
-      it "returns :v7" do
-        expect(described_class.detect_version).to eq(:v7)
-      end
-    end
-
-    context "when convert command exists but magick does not" do
-      before do
-        allow(described_class).to receive(:command_exists?).with("magick").and_return(false)
-        allow(described_class).to receive(:command_exists?).with("convert").and_return(true)
-      end
-
-      it "returns :v6" do
-        expect(described_class.detect_version).to eq(:v6)
-      end
-    end
-
-    context "when neither command exists" do
-      before do
-        allow(described_class).to receive(:command_exists?).with("magick").and_return(false)
-        allow(described_class).to receive(:command_exists?).with("convert").and_return(false)
-      end
-
-      it "returns :none" do
-        expect(described_class.detect_version).to eq(:none)
-      end
-    end
-  end
-
-  # command_exists? is private_class_method. It is tested directly via .send
-  # because its Windows .exe-extension branch cannot be isolated through the
-  # public API: available?/convert_command only probe "magick" and "convert",
-  # so testing the generic extension-appending logic through them would conflate
-  # two unrelated concerns. Direct testing is the only way to pin the
-  # Windows PATH-probe behavior independently.
-  describe ".command_exists?" do
-    before do
-      allow(Gem).to receive(:win_platform?).and_return(false)
-      allow(ENV).to receive(:[]).with("PATH").and_return("/usr/bin:/usr/local/bin")
-    end
-
-    context "when command found in PATH" do
-      it "returns true" do
-        allow(File).to receive(:executable?).with("/usr/bin/testcmd").and_return(false)
-        allow(File).to receive(:executable?).with("/usr/local/bin/testcmd").and_return(true)
-        expect(described_class.send(:command_exists?, "testcmd")).to be true
-      end
-    end
-
-    context "when command not found in PATH" do
-      it "returns false" do
-        allow(File).to receive(:executable?).with("/usr/bin/testcmd").and_return(false)
-        allow(File).to receive(:executable?).with("/usr/local/bin/testcmd").and_return(false)
-        expect(described_class.send(:command_exists?, "testcmd")).to be false
-      end
-    end
-
-    context "on Windows" do
-      before do
-        allow(Gem).to receive(:win_platform?).and_return(true)
-        allow(ENV).to receive(:[]).with("PATH").and_return("C:\\Windows;C:\\Program Files")
-      end
-
-      it "checks for .exe extension" do
-        # File.join on Unix may produce mixed path separators for Windows-style paths
-        # Accept any path format since we're Ubuntu-only for development/testing
-        allow(File).to receive(:executable?).and_return(false)
-        # Stub the path that will actually be constructed (File.join may normalize it)
-        # We just need to verify .exe extension is added
-        allow(File).to receive(:executable?) do |path|
-          path.end_with?("testcmd.exe") && path.include?("Program")
-        end
-        expect(described_class.send(:command_exists?, "testcmd")).to be true
       end
     end
   end

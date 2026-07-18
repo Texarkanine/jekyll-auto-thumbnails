@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "pathname"
+
 module JekyllAutoThumbnails
   # URL resolution and path handling
   #
@@ -23,13 +25,8 @@ module JekyllAutoThumbnails
       return nil if external?(url)
       return url if url.start_with?("/")
 
-      # Relative path - resolve against base_dir
-      # Remove ./ prefix if present
-      cleaned_url = url.sub(%r{^\./}, "")
-
       # Join with base_dir and normalize
-      require "pathname"
-      Pathname.new(File.join(base_dir, cleaned_url)).cleanpath.to_s
+      Pathname.new(File.join(base_dir, url)).cleanpath.to_s
     end
 
     # Convert site-relative URL to filesystem path
@@ -40,9 +37,7 @@ module JekyllAutoThumbnails
     def self.to_filesystem_path(url, site_source)
       return nil if external?(url)
 
-      # Strip leading slash and join with site source
-      cleaned_url = url.sub(%r{^/}, "")
-      File.join(site_source, cleaned_url)
+      File.join(site_source, url)
     end
   end
 end

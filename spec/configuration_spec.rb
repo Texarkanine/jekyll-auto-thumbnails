@@ -117,6 +117,96 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
       end
     end
 
+    context "with quality zero" do
+      let(:config_hash) do
+        {
+          "auto_thumbnails" => {
+            "quality" => 0
+          }
+        }
+      end
+
+      it "accepts zero as valid quality" do
+        config = described_class.new(site)
+        expect(config.quality).to eq(0)
+      end
+    end
+
+    context "with quality at maximum" do
+      let(:config_hash) do
+        {
+          "auto_thumbnails" => {
+            "quality" => 100
+          }
+        }
+      end
+
+      it "accepts 100 as valid quality" do
+        config = described_class.new(site)
+        expect(config.quality).to eq(100)
+      end
+    end
+
+    context "with string quality" do
+      let(:config_hash) do
+        {
+          "auto_thumbnails" => {
+            "quality" => "90"
+          }
+        }
+      end
+
+      it "coerces string values to integers" do
+        config = described_class.new(site)
+        expect(config.quality).to eq(90)
+      end
+    end
+
+    context "with partially numeric string quality" do
+      let(:config_hash) do
+        {
+          "auto_thumbnails" => {
+            "quality" => "90abc"
+          }
+        }
+      end
+
+      it "uses Ruby to_i lenient parsing" do
+        config = described_class.new(site)
+        expect(config.quality).to eq(90)
+      end
+    end
+
+    context "with quality one above maximum" do
+      let(:config_hash) do
+        {
+          "auto_thumbnails" => {
+            "quality" => 101
+          }
+        }
+      end
+
+      it "falls back to default quality" do
+        config = described_class.new(site)
+        expect(config.quality).to eq(85)
+      end
+    end
+
+    context "with quality negative one" do
+      let(:config_hash) do
+        {
+          "auto_thumbnails" => {
+            "quality" => -1
+          }
+        }
+      end
+
+      it "falls back to default quality" do
+        config = described_class.new(site)
+        expect(config.quality).to eq(85)
+      end
+    end
+
     context "with negative quality" do
       let(:config_hash) do
         {
@@ -242,6 +332,21 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
 
         it "raises ArgumentError" do
           expect { described_class.new(site) }.to raise_error(ArgumentError, /parser/i)
+        end
+
+        it "includes the invalid value in the error message" do
+          expect { described_class.new(site) }.to raise_error(ArgumentError, /got 5/)
+        end
+      end
+
+      context "with a String subclass parser value" do
+        let(:parser_value) { Class.new(String).new("htmlX") }
+        let(:config_hash) { { "auto_thumbnails" => { "parser" => parser_value } } }
+
+        it "raises ArgumentError with inspect-style value quoting" do
+          expect { described_class.new(site) }.to raise_error(ArgumentError) do |error|
+            expect(error.message).to end_with("got #{parser_value.inspect}")
+          end
         end
       end
     end

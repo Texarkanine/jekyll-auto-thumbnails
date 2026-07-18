@@ -25,10 +25,8 @@ module JekyllAutoThumbnails
       case detect_version
       when :v7
         %w[magick convert]
-      when :v6
-        ["convert"]
       else
-        ["convert"] # Default fallback (will fail if not available)
+        ["convert"] # v6 and unavailable fallback (will fail if not available)
       end
     end
 
@@ -39,10 +37,8 @@ module JekyllAutoThumbnails
       case detect_version
       when :v7
         %w[magick identify]
-      when :v6
-        ["identify"]
       else
-        ["identify"] # Default fallback (will fail if not available)
+        ["identify"] # v6 and unavailable fallback (will fail if not available)
       end
     end
 
@@ -68,15 +64,13 @@ module JekyllAutoThumbnails
     #
     # @return [Symbol] :v6, :v7, or :none
     def self.detect_version
-      return @detected_version if defined?(@detected_version) && @detected_version
-
-      @detected_version = if command_exists?("magick")
-                            :v7
-                          elsif command_exists?("convert")
-                            :v6
-                          else
-                            :none
-                          end
+      @detected_version ||= if command_exists?("magick")
+                              :v7
+                            elsif command_exists?("convert")
+                              :v6
+                            else
+                              :none
+                            end
     end
 
     # Check if a command exists in PATH

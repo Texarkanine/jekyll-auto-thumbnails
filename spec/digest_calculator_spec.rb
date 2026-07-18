@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "digest/md5"
 require "spec_helper"
 
 RSpec.describe JekyllAutoThumbnails::DigestCalculator do
@@ -23,6 +24,12 @@ RSpec.describe JekyllAutoThumbnails::DigestCalculator do
         expect(digest).to be_a(String)
         expect(digest.length).to eq(6)
         expect(digest).to match(/^[0-9a-f]{6}$/)
+      end
+
+      it "matches the first six hex characters of the file MD5" do
+        expected = Digest::MD5.file(test_file).hexdigest.byteslice(0, 6)
+
+        expect(described_class.short_digest(test_file)).to eq(expected)
       end
     end
 
