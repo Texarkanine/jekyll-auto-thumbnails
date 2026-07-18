@@ -113,3 +113,16 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - None
 * Insights
     - None
+
+## 2026-07-18 - POST-QA SLOBAC REMEDIATION - COMPLETE
+
+* Work completed
+    - Judged SLOBAC audit (8 findings); all dispositioned fix-in-PR
+    - Spec/code fixes committed (`65da102`) and pushed to PR #50
+    - Restored intentional scan_html identify-skip when both HTML dims present, with observing example
+* Decisions made
+    - Soften presentation-coupled logs to load-bearing matchers (topic + count/URL), not full prose
+    - Prefer public `reset_detection_cache!` over `instance_variable_set`
+    - Identify-once-when-both-dims-set is a product/perf contract worth observing (not vacuous call-count)
+* Insights
+    - Softening log oracles too far (`/\b1\b/`) let Mutant delete the Generated log while Found still matched — pin distinct topics

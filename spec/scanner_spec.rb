@@ -341,6 +341,15 @@ RSpec.describe JekyllAutoThumbnails::Scanner do
         expect(reqs[:width]).to eq(300)
         expect(reqs[:height]).to eq(250)
       end
+
+      # Both attrs present: skip calculate_dimensions (no aspect-ratio work) and only
+      # identify once for the dimensions_match_original? check.
+      it "invokes identify once for the original-dimension check" do
+        described_class.scan_html(html, registry, config, "/site")
+
+        expect(JekyllAutoThumbnails::ImageMagickWrapper).to have_received(:execute_identify)
+          .with("-format", "%wx%h", "/site/photo.jpg[0]").once
+      end
     end
 
     context "with height-only explicit dimensions" do

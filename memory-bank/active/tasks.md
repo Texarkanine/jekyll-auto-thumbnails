@@ -24,3 +24,9 @@ Reach 100% SimpleCov line coverage for the three uncovered Jekyll hook registrat
 ### QA Results
 
 - PASS — no semantic issues; rework requirements complete; persistent files unchanged
+
+### Post-QA (SLOBAC)
+
+- [x] Judged 8 findings from `.slobac/2026-07-18T22-26-33/audit.md` (all fix-in-PR)
+- [x] Landed `65da102` — SLOBAC remediations + Mutant 100%
+- [x] Follow-up: keep skip-identify-when-both-dims-present as intentional optimization with observing example

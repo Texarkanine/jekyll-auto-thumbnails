@@ -43,3 +43,7 @@ As part of review feedback on the current mutation-testing draft PR:
 
 1. Reach **100% SimpleCov line coverage** (currently 286/289). The three uncovered lines are the bodies of the `Jekyll::Hooks.register` blocks in `lib/jekyll-auto-thumbnails/hooks.rb` (`initialize_system` / `process_site` / `copy_thumbnails` wiring).
 2. **Correct `CONTRIBUTING.md`** Test Coverage guidance — replace the stale “Aim for >89% line coverage” target with a 100% line-coverage expectation consistent with the project’s coverage discipline.
+
+### SLOBAC suite audit (2026-07-18)
+
+Address test-smell findings in `.slobac/2026-07-18T22-26-33/audit.md` (vacuous-assertion, implementation-coupled, over-specified-mock, presentation-coupled, naming-lies) on the mutation-testing branch while keeping Mutant at 100%.
