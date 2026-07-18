@@ -14,8 +14,6 @@ module JekyllAutoThumbnails
   # users who depended on libxml2's serialization quirks (notably the
   # injected `<meta http-equiv="Content-Type">`).
   module HtmlParser
-    module_function
-
     # Parse an HTML string with the selected parser.
     #
     # @param html [String] HTML source
@@ -25,7 +23,7 @@ module JekyllAutoThumbnails
     # @raise [NameError] if :html5 is requested under JRuby (should be
     #   prevented by Configuration validation; this is a belt-and-suspenders
     #   guard)
-    def parse(html, parser)
+    def self.parse(html, parser)
       case parser
       when :html5
         Nokogiri::HTML5.parse(html)
