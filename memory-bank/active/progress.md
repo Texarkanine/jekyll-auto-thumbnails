@@ -1,8 +1,8 @@
 # Progress
 
-Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), modeled on jekyll-llms, and open a draft PR as the reference pattern for the other two gems.
+Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), modeled on jekyll-llms, and open a draft PR as the reference pattern for the other two gems. Rework: 100% SimpleCov line coverage + CONTRIBUTING coverage target correction.
 
-**Complexity:** Level 3
+**Complexity:** Level 1
 
 ## 2026-07-18 - COMPLEXITY-ANALYSIS - COMPLETE
 
@@ -83,3 +83,12 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - Treat as rework (not new task / not archive)
 * Insights
     - PR feedback: reach 100% SimpleCov line coverage (3 uncovered Jekyll hook block bodies in `hooks.rb`); correct `CONTRIBUTING.md` coverage guidance (currently “Aim for >89%”)
+
+## 2026-07-18 - COMPLEXITY-ANALYSIS (REWORK) - COMPLETE
+
+* Work completed
+    - Classified rework as Level 1
+* Decisions made
+    - Level 1: corrective PR feedback, single area (`hooks.rb` wiring + CONTRIBUTING), no architectural design needed
+* Insights
+    - Uncovered lines are hook block bodies only; methods themselves already unit-tested
