@@ -110,11 +110,11 @@ Resolved during planning (not creative-phase):
 
 ## Implementation Plan
 
-1. **Tooling scaffold (PoC largely done — finalize & document)**
+1. **Tooling scaffold (PoC largely done — finalize & document)** ✅
     - Files: `jekyll-auto-thumbnails.gemspec`, `Gemfile.lock`, `config/mutant.yml`, `spec/support/mutant_setup.rb`, `spec/spec_helper.rb`, `.gitignore`
     - Changes: ensure deps locked; add `/.mutant/` to gitignore; keep PoC wiring; verify `bundle exec rspec` + `bundle exec mutant test` green
 
-2. **Agent / contributor guidance**
+2. **Agent / contributor guidance** ✅
     - Files: `AGENTS.md` (new), `CONTRIBUTING.md` (Mutant section)
     - Changes: port jekyll-llms kill discipline; document `mutant test` / `mutant run` / `--fail-fast`; note opensource usage
 

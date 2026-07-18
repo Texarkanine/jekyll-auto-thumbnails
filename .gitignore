@@ -2,6 +2,7 @@
 *.rbc
 /.config
 /coverage/
+/.mutant/
 /InstalledFiles
 /pkg/
 /spec/reports/

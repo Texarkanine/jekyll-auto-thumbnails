@@ -1,11 +1,11 @@
 # Active Context
 
 ## Current Task: mutation-testing
-**Phase:** PREFLIGHT - COMPLETE
+**Phase:** BUILD - IN-PROGRESS
 
 ## What Was Done
-- Preflight validated Level 3 plan — PASS
-- PoC Mutant wiring already on branch; build will finalize scaffold, AGENTS, kill loop, draft PR
+- Preflight PASS; entered Level 3 Build
+- PoC Mutant wiring already on branch (`config/mutant.yml`, `mutant_setup`, SimpleCov gate, gemspec deps)
 
 ## Next Step
-- Operator runs `/niko-build` to implement
+- Finalize scaffold (`.gitignore`), AGENTS/CONTRIBUTING, kill loop to 100% mutation coverage, draft PR

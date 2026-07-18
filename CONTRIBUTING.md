@@ -37,6 +37,25 @@ bundle exec rspec
 open coverage/index.html
 ```
 
+### Mutation Testing
+
+This project uses [Mutant](https://github.com/mbj/mutant) with the RSpec integration (`mutant-rspec`). Configuration lives in `config/mutant.yml` (`usage: opensource`).
+
+Confirm the suite passes under Mutant:
+
+```bash
+bundle exec mutant test
+```
+
+Run mutation analysis (prefer `--fail-fast` while iterating):
+
+```bash
+bundle exec mutant run --fail-fast
+bundle exec mutant run
+```
+
+When a mutant survives, either simplify redundant production code or add an observing example — do not ignore subjects or weaken coverage criteria. See `AGENTS.md` for the full discipline.
+
 ### Code Quality
 
 Check code style:
