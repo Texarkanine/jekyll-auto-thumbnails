@@ -103,3 +103,13 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - Use `Jekyll::Hooks.trigger` + side-effect assertions (not SUT stubs) for wiring coverage
 * Insights
     - Method unit tests never exercised register-block bodies; trigger is the minimal fix
+
+## 2026-07-18 - QA (REWORK) - COMPLETE
+
+* Work completed
+    - Semantic review PASS; `.qa-validation-status` = PASS
+    - Persistent reconcile: no updates required
+* Decisions made
+    - None
+* Insights
+    - None
