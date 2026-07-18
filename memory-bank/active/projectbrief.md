@@ -34,3 +34,12 @@ Reviewer inspects a draft PR that shows the reference pattern (deps, config, age
 2. `bundle exec rake` / existing RSpec + coverage gates remain green; Mutant is runnable in the jekyll-llms style.
 3. Mutation coverage goal matches the jekyll-llms discipline (kill survivors via simplify or tests; no ignore cheats), as far as this PR lands.
 4. A draft GitHub PR exists on `feat/mutation-testing` for human review.
+
+## Rework
+
+### PR Feedback (2026-07-18)
+
+As part of review feedback on the current mutation-testing draft PR:
+
+1. Reach **100% SimpleCov line coverage** (currently 286/289). The three uncovered lines are the bodies of the `Jekyll::Hooks.register` blocks in `lib/jekyll-auto-thumbnails/hooks.rb` (`initialize_system` / `process_site` / `copy_thumbnails` wiring).
+2. **Correct `CONTRIBUTING.md`** Test Coverage guidance — replace the stale “Aim for >89% line coverage” target with a 100% line-coverage expectation consistent with the project’s coverage discipline.

@@ -74,3 +74,12 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - None
 * Insights
     - See reflection doc (module_function / SUT stubs / describe-prefix / parallel inventory)
+
+## 2026-07-18 - REWORK INITIATED
+
+* Work completed
+    - Operator requested rework from PR feedback on draft PR #50 / current `mutation-testing` task
+* Decisions made
+    - Treat as rework (not new task / not archive)
+* Insights
+    - PR feedback: reach 100% SimpleCov line coverage (3 uncovered Jekyll hook block bodies in `hooks.rb`); correct `CONTRIBUTING.md` coverage guidance (currently “Aim for >89%”)
