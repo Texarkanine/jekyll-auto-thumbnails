@@ -5,16 +5,15 @@ require "spec_helper"
 
 RSpec.describe JekyllAutoThumbnails::DigestCalculator do
   describe ".short_digest" do
-    let(:test_file) { File.join(__dir__, "fixtures/images/test.jpg") }
+    let(:tmpdir) { Dir.mktmpdir }
+    let(:test_file) { File.join(tmpdir, "test.jpg") }
 
     before do
-      # Create test fixture
-      FileUtils.mkdir_p(File.dirname(test_file))
       File.write(test_file, "test image content")
     end
 
     after do
-      FileUtils.rm_f(test_file)
+      FileUtils.rm_rf(tmpdir)
     end
 
     context "with existing file" do
@@ -43,14 +42,10 @@ RSpec.describe JekyllAutoThumbnails::DigestCalculator do
     end
 
     context "with different content" do
-      let(:test_file2) { File.join(__dir__, "fixtures/images/test2.jpg") }
+      let(:test_file2) { File.join(tmpdir, "test2.jpg") }
 
       before do
         File.write(test_file2, "different content")
-      end
-
-      after do
-        FileUtils.rm_f(test_file2)
       end
 
       it "produces different digests" do

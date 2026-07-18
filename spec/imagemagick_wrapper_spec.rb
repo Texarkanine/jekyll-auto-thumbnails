@@ -3,8 +3,8 @@
 require "spec_helper"
 
 RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
-  def reset_detected_version
-    described_class.instance_variable_set(:@detected_version, nil)
+  def reset_detect_version
+    described_class.instance_variable_set(:@detect_version, nil)
   end
 
   def with_path(commands, path: nil, win: false)
@@ -17,18 +17,18 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       end
 
       allow(Gem).to receive(:win_platform?).and_return(win)
-      previous_path = ENV["PATH"]
+      previous_path = ENV.fetch("PATH", nil)
       ENV["PATH"] = path.nil? ? dir : path
-      reset_detected_version
+      reset_detect_version
       yield dir
     ensure
       ENV["PATH"] = previous_path
-      reset_detected_version
+      reset_detect_version
     end
   end
 
   before do
-    reset_detected_version
+    reset_detect_version
   end
 
   describe ".detect_version" do
@@ -70,7 +70,7 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       File.chmod(0o755, magick)
 
       allow(Gem).to receive(:win_platform?).and_return(false)
-      previous_path = ENV["PATH"]
+      previous_path = ENV.fetch("PATH", nil)
       ENV["PATH"] = [first, second].join(File::PATH_SEPARATOR)
 
       expect(described_class.detect_version).to eq(:v7)
@@ -78,18 +78,18 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
       ENV["PATH"] = previous_path if defined?(previous_path)
       FileUtils.rm_rf(first) if defined?(first) && first
       FileUtils.rm_rf(second) if defined?(second) && second
-      reset_detected_version
+      reset_detect_version
     end
 
     it "handles nil PATH" do
       allow(Gem).to receive(:win_platform?).and_return(false)
-      previous_path = ENV["PATH"]
+      previous_path = ENV.fetch("PATH", nil)
       ENV["PATH"] = nil
 
       expect(described_class.detect_version).to eq(:none)
     ensure
       ENV["PATH"] = previous_path
-      reset_detected_version
+      reset_detect_version
     end
 
     context "on Windows" do

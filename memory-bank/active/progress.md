@@ -37,3 +37,17 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - No plan amendments required
 * Insights
     - Advisory only: optional future `rake mutant` wrapper; stay CLI-faithful to jekyll-llms for now
+
+## 2026-07-18 - BUILD - COMPLETE
+
+* Work completed
+    - Finalized Mutant scaffold + AGENTS/CONTRIBUTING
+    - Kill loop to 100% mutation coverage (2338/2338)
+    - Full verification green (rspec, rubocop, mutant test, mutant run)
+* Decisions made
+    - Prefer public helpers over `.send` for Mutant observability
+    - Bucket A for unobserved debug logs / redundant nil-coercion before interpolation
+* Insights
+    - `module_function` made Mutant mutate unused instance methods — use `def self.`
+    - Stubbing SUT private methods zeroed kill rate for those subjects
+    - Shared fixture paths race under Mutant's parallel forks — use per-example tmpdirs

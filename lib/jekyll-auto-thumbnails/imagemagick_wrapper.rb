@@ -64,13 +64,13 @@ module JekyllAutoThumbnails
     #
     # @return [Symbol] :v6, :v7, or :none
     def self.detect_version
-      @detected_version ||= if command_exists?("magick")
-                              :v7
-                            elsif command_exists?("convert")
-                              :v6
-                            else
-                              :none
-                            end
+      @detect_version ||= if command_exists?("magick")
+                            :v7
+                          elsif command_exists?("convert")
+                            :v6
+                          else
+                            :none
+                          end
     end
 
     # Check if a command exists in PATH

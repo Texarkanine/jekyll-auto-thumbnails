@@ -30,18 +30,12 @@ module JekyllAutoThumbnails
         if width || height
           # Explicitly sized - calculate missing dimension if needed
           if site_source && (width.nil? || height.nil?)
-            Jekyll.logger.debug "AutoThumbnails:", "Calculating dimensions for #{src} (#{width}x#{height})"
             width, height = calculate_dimensions(src, width, height, site_source)
-            Jekyll.logger.debug "AutoThumbnails:", "Calculated: #{width}x#{height}"
           end
 
           # Skip if dimensions match original (no thumbnail needed)
-          if site_source && dimensions_match_original?(src, width, height, site_source)
-            Jekyll.logger.debug "AutoThumbnails:", "Skipping #{src} - dimensions match original"
-            next
-          end
+          next if site_source && dimensions_match_original?(src, width, height, site_source)
 
-          Jekyll.logger.debug "AutoThumbnails:", "Registering #{src} at #{width}x#{height}"
           registry.register(src, width, height)
         elsif site_source && (config.max_width || config.max_height)
           # Unsized but max config exists - check actual dimensions
@@ -61,7 +55,7 @@ module JekyllAutoThumbnails
       return unless file_path && File.exist?(file_path)
 
       actual_width, actual_height = image_dimensions(file_path)
-      return unless actual_width && actual_height
+      return unless actual_height
 
       # Check if exceeds max dimensions
       exceeds_width = config.max_width && actual_width > config.max_width
@@ -82,10 +76,10 @@ module JekyllAutoThumbnails
       # Use [0] to get only first frame (important for animated GIFs)
       # Wrapper handles both ImageMagick v6 and v7
       output, status = ImageMagickWrapper.execute_identify("-format", "%wx%h", "#{file_path}[0]")
-      return nil unless status.success? && !output.strip.empty?
+      return nil unless status.success?
 
-      width, height = output.strip.split("x").map(&:to_i)
-      [width, height]
+      match = output.match(/\A\s*(\d+)x(\d+)\s*\z/)
+      [Integer(match[1]), Integer(match[2])]
     rescue StandardError
       nil
     end
@@ -102,7 +96,7 @@ module JekyllAutoThumbnails
       return [width, height] unless file_path && File.exist?(file_path)
 
       actual_width, actual_height = image_dimensions(file_path)
-      return [width, height] unless actual_width && actual_height
+      return [width, height] unless actual_height
 
       # Calculate missing dimension preserving aspect ratio
       if width && !height
@@ -123,13 +117,11 @@ module JekyllAutoThumbnails
     # @param value [String, nil] attribute value
     # @return [Integer, nil] parsed integer or nil
     def self.parse_dimension(value)
-      return nil if value.nil? || value.empty?
-
       # Strip non-numeric characters (e.g., "300px" -> 300)
       numeric = value.to_s.gsub(/[^\d]/, "")
       return nil if numeric.empty?
 
-      numeric.to_i
+      Integer(numeric)
     end
 
     # Check if requested dimensions match original dimensions
@@ -144,12 +136,8 @@ module JekyllAutoThumbnails
       return false unless file_path && File.exist?(file_path)
 
       actual_width, actual_height = image_dimensions(file_path)
-      return false unless actual_width && actual_height
 
       width == actual_width && height == actual_height
     end
-
-    private_class_method :check_and_register_oversized, :calculate_dimensions, :parse_dimension,
-                         :dimensions_match_original?
   end
 end
