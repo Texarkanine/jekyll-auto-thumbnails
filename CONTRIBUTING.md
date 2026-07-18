@@ -128,7 +128,7 @@ Use conventional commit format:
 
 ### Test Coverage
 
-- Aim for >89% line coverage
+- Aim for **100% line coverage** (`bundle exec rspec`; see `coverage/index.html`)
 - Cover happy paths and edge cases
 - Test error handling
 - Mock external dependencies (ImageMagick, file I/O)

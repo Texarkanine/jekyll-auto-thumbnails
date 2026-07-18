@@ -92,3 +92,14 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - Level 1: corrective PR feedback, single area (`hooks.rb` wiring + CONTRIBUTING), no architectural design needed
 * Insights
     - Uncovered lines are hook block bodies only; methods themselves already unit-tested
+
+## 2026-07-18 - BUILD (REWORK) - COMPLETE
+
+* Work completed
+    - Specs: trigger `:post_read` / `:post_render` / `:post_write` and observe Hooks side effects
+    - CONTRIBUTING: line-coverage aim → 100%
+    - Green: rspec 240, SimpleCov 289/289, rubocop, mutant 2338 kills
+* Decisions made
+    - Use `Jekyll::Hooks.trigger` + side-effect assertions (not SUT stubs) for wiring coverage
+* Insights
+    - Method unit tests never exercised register-block bodies; trigger is the minimal fix

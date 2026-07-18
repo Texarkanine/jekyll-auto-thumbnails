@@ -682,4 +682,40 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       expect(logger).not_to have_received(:info)
     end
   end
+
+  # Exercises the Jekyll::Hooks.register block bodies at the bottom of hooks.rb
+  # (wiring from site lifecycle events to Hooks methods). Method behavior is
+  # covered above; these examples only prove the registrations fire.
+  describe "Jekyll hook registration" do
+    it "runs initialize_system on site post_read" do
+      Jekyll::Hooks.trigger :site, :post_read, site
+
+      expect(site.data["auto_thumbnails_config"]).to be_a(JekyllAutoThumbnails::Configuration)
+      expect(logger).to have_received(:info).with("AutoThumbnails:", "System initialized")
+    end
+
+    it "runs process_site on site post_render" do
+      described_class.initialize_system(site)
+      allow(site.data["auto_thumbnails_generator"]).to receive(:imagemagick_available?).and_return(false)
+
+      Jekyll::Hooks.trigger :site, :post_render, site
+
+      expect(logger).to have_received(:warn).with("AutoThumbnails:", "ImageMagick not found - skipping")
+    end
+
+    it "runs copy_thumbnails on site post_write" do
+      site_data["auto_thumbnails_config"] = double("Configuration", enabled?: true, cache_dir: "/cache")
+      site_data["auto_thumbnails_url_map"] = { "/photo.jpg" => "/photo_thumb-abc123-300x200.jpg" }
+      allow(FileUtils).to receive(:mkdir_p)
+      allow(FileUtils).to receive(:cp)
+
+      Jekyll::Hooks.trigger :site, :post_write, site
+
+      expect(logger).to have_received(:info).with("AutoThumbnails:", "Copying 1 thumbnails to _site")
+      expect(FileUtils).to have_received(:cp).with(
+        "/cache/photo_thumb-abc123-300x200.jpg",
+        "/test/_site/photo_thumb-abc123-300x200.jpg"
+      )
+    end
+  end
 end
