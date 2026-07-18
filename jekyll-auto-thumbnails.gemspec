@@ -35,6 +35,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "nokogiri", "~> 1.15"
 
   # Development dependencies
+  spec.add_development_dependency "mutant", "~> 0.16"
+  spec.add_development_dependency "mutant-rspec", "~> 0.16"
   spec.add_development_dependency "rake", "~> 13.3"
   spec.add_development_dependency "rspec", "~> 3.13"
   spec.add_development_dependency "rubocop", "~> 1.81"
