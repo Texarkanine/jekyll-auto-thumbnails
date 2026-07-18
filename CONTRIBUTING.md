@@ -39,9 +39,9 @@ open coverage/index.html
 
 ### Mutation Testing
 
-This project uses [Mutant](https://github.com/mbj/mutant) with the RSpec integration (`mutant-rspec`). Configuration lives in `config/mutant.yml` (`usage: opensource`).
+This project uses [Mutant](https://github.com/mbj/mutant) with the RSpec integration (`mutant-rspec`). Configuration lives in `config/mutant.yml` (`usage: opensource`). Goal: **100% mutation coverage**.
 
-Confirm the suite passes under Mutant:
+Confirm the suite passes under Mutant before analyzing mutations:
 
 ```bash
 bundle exec mutant test
@@ -54,7 +54,28 @@ bundle exec mutant run --fail-fast
 bundle exec mutant run
 ```
 
-When a mutant survives, either simplify redundant production code or add an observing example — do not ignore subjects or weaken coverage criteria. See `AGENTS.md` for the full discipline.
+#### Alive Mutations
+
+When a mutant survives, decide which bucket it falls into before changing anything:
+
+- **A) The code does too much** for what the tests require. The surviving mutation reveals redundant behavior. Simplify the implementation.
+- **B) A test is missing.** The behavior is intentional but no test observes it. Add an observing example.
+
+If unsure, ask before choosing.
+
+#### Constraints
+
+- Keep the RSpec suite green (`bundle exec rspec`).
+- Do not skip mutants by configuring Mutant to ignore them. No matcher ignores, no `coverage_criteria:` tweaks.
+- Do not use `send` or `__send__` to invoke private methods in tests just to satisfy Mutant.
+- Do not stub or mock the system under test (stub collaborators instead).
+
+Done when both are green:
+
+```bash
+bundle exec rspec
+bundle exec mutant run
+```
 
 ### Code Quality
 

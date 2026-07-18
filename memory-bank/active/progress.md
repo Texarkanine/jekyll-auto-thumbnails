@@ -41,7 +41,7 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
 ## 2026-07-18 - BUILD - COMPLETE
 
 * Work completed
-    - Finalized Mutant scaffold + AGENTS/CONTRIBUTING
+    - Finalized Mutant scaffold + CONTRIBUTING discipline
     - Kill loop to 100% mutation coverage (2338/2338)
     - Full verification green (rspec, rubocop, mutant test, mutant run)
     - Draft PR #50 opened
@@ -60,7 +60,7 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - Trivial fixes: techContext Mutant pointer; url_resolver example wording
     - Wrote `.qa-validation-status` = PASS
 * Decisions made
-    - Public Hooks/Scanner helpers accepted as AGENTS-compliant observability, not over-engineering
+    - Public Hooks/Scanner helpers accepted for Mutant observability without `.send`, not over-engineering
     - File.join slash-strip removal confirmed non-regressive on MRI File.join semantics
 * Insights
     - None beyond build insights

@@ -42,4 +42,4 @@ PoC during plan/preflight paid off — Build started with green `mutant test`. P
 ### Process
 
 - After a green Mutant PoC, inventory all evil survivors once (`mutant run` + JSON parse) before one-at-a-time `--fail-fast` — batching by structural cause beats linear kill.
-- Parallel subject-scoped subagents worked well once AGENTS constraints and A/B rules were explicit in the prompt.
+- Parallel subject-scoped subagents worked well once Mutant A/B constraints were explicit in the prompt.
