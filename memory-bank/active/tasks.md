@@ -155,6 +155,14 @@ Resolved during planning (not creative-phase):
 - **Accidental rewrite-path breakage**: Re-run hooks/scanner specs after any Hooks/HtmlParser simplification; preserve identity-return invariants from `systemPatterns.md`.
 - **Docs drift (`mutant test run`)**: AGENTS/CONTRIBUTING must document 0.16 CLI (`mutant test`, not `test run`).
 
+## Preflight Findings
+
+- **PASS** — plan aligns with RSpec layout, jekyll-llms Mutant pattern, and OSS `usage: opensource`.
+- No convention conflicts: `config/mutant.yml`, `spec/support/`, root `AGENTS.md` match established/reference layouts.
+- Downstream impact accounted for: kill loop may touch all `lib/` + `spec/` subjects; Hooks identity-return invariants called out; CI left unchanged.
+- Requirements mapped: investigate ✓, add Mutant+RSpec ✓, mirror discipline ✓, draft PR ✓.
+- Advisory (non-blocking): consider a thin `rake mutant` wrapper later for discoverability — jekyll-llms has none; keep CLI-only for reference fidelity unless build discovers pain.
+
 ## Status
 
 - [x] Component analysis complete
@@ -162,6 +170,6 @@ Resolved during planning (not creative-phase):
 - [x] Test planning complete (TDD)
 - [x] Implementation plan complete
 - [x] Technology validation complete
-- [ ] Preflight
+- [x] Preflight
 - [ ] Build
 - [ ] QA

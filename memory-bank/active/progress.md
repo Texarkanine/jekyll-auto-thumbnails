@@ -27,3 +27,13 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - Drive to full mutation coverage in this PR as the reference pattern
 * Insights
     - Older docs saying `mutant test run` are stale for 0.16.3
+
+## 2026-07-18 - PREFLIGHT - COMPLETE
+
+* Work completed
+    - Validated plan against conventions, deps, completeness
+    - Wrote `.preflight-status` = PASS
+* Decisions made
+    - No plan amendments required
+* Insights
+    - Advisory only: optional future `rake mutant` wrapper; stay CLI-faithful to jekyll-llms for now
