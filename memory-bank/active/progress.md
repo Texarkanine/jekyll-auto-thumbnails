@@ -44,6 +44,7 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - Finalized Mutant scaffold + AGENTS/CONTRIBUTING
     - Kill loop to 100% mutation coverage (2338/2338)
     - Full verification green (rspec, rubocop, mutant test, mutant run)
+    - Draft PR #50 opened
 * Decisions made
     - Prefer public helpers over `.send` for Mutant observability
     - Bucket A for unobserved debug logs / redundant nil-coercion before interpolation
@@ -51,3 +52,15 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - `module_function` made Mutant mutate unused instance methods — use `def self.`
     - Stubbing SUT private methods zeroed kill rate for those subjects
     - Shared fixture paths race under Mutant's parallel forks — use per-example tmpdirs
+
+## 2026-07-18 - QA - COMPLETE
+
+* Work completed
+    - Semantic review against plan (KISS/DRY/YAGNI/completeness/regression/integrity/docs)
+    - Trivial fixes: techContext Mutant pointer; url_resolver example wording
+    - Wrote `.qa-validation-status` = PASS
+* Decisions made
+    - Public Hooks/Scanner helpers accepted as AGENTS-compliant observability, not over-engineering
+    - File.join slash-strip removal confirmed non-regressive on MRI File.join semantics
+* Insights
+    - None beyond build insights

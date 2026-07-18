@@ -86,8 +86,8 @@ RSpec.describe JekyllAutoThumbnails::UrlResolver do
       end
     end
 
-    context "with leading slash stripped" do
-      it "joins correctly" do
+    context "with a root-relative URL" do
+      it "joins the site source and URL without duplicating separators" do
         result = described_class.to_filesystem_path("/image.jpg", site_source)
         expect(result).to eq("/home/user/site/image.jpg")
       end

@@ -16,7 +16,8 @@ Ruby gem (Jekyll plugin) targeting Ruby 3.3+ and Jekyll 4.x. HTML rewriting is p
 ## Testing Process
 
 - Tests run with RSpec, configured via `.rspec` and `spec/spec_helper.rb`. Invoke with `bundle exec rspec`.
-- Coverage via SimpleCov (with `simplecov-cobertura` formatter); output under `coverage/`.
+- Coverage via SimpleCov (with `simplecov-cobertura` formatter); output under `coverage/`. SimpleCov is skipped when Mutant is loaded (see `spec/spec_helper.rb`).
+- Mutation testing via Mutant + `mutant-rspec`, configured in `config/mutant.yml`. Agent discipline in `AGENTS.md`. Invoke with `bundle exec mutant test` / `bundle exec mutant run`.
 - Lint with RuboCop (plus `rubocop-rake` and `rubocop-rspec` plugins) as configured in `.rubocop.yml`. Invoke with `bundle exec rubocop`.
 - RSpec specs live alongside code in `spec/<name>_spec.rb` and mirror the `lib/jekyll-auto-thumbnails/<name>.rb` layout. Fixtures live under `spec/fixtures/`.
 

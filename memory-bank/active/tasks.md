@@ -13,7 +13,7 @@ Add Mutant mutation testing to jekyll-auto-thumbnails using the jekyll-llms patt
 3. **Baseline mutation run** ✅
 4. **Kill loop (TDD per survivor)** ✅ — 2338/2338 kills, 100% coverage
 5. **Final verification** ✅ — rspec 237/237, rubocop clean, mutant test + mutant run green
-6. **Draft PR** — in progress at end of Build
+6. **Draft PR** ✅ — https://github.com/Texarkanine/jekyll-auto-thumbnails/pull/50
 
 ## Status
 
@@ -24,4 +24,9 @@ Add Mutant mutation testing to jekyll-auto-thumbnails using the jekyll-llms patt
 - [x] Technology validation complete
 - [x] Preflight
 - [x] Build
-- [ ] QA
+- [x] QA
+
+### QA Results
+
+- PASS — trivial fixes: techContext Mutant note; url_resolver example wording
+- No substantive blockers
