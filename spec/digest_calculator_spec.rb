@@ -17,14 +17,6 @@ RSpec.describe JekyllAutoThumbnails::DigestCalculator do
     end
 
     context "with existing file" do
-      it "computes 6-character MD5 digest" do
-        digest = described_class.short_digest(test_file)
-
-        expect(digest).to be_a(String)
-        expect(digest.length).to eq(6)
-        expect(digest).to match(/^[0-9a-f]{6}$/)
-      end
-
       it "matches the first six hex characters of the file MD5" do
         expected = Digest::MD5.file(test_file).hexdigest.byteslice(0, 6)
 

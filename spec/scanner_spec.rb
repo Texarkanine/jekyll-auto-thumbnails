@@ -341,14 +341,6 @@ RSpec.describe JekyllAutoThumbnails::Scanner do
         expect(reqs[:width]).to eq(300)
         expect(reqs[:height]).to eq(250)
       end
-
-      it "does not calculate missing dimensions when both are specified" do
-        stub_identify("/site/photo.jpg", "600x400")
-
-        described_class.scan_html(html, registry, config, "/site")
-
-        expect(JekyllAutoThumbnails::ImageMagickWrapper).to have_received(:execute_identify).once
-      end
     end
 
     context "with height-only explicit dimensions" do

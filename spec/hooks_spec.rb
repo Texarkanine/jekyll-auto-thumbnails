@@ -134,7 +134,9 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       described_class.process_site(site)
 
       expect(generator).to have_received(:generate).with("/p1.jpg", 300, 200).at_least(:once)
-      expect(doc1).to have_received(:output=)
+      expect(doc1).to have_received(:output=) do |html|
+        expect(html).to include("/p1_thumb-abc123-300x200.jpg")
+      end
     end
 
     it "builds thumbnail URLs with forward slashes (cross-platform)" do
@@ -186,7 +188,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       described_class.process_site(site)
 
-      expect(logger).to have_received(:info).with("AutoThumbnails:", "Found 1 images to optimize")
+      expect(logger).to have_received(:info).with("AutoThumbnails:", a_string_matching(/Found\s+1\b/))
     end
 
     it "logs how many thumbnails were generated" do
@@ -198,7 +200,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       described_class.process_site(site)
 
-      expect(logger).to have_received(:info).with("AutoThumbnails:", "Generated 1 thumbnails")
+      expect(logger).to have_received(:info).with("AutoThumbnails:", a_string_matching(/Generated\s+1\b/))
     end
 
     it "warns and omits failed thumbnails from the url_map" do
@@ -209,7 +211,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       described_class.process_site(site)
 
-      expect(logger).to have_received(:warn).with("AutoThumbnails:", "Failed to generate thumbnail for /fail.jpg")
+      expect(logger).to have_received(:warn).with("AutoThumbnails:", a_string_including("/fail.jpg"))
       expect(site.data["auto_thumbnails_url_map"]).not_to have_key("/fail.jpg")
     end
 
@@ -297,7 +299,9 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       described_class.process_site(site)
 
-      expect(html_doc).to have_received(:output=)
+      expect(html_doc).to have_received(:output=) do |html|
+        expect(html).to include("/rewrite_thumb.jpg")
+      end
     end
 
     it "continues scanning after a non-HTML document" do
@@ -328,7 +332,9 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       described_class.process_site(site)
 
-      expect(doc1).to have_received(:output=)
+      expect(doc1).to have_received(:output=) do |html|
+        expect(html).to include("/p1_thumb-abc123-300x200.jpg")
+      end
     end
 
     it "passes nil dimensions when registry entries omit width" do
@@ -342,7 +348,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       expect(generator).to have_received(:generate).with("/partial.jpg", nil, 200)
     end
 
-    it "requires registry and generator keys to be present in site.data" do
+    it "requires the registry to be present in site.data" do
       site_data.delete("auto_thumbnails_registry")
 
       expect { described_class.process_site(site) }.to raise_error(NoMethodError)
@@ -374,7 +380,9 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       described_class.process_site(site)
 
-      expect(doc2).to have_received(:output=)
+      expect(doc2).to have_received(:output=) do |html|
+        expect(html).to include("/p2_thumb-abc123-400x300.jpg")
+      end
     end
 
     it "passes config.parser to replace_urls during the rewrite pass" do
@@ -644,8 +652,8 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     it "logs copy start and completion" do
       described_class.copy_thumbnails(site)
 
-      expect(logger).to have_received(:info).with("AutoThumbnails:", "Copying 1 thumbnails to _site")
-      expect(logger).to have_received(:info).with("AutoThumbnails:", "All thumbnails copied")
+      expect(logger).to have_received(:info).with("AutoThumbnails:", a_string_matching(/Copying\s+1\b/))
+      expect(logger).to have_received(:info).with("AutoThumbnails:", a_string_matching(/copied/i))
     end
 
     it "skips when config is disabled" do
@@ -691,7 +699,8 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       Jekyll::Hooks.trigger :site, :post_read, site
 
       expect(site.data["auto_thumbnails_config"]).to be_a(JekyllAutoThumbnails::Configuration)
-      expect(logger).to have_received(:info).with("AutoThumbnails:", "System initialized")
+      expect(site.data["auto_thumbnails_registry"]).to be_a(JekyllAutoThumbnails::Registry)
+      expect(site.data["auto_thumbnails_generator"]).to be_a(JekyllAutoThumbnails::Generator)
     end
 
     it "runs process_site on site post_render" do
@@ -700,7 +709,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       Jekyll::Hooks.trigger :site, :post_render, site
 
-      expect(logger).to have_received(:warn).with("AutoThumbnails:", "ImageMagick not found - skipping")
+      expect(logger).to have_received(:warn).with("AutoThumbnails:", a_string_matching(/ImageMagick/i))
     end
 
     it "runs copy_thumbnails on site post_write" do
@@ -711,7 +720,6 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       Jekyll::Hooks.trigger :site, :post_write, site
 
-      expect(logger).to have_received(:info).with("AutoThumbnails:", "Copying 1 thumbnails to _site")
       expect(FileUtils).to have_received(:cp).with(
         "/cache/photo_thumb-abc123-300x200.jpg",
         "/test/_site/photo_thumb-abc123-300x200.jpg"

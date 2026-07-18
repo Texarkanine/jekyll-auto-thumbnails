@@ -198,7 +198,7 @@ RSpec.describe JekyllAutoThumbnails::Generator do
 
         expect(logger).to have_received(:warn).with(
           "AutoThumbnails:",
-          "Thumbnail larger than original (60000 > 50000), deleting #{cached_path}"
+          a_string_including("60000", "50000", cached_path)
         )
         expect(FileUtils).to have_received(:rm_f).with(cached_path)
         expect(result).to be_nil

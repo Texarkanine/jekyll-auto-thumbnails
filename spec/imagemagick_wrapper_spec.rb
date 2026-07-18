@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
   def reset_detect_version
-    described_class.instance_variable_set(:@detect_version, nil)
+    described_class.reset_detection_cache!
   end
 
   def with_path(commands, path: nil, win: false)
@@ -57,6 +57,20 @@ RSpec.describe JekyllAutoThumbnails::ImageMagickWrapper do
         empty_dir = Dir.mktmpdir
         ENV["PATH"] = empty_dir
         expect(described_class.detect_version).to eq(:v7)
+      ensure
+        FileUtils.rm_rf(empty_dir) if defined?(empty_dir) && empty_dir
+      end
+    end
+
+    it "re-probes PATH after reset_detection_cache!" do
+      with_path("magick") do
+        expect(described_class.detect_version).to eq(:v7)
+
+        empty_dir = Dir.mktmpdir
+        ENV["PATH"] = empty_dir
+        described_class.reset_detection_cache!
+
+        expect(described_class.detect_version).to eq(:none)
       ensure
         FileUtils.rm_rf(empty_dir) if defined?(empty_dir) && empty_dir
       end

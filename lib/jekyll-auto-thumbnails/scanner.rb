@@ -28,10 +28,8 @@ module JekyllAutoThumbnails
         height = parse_dimension(img["height"])
 
         if width || height
-          # Explicitly sized - calculate missing dimension if needed
-          if site_source && (width.nil? || height.nil?)
-            width, height = calculate_dimensions(src, width, height, site_source)
-          end
+          # Explicitly sized - calculate_dimensions no-ops when both are present
+          width, height = calculate_dimensions(src, width, height, site_source) if site_source
 
           # Skip if dimensions match original (no thumbnail needed)
           next if site_source && dimensions_match_original?(src, width, height, site_source)

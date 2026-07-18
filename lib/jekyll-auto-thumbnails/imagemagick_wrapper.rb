@@ -73,6 +73,16 @@ module JekyllAutoThumbnails
                           end
     end
 
+    # Clear the memoized result of {.detect_version}.
+    #
+    # Intended for tests that mutate PATH between examples so detection can
+    # be re-probed through the public API rather than via reflection.
+    #
+    # @return [void]
+    def self.reset_detection_cache!
+      @detect_version = nil
+    end
+
     # Check if a command exists in PATH
     #
     # @param cmd [String] command name
