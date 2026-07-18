@@ -31,6 +31,8 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
         expect(config.max_width).to eq(1200)
         expect(config.max_height).to eq(800)
         expect(config.quality).to eq(90)
+        expect(config.parser).to eq(:html5)
+        expect(config.cache_dir).to eq("/test/site/.jekyll-cache/jekyll-auto-thumbnails")
       end
     end
 
@@ -50,6 +52,8 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
         expect(config.max_width).to eq(800)  # specified
         expect(config.max_height).to be_nil  # not specified
         expect(config.quality).to eq(85) # default
+        expect(config.parser).to eq(:html5)
+        expect(config.cache_dir).to eq("/test/site/.jekyll-cache/jekyll-auto-thumbnails")
       end
     end
 
@@ -63,6 +67,38 @@ RSpec.describe JekyllAutoThumbnails::Configuration do
         expect(config.max_width).to be_nil
         expect(config.max_height).to be_nil
         expect(config.quality).to eq(85)
+        expect(config.parser).to eq(:html5)
+        expect(config.cache_dir).to eq("/test/site/.jekyll-cache/jekyll-auto-thumbnails")
+      end
+    end
+
+    context "when explicitly disabled" do
+      let(:config_hash) do
+        {
+          "auto_thumbnails" => {
+            "enabled" => false
+          }
+        }
+      end
+
+      it "reads the enabled config key as false" do
+        config = described_class.new(site)
+        expect(config.enabled?).to be false
+      end
+    end
+
+    context "with an explicit parser" do
+      let(:config_hash) do
+        {
+          "auto_thumbnails" => {
+            "parser" => "html4"
+          }
+        }
+      end
+
+      it "reads the parser config key" do
+        config = described_class.new(site)
+        expect(config.parser).to eq(:html4)
       end
     end
 

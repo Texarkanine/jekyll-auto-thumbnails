@@ -19,7 +19,11 @@ module JekyllAutoThumbnails
       @enabled = config_hash.fetch("enabled", true)
       @max_width = parse_dimension(config_hash["max_width"])
       @max_height = parse_dimension(config_hash["max_height"])
-      @quality = parse_quality(config_hash.fetch("quality", 85))
+      @quality = if config_hash.key?("quality")
+                   parse_quality(config_hash.fetch("quality"))
+                 else
+                   85
+                 end
       @parser = parse_parser(config_hash.fetch("parser", "html5"))
       @cache_dir = File.join(site.source, ".jekyll-cache", "jekyll-auto-thumbnails")
     end
