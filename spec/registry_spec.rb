@@ -8,12 +8,25 @@ RSpec.describe JekyllAutoThumbnails::Registry do
   describe "#register" do
     it "stores image with dimensions" do
       registry.register("/assets/photo.jpg", 300, 200)
+      reqs = registry.requirements_for("/assets/photo.jpg")
+
       expect(registry.registered?("/assets/photo.jpg")).to be true
+      expect(reqs[:width]).to eq(300)
+      expect(reqs[:height]).to eq(200)
     end
 
     it "updates to larger width on duplicate" do
       registry.register("/assets/photo.jpg", 300, 200)
       registry.register("/assets/photo.jpg", 400, 200)
+
+      reqs = registry.requirements_for("/assets/photo.jpg")
+      expect(reqs[:width]).to eq(400)
+      expect(reqs[:height]).to eq(200)
+    end
+
+    it "keeps the larger width when duplicate has smaller width" do
+      registry.register("/assets/photo.jpg", 400, 200)
+      registry.register("/assets/photo.jpg", 300, 200)
 
       reqs = registry.requirements_for("/assets/photo.jpg")
       expect(reqs[:width]).to eq(400)
@@ -27,6 +40,33 @@ RSpec.describe JekyllAutoThumbnails::Registry do
       reqs = registry.requirements_for("/assets/photo.jpg")
       expect(reqs[:width]).to eq(300)
       expect(reqs[:height]).to eq(300)
+    end
+
+    it "keeps the larger height when duplicate has smaller height" do
+      registry.register("/assets/photo.jpg", 300, 400)
+      registry.register("/assets/photo.jpg", 300, 250)
+
+      reqs = registry.requirements_for("/assets/photo.jpg")
+      expect(reqs[:width]).to eq(300)
+      expect(reqs[:height]).to eq(400)
+    end
+
+    it "keeps existing width when re-registering with nil width" do
+      registry.register("/assets/photo.jpg", 400, 200)
+      registry.register("/assets/photo.jpg", nil, 300)
+
+      reqs = registry.requirements_for("/assets/photo.jpg")
+      expect(reqs[:width]).to eq(400)
+      expect(reqs[:height]).to eq(300)
+    end
+
+    it "keeps existing height when re-registering with nil height" do
+      registry.register("/assets/photo.jpg", 300, 400)
+      registry.register("/assets/photo.jpg", 500, nil)
+
+      reqs = registry.requirements_for("/assets/photo.jpg")
+      expect(reqs[:width]).to eq(500)
+      expect(reqs[:height]).to eq(400)
     end
 
     it "handles nil dimensions" do
@@ -46,6 +86,15 @@ RSpec.describe JekyllAutoThumbnails::Registry do
       expect(entries.size).to eq(2)
       expect(entries).to have_key("/photo1.jpg")
       expect(entries).to have_key("/photo2.jpg")
+    end
+
+    it "returns a defensive copy" do
+      registry.register("/photo.jpg", 300, 200)
+
+      entries = registry.entries
+      entries["/other.jpg"] = { width: 999, height: 999 }
+
+      expect(registry.entries).not_to have_key("/other.jpg")
     end
   end
 
@@ -68,6 +117,15 @@ RSpec.describe JekyllAutoThumbnails::Registry do
       expect(reqs).to be_a(Hash)
       expect(reqs[:width]).to eq(300)
       expect(reqs[:height]).to eq(200)
+    end
+
+    it "returns a defensive copy" do
+      registry.register("/photo.jpg", 300, 200)
+
+      reqs = registry.requirements_for("/photo.jpg")
+      reqs[:width] = 999
+
+      expect(registry.requirements_for("/photo.jpg")[:width]).to eq(300)
     end
 
     it "returns nil for unregistered image" do

@@ -13,7 +13,7 @@ module JekyllAutoThumbnails
     # @return [String] first 6 characters of MD5 hex digest
     # @raise [Errno::ENOENT] if file doesn't exist
     def self.short_digest(file_path)
-      Digest::MD5.file(file_path).hexdigest[0...6]
+      Digest::MD5.file(file_path).hexdigest.byteslice(0, 6)
     end
   end
 end

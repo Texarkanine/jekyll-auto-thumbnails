@@ -97,7 +97,7 @@ module JekyllAutoThumbnails
         cached_path = File.join(config.cache_dir, thumb_filename)
 
         # Build destination path in _site preserving directory structure
-        dest_path = File.join(site.dest, thumb_url.sub(%r{^/}, ""))
+        dest_path = File.join(site.dest, thumb_url)
         dest_dir = File.dirname(dest_path)
 
         FileUtils.mkdir_p(dest_dir)
@@ -128,8 +128,6 @@ module JekyllAutoThumbnails
       modified = false
       doc.css("article img").each do |img|
         src = img["src"]
-        next unless src
-
         thumb_url = url_map[src]
         next unless thumb_url
 
@@ -148,8 +146,6 @@ module JekyllAutoThumbnails
       ext = File.extname(doc.path || doc.url || "").downcase
       [".html", ".htm", ".md", ".markdown"].include?(ext)
     end
-
-    private_class_method :replace_urls, :html_document?
   end
 end
 

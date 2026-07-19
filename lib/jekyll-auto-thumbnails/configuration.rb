@@ -19,7 +19,11 @@ module JekyllAutoThumbnails
       @enabled = config_hash.fetch("enabled", true)
       @max_width = parse_dimension(config_hash["max_width"])
       @max_height = parse_dimension(config_hash["max_height"])
-      @quality = parse_quality(config_hash.fetch("quality", 85))
+      @quality = if config_hash.key?("quality")
+                   parse_quality(config_hash.fetch("quality"))
+                 else
+                   85
+                 end
       @parser = parse_parser(config_hash.fetch("parser", "html5"))
       @cache_dir = File.join(site.source, ".jekyll-cache", "jekyll-auto-thumbnails")
     end
@@ -39,7 +43,7 @@ module JekyllAutoThumbnails
     # @return [Integer, nil] positive integer or nil
     def parse_dimension(value)
       val = value.to_i
-      val.positive? ? val : nil
+      val if val.positive?
     end
 
     # Parse quality value (0-100)
@@ -63,7 +67,7 @@ module JekyllAutoThumbnails
     # @return [Symbol] :html4 or :html5
     # @raise [ArgumentError] for invalid values or JRuby + :html5
     def parse_parser(value)
-      unless value.is_a?(String)
+      unless value.instance_of?(String)
         raise ArgumentError,
               "auto_thumbnails: parser must be a string (\"html4\" or \"html5\"); got #{value.inspect}"
       end

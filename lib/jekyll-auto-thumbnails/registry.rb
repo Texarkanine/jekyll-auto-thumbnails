@@ -17,17 +17,11 @@ module JekyllAutoThumbnails
     # @param width [Integer, nil] required width
     # @param height [Integer, nil] required height
     def register(url, width, height)
-      existing = @entries[url]
-
-      @entries[url] = if existing
-                        # Update to max dimensions
-                        {
-                          width: [existing[:width], width].compact.max,
-                          height: [existing[:height], height].compact.max
-                        }
-                      else
-                        { width: width, height: height }
-                      end
+      previous = @entries[url]
+      @entries[url] = {
+        width: [previous&.dig(:width), width].compact.max,
+        height: [previous&.dig(:height), height].compact.max
+      }
     end
 
     # Check if image is registered
@@ -43,7 +37,7 @@ module JekyllAutoThumbnails
     # @param url [String] image URL
     # @return [Hash, nil] {width:, height:} or nil if not registered
     def requirements_for(url)
-      @entries[url]&.dup
+      @entries[url].dup
     end
 
     # Get all registered entries

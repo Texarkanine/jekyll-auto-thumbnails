@@ -72,9 +72,7 @@ module JekyllAutoThumbnails
     # @param ext [String] file extension
     # @return [String] thumbnail filename
     def build_thumbnail_filename(basename, digest, width, height, ext)
-      width_str = width || ""
-      height_str = height || ""
-      "#{basename}_thumb-#{digest}-#{width_str}x#{height_str}#{ext}"
+      "#{basename}_thumb-#{digest}-#{width}x#{height}#{ext}"
     end
 
     private
@@ -111,9 +109,7 @@ module JekyllAutoThumbnails
     # @param height [Integer, nil] target height
     # @return [String] geometry string (e.g., "400x300>")
     def build_geometry(width, height)
-      width_str = width || ""
-      height_str = height || ""
-      "#{width_str}x#{height_str}>"
+      "#{width}x#{height}>"
     end
 
     # Check if quality parameter needed for image format
