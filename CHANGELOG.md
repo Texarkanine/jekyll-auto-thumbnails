@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.0.1...v2.1.0) (2026-07-19)
+
+
+### Features
+
+* **test:** add Mutant mutation testing with RSpec ([#50](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/50)) ([42f4de6](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/42f4de6cd4740a05d7acfa4b57c01350e7054d95))
+
+
+### Bug Fixes
+
+* **deps:** bump nokogiri from 1.19.3 to 1.19.4 in the production-deps group ([#42](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/42)) ([0e41fd2](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/0e41fd2f3c6c475d77ca53e73be90ff4bf536ec7))
+* **deps:** bump nokogiri in the production-deps group ([0e41fd2](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/0e41fd2f3c6c475d77ca53e73be90ff4bf536ec7))
+
 ## [2.0.1](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.0.0...v2.0.1) (2026-05-14)
 
 
