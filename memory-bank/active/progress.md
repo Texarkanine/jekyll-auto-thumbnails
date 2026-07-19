@@ -139,3 +139,12 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - Dismiss `30px40` → reject-malformed as out-of-scope product polish
 * Insights
     - Bot reviews often confuse `File.join` with `Pathname#join` absolute-path reset semantics
+
+## 2026-07-18 - ARCHIVE - IN PROGRESS
+
+* Work completed
+    - Operator directed archive of overarching Level 3 `mutation-testing` task (including Level 1 reworks) via `/niko-archive`
+* Decisions made
+    - Archive as Level 3 feature archive despite Level 1 rework classification of the SimpleCov / SLOBAC / PR-bot follow-ups
+* Insights
+    - Reflection + progress together are the source of truth for the full journey
