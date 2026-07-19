@@ -126,3 +126,16 @@ Add Mutant mutation testing to jekyll-auto-thumbnails (RSpec integration), model
     - Identify-once-when-both-dims-set is a product/perf contract worth observing (not vacuous call-count)
 * Insights
     - Softening log oracles too far (`/\b1\b/`) let Mutant delete the Generated log while Found still matched — pin distinct topics
+
+## 2026-07-18 - POST-QA PR BOT FEEDBACK TRIAGE - COMPLETE
+
+* Work completed
+    - Judged LlamaPReview `#pullrequestreview-4729458105` + CodeRabbit `#pullrequestreview-4729462446` (10 items)
+    - Fixed item 8: skip `calculate_dimensions` when both width/height present; one identify for match-check only
+    - Green gates after fix: rspec 240, SimpleCov 100%, mutant 2336 kills
+* Decisions made
+    - Dismiss File.join-discards-prefix and `nil.dup` crash claims (false on supported Ruby)
+    - Defer path-traversal hardening in `to_filesystem_path` / copy to a follow-up issue
+    - Dismiss `30px40` → reject-malformed as out-of-scope product polish
+* Insights
+    - Bot reviews often confuse `File.join` with `Pathname#join` absolute-path reset semantics
