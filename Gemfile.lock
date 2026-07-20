@@ -172,7 +172,7 @@ GEM
     sass-embedded (1.96.0-x86_64-darwin)
       google-protobuf (~> 4.31)
     securerandom (0.4.1)
-    simplecov (1.0.1)
+    simplecov (1.0.2)
     simplecov-cobertura (4.0.0)
       rexml
       simplecov (~> 1.0)
