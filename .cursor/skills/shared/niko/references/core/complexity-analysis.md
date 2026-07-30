@@ -4,7 +4,7 @@ Determine the appropriate complexity level (1-4) for a task, then write the dete
 
 ## Step 1: Classification Target
 
-Determine what to classify. If `memory-bank/active/milestones.md` exists, read it — the classification target is the description of the first unchecked (`- [ ]`) milestone. Otherwise, the classification target is the user's task input.
+Determine what to classify. If `memory-bank/active/milestones.md` exists, read it - the classification target is the description of the first unchecked (`- [ ]`) milestone. Otherwise, the classification target is the user's task input.
 
 ## Step 2: Decision Tree
 
@@ -88,9 +88,11 @@ Create any **missing** ephemeral files as described below. Preserve files that a
 
 Create a stub file with the task name. Do **not** populate checklists yet - the level-specific planning rules prescribe the exact format and content.
 
-**`memory-bank/active/progress.md`** - If `milestones.md` exists: create a brand-new progress.md (old content is stale). Otherwise: create only if absent (preserves rework history).
+**`memory-bank/active/progress.md`** - If `milestones.md` exists: create a brand-new `progress.md` (old content is stale). Otherwise: create only if absent (preserves rework history).
 
-Include a brief summary of the work to be done as described in the project brief, followed by `**Complexity:** Level N`. This is the **system of record** for the task's complexity level — other files may display it, but `progress.md` is the canonical source.
+Load: `.cursor/rules/shared/niko/memory-bank/active/progress.mdc` and create the file by following the instructions in the rule.
+
+The initial summary should describe the work to be done as laid out in `projectbrief.md`, and the rule's `**Complexity:**` field must be populated. That field is the **system of record** for the task's complexity level - other files may display it, but `progress.md` is the canonical source.
 
 ## Step 5: Log Progress
 
