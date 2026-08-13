@@ -33,3 +33,16 @@ Append elapsed time to AutoThumbnails completion log lines (`Generated N thumbna
     - PASS; declined a shared duration gem as out of Level 2 / brief scope
 * Insights
     - AutoThumbnails regex log assertions reduce churn vs mermaid's exact strings
+
+## 2026-08-13 - BUILD - COMPLETE
+
+* Work completed
+    - Added `Hooks.format_elapsed` (`in Xs` / `in X m Y s`)
+    - Timed `process_site` onto Generated and `copy_thumbnails` onto All thumbnails copied
+    - Full suite 248 examples, 0 failures, 100% line coverage; RuboCop clean
+* Decisions made
+    - Elapsed computed into a local before logging (line-length)
+    - Clock starts after ImageMagick guard so Generated covers scan+generate+replace
+* Insights
+    - Existing regex Generated/copied matchers survived; clock stubs pin exact suffixes
+

@@ -1,11 +1,12 @@
 # Active Context
 
 ## Current Task: log-elapsed-time
-**Phase:** PREFLIGHT - COMPLETE (PASS)
+**Phase:** BUILD - COMPLETE
 
 ## What Was Done
-- Preflight PASS: TDD encoding per step, Hooks convention, no new deps, exact-string specs accounted for.
-- Advisory (not taken): a shared duration gem across Jekyll plugins would be L3/out of brief.
+- `Hooks.format_elapsed` plus timed Generated / All thumbnails copied logs.
+- Files: `/home/mobaxterm/git/jekyll-auto-thumbnails/lib/jekyll-auto-thumbnails/hooks.rb`, `/home/mobaxterm/git/jekyll-auto-thumbnails/spec/hooks_spec.rb`
+- Deviation: elapsed stored in a local to satisfy Layout/LineLength.
 
 ## Next Step
-- Build.
+- QA review.
