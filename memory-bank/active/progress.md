@@ -24,3 +24,12 @@ Append elapsed time to AutoThumbnails completion log lines (`Generated N thumbna
     - Use `Process.clock_gettime(Process::CLOCK_MONOTONIC)`
 * Insights
     - Clock-stubbed examples pin format; existing regex assertions stay as regression nets
+
+## 2026-08-13 - PREFLIGHT - COMPLETE (PASS)
+
+* Work completed
+    - Validated TDD ordering, convention (formatter on Hooks), dependency impact, completeness
+* Decisions made
+    - PASS; declined a shared duration gem as out of Level 2 / brief scope
+* Insights
+    - AutoThumbnails regex log assertions reduce churn vs mermaid's exact strings
