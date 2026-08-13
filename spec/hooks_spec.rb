@@ -17,6 +17,34 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
     allow(Jekyll).to receive(:logger).and_return(logger)
   end
 
+  describe ".format_elapsed" do
+    it "formats zero seconds" do
+      expect(described_class.format_elapsed(0)).to eq("in 0s")
+    end
+
+    it "formats sub-minute durations with an s suffix" do
+      expect(described_class.format_elapsed(12)).to eq("in 12s")
+    end
+
+    it "formats 59 seconds without minutes" do
+      expect(described_class.format_elapsed(59)).to eq("in 59s")
+    end
+
+    it "formats 60 seconds as one minute" do
+      expect(described_class.format_elapsed(60)).to eq("in 1 m 0 s")
+    end
+
+    it "formats minutes plus remaining seconds" do
+      expect(described_class.format_elapsed(62)).to eq("in 1 m 2 s")
+      expect(described_class.format_elapsed(422)).to eq("in 7 m 2 s")
+    end
+
+    it "rounds fractional seconds" do
+      expect(described_class.format_elapsed(12.4)).to eq("in 12s")
+      expect(described_class.format_elapsed(12.6)).to eq("in 13s")
+    end
+  end
+
   describe ".initialize_system" do
     it "creates configuration, registry, and generator" do
       described_class.initialize_system(site)
@@ -201,6 +229,19 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       described_class.process_site(site)
 
       expect(logger).to have_received(:info).with("AutoThumbnails:", a_string_matching(/Generated\s+1\b/))
+    end
+
+    it "appends elapsed time to the generated log" do
+      allow(site).to receive(:documents).and_return([])
+      allow(site).to receive(:pages).and_return([])
+      registry.register("/p1.jpg", 300, 200)
+      allow(generator).to receive(:generate).with("/p1.jpg", 300, 200)
+                                            .and_return("/cache/p1_thumb-abc123-300x200.jpg")
+      allow(Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(100.0, 112.0)
+
+      described_class.process_site(site)
+
+      expect(logger).to have_received(:info).with("AutoThumbnails:", "Generated 1 thumbnails in 12s")
     end
 
     it "warns and omits failed thumbnails from the url_map" do
@@ -654,6 +695,15 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
       expect(logger).to have_received(:info).with("AutoThumbnails:", a_string_matching(/Copying\s+1\b/))
       expect(logger).to have_received(:info).with("AutoThumbnails:", a_string_matching(/copied/i))
+    end
+
+    it "appends elapsed time to the copy completion log only" do
+      allow(Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(50.0, 51.0)
+
+      described_class.copy_thumbnails(site)
+
+      expect(logger).to have_received(:info).with("AutoThumbnails:", "Copying 1 thumbnails to _site")
+      expect(logger).to have_received(:info).with("AutoThumbnails:", "All thumbnails copied in 1s")
     end
 
     it "skips when config is disabled" do

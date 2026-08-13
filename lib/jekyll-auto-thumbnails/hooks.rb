@@ -5,6 +5,18 @@ require_relative "html_parser"
 module JekyllAutoThumbnails
   # Jekyll hook integration
   module Hooks
+    # Format a duration for Jekyll log suffixes.
+    #
+    # @param seconds [Numeric] elapsed seconds
+    # @return [String] `in Xs` under a minute, otherwise `in X m Y s`
+    def self.format_elapsed(seconds)
+      total = seconds.round
+      return "in #{total}s" if total < 60
+
+      minutes, remainder = total.divmod(60)
+      "in #{minutes} m #{remainder} s"
+    end
+
     # Initialize optimization system
     #
     # @param site [Jekyll::Site] Jekyll site
@@ -34,6 +46,8 @@ module JekyllAutoThumbnails
         Jekyll.logger.warn "AutoThumbnails:", "ImageMagick not found - skipping"
         return
       end
+
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
       # Scan all documents and pages
       (site.documents + site.pages).each do |doc|
@@ -77,7 +91,8 @@ module JekyllAutoThumbnails
         doc.output = replace_urls(doc.output, url_map, parser: config.parser)
       end
 
-      Jekyll.logger.info "AutoThumbnails:", "Generated #{url_map.size} thumbnails"
+      elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+      Jekyll.logger.info "AutoThumbnails:", "Generated #{url_map.size} thumbnails #{format_elapsed(elapsed)}"
     end
 
     # Copy thumbnails from cache to _site
@@ -92,6 +107,8 @@ module JekyllAutoThumbnails
 
       Jekyll.logger.info "AutoThumbnails:", "Copying #{url_map.size} thumbnails to _site"
 
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
       url_map.each_value do |thumb_url|
         thumb_filename = File.basename(thumb_url)
         cached_path = File.join(config.cache_dir, thumb_filename)
@@ -104,7 +121,8 @@ module JekyllAutoThumbnails
         FileUtils.cp(cached_path, dest_path)
       end
 
-      Jekyll.logger.info "AutoThumbnails:", "All thumbnails copied"
+      elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+      Jekyll.logger.info "AutoThumbnails:", "All thumbnails copied #{format_elapsed(elapsed)}"
     end
 
     # Replace image URLs in HTML.
