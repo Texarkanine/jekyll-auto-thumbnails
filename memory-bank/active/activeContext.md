@@ -1,11 +1,11 @@
 # Active Context
 
 ## Current Task: log-elapsed-time
-**Phase:** COMPLEXITY-ANALYSIS - COMPLETE
+**Phase:** PLAN - COMPLETE
 
 ## What Was Done
-- Operator confirmed intent: elapsed-time suffixes on AutoThumbnails completion log lines (`in Xs` / `in X m Y s`).
-- Complexity determined Level 2: small self-contained enhancement to hook logging.
+- Level 2 plan written: `format_elapsed` on `Hooks`, time `process_site` (Generated) and `copy_thumbnails` (All thumbnails copied).
+- Three TDD steps, no new files or dependencies.
 
 ## Next Step
-- Load the Level 2 workflow and execute the plan phase.
+- Preflight validation.
