@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.1.0...v2.2.0) (2026-08-13)
+
+
+### Features
+
+* **hooks:** append elapsed time to completion logs ([#54](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/54)) ([4bb9c6f](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/4bb9c6fcb9a83802e503d21d108017016c00c543))
+
 ## [2.1.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.0.1...v2.1.0) (2026-07-19)
 
 
