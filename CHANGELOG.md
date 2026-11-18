@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.1](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.2.0...v2.2.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* **deps:** bump nokogiri ([bc4c2a2](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/bc4c2a2bff998762f33c72b4909f65bbacb51238))
+* **deps:** bump nokogiri from 1.19.4 to 1.19.7 in the production-deps group ([#68](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/68)) ([bc4c2a2](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/bc4c2a2bff998762f33c72b4909f65bbacb51238))
+
 ## [2.2.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.1.0...v2.2.0) (2026-08-13)
 
 
