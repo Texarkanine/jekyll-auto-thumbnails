@@ -79,3 +79,11 @@ Write both `width` and `height` on every local image inside `<article>` that thi
     - `scan_html` returned the Nokogiri node set, so stubs had to start returning a hash once `process_site` merged that return
     - `generate` still returns only a path. Returning pixels with the path is a later change
 
+## 2026-11-22 - DRAFT PR - OPEN
+
+* Work completed
+    - Pushed `scrolljumpfix` and opened draft pull request [#71](https://github.com/Texarkanine/jekyll-auto-thumbnails/pull/71)
+* Decisions made
+    - The pull request title is the release-please message: `fix: write width and height on measured article images`
+    - The pull request stays a draft until the operator marks it ready
+
