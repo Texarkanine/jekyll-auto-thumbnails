@@ -127,8 +127,9 @@ module JekyllAutoThumbnails
 
     # Replace image URLs in HTML.
     #
-    # Returns the input string unchanged (object identity) when no replacement
-    # was actually made. This is both a perf win for pages with no matching
+    # Returns the input string unchanged (object identity) when no article image
+    # changes. A change is a new thumbnail `src`, or a `width` and `height`
+    # taken from `sizes`. This is both a perf win for pages with no matching
     # images and a correctness win: the HTML4 path otherwise round-trips every
     # page through libxml2's serializer, which injects a spurious
     # `<meta http-equiv="Content-Type">` on HTML5 sites.
@@ -136,9 +137,10 @@ module JekyllAutoThumbnails
     # @param html [String] HTML content
     # @param url_map [Hash] original URL => thumbnail URL
     # @param parser [Symbol] :html5 (default) or :html4
+    # @param sizes [Hash] original URL => {width:, height:} for the file the browser will load
     # @return [String] modified HTML (or the input itself, unchanged)
-    def self.replace_urls(html, url_map, parser: :html5)
-      return html if url_map.empty?
+    def self.replace_urls(html, url_map, parser: :html5, sizes: {})
+      return html if url_map.empty? && sizes.empty?
       return html unless html.match?(/<img/i)
 
       doc = HtmlParser.parse(html, parser)
@@ -146,11 +148,26 @@ module JekyllAutoThumbnails
       modified = false
       doc.css("article img").each do |img|
         src = img["src"]
-        thumb_url = url_map[src]
-        next unless thumb_url
+        next unless src
 
-        img["src"] = thumb_url
-        modified = true
+        if (thumb_url = url_map[src]) && img["src"] != thumb_url
+          img["src"] = thumb_url
+          modified = true
+        end
+
+        size = sizes[src]
+        next unless size && size[:width] && size[:height]
+
+        width = size[:width].to_s
+        height = size[:height].to_s
+        if img["width"] != width
+          img["width"] = width
+          modified = true
+        end
+        if img["height"] != height
+          img["height"] = height
+          modified = true
+        end
       end
 
       modified ? doc.to_html : html

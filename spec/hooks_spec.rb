@@ -648,6 +648,86 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
         expect(out).to match(/meta\s+http-equiv=["']Content-Type["']/i)
       end
     end
+
+    context "with served sizes" do
+      def article_imgs(html)
+        JekyllAutoThumbnails::HtmlParser.parse(html, :html5).css("article img")
+      end
+
+      it "writes both attributes and leaves src when the url map is empty" do
+        html = "<article><img src='/photo.jpg'></article>"
+        sizes = { "/photo.jpg" => { width: 640, height: 480 } }
+
+        out = described_class.replace_urls(html, {}, sizes: sizes)
+
+        img = article_imgs(out).first
+        expect(out).not_to equal(html)
+        expect(img["src"]).to eq("/photo.jpg")
+        expect(img["width"]).to eq("640")
+        expect(img["height"]).to eq("480")
+      end
+
+      it "returns the input object when the attributes already match and src is unchanged" do
+        html = "<article><img src='/photo.jpg' width='640' height='480'></article>"
+        sizes = { "/photo.jpg" => { width: 640, height: 480 } }
+
+        expect(described_class.replace_urls(html, {}, sizes: sizes)).to equal(html)
+      end
+
+      it "writes the thumbnail src and the served size over existing attributes" do
+        html = "<article><img src='/photo.jpg' width='300' height='200'></article>"
+        url_map = { "/photo.jpg" => "/photo_thumb.jpg" }
+        sizes = { "/photo.jpg" => { width: 640, height: 480 } }
+
+        img = article_imgs(described_class.replace_urls(html, url_map, sizes: sizes)).first
+
+        expect(img["src"]).to eq("/photo_thumb.jpg")
+        expect(img["width"]).to eq("640")
+        expect(img["height"]).to eq("480")
+      end
+
+      it "replaces a px attribute with the integer strings from the size entry" do
+        html = "<article><img src='/photo.jpg' width='300px'></article>"
+        url_map = { "/photo.jpg" => "/photo_thumb.jpg" }
+        sizes = { "/photo.jpg" => { width: 300, height: 200 } }
+
+        img = article_imgs(described_class.replace_urls(html, url_map, sizes: sizes)).first
+
+        expect(img["src"]).to eq("/photo_thumb.jpg")
+        expect(img["width"]).to eq("300")
+        expect(img["height"]).to eq("200")
+      end
+
+      it "changes src only when that URL has no size entry" do
+        html = "<article><img src='/photo.jpg' width='300' height='200'></article>"
+        url_map = { "/photo.jpg" => "/photo_thumb.jpg" }
+
+        img = article_imgs(described_class.replace_urls(html, url_map)).first
+
+        expect(img["src"]).to eq("/photo_thumb.jpg")
+        expect(img["width"]).to eq("300")
+        expect(img["height"]).to eq("200")
+      end
+
+      it "returns the input object when the only matching image is outside article" do
+        html = "<header><img src='/logo.jpg' width='10'></header>"
+        url_map = { "/logo.jpg" => "/logo_thumb.jpg" }
+        sizes = { "/logo.jpg" => { width: 64, height: 32 } }
+
+        expect(described_class.replace_urls(html, url_map, sizes: sizes)).to equal(html)
+      end
+
+      it "writes the same pair on two article images with the same src" do
+        html = "<article><img src='/photo.jpg'><img src='/photo.jpg' width='10'></article>"
+        sizes = { "/photo.jpg" => { width: 640, height: 480 } }
+
+        imgs = article_imgs(described_class.replace_urls(html, {}, sizes: sizes))
+
+        expect(imgs.map { |img| [img["src"], img["width"], img["height"]] }).to eq(
+          [["/photo.jpg", "640", "480"], ["/photo.jpg", "640", "480"]]
+        )
+      end
+    end
   end
 
   describe ".copy_thumbnails" do

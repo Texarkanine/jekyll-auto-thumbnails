@@ -47,7 +47,7 @@ When the scanner has measured a local image inside `<article>`, the published ta
 3. Write tests and run red: assert the returned `{ url => { width:, height: } }` shape and the registry results in the behavior list. Run those examples and see them fail.
 4. Write code and run green: when an existing identify succeeds, store the file's width and height in the hash passed from `scan_html`. Store that pair even when the image is not registered. Do not add an identify call. The existing "invokes identify once" example must stay green. Do not change what `register` receives, including a nil side from `check_and_register_oversized`. Return `{}` when nothing was measured.
 
-### 2. Write the served pair onto the article image — executable
+### 2. [x] Write the served pair onto the article image — executable
 
 - Files: `spec/hooks_spec.rb`, `lib/jekyll-auto-thumbnails/hooks.rb`
 
