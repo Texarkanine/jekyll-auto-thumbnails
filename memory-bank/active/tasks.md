@@ -65,7 +65,7 @@ When the scanner has measured a local image inside `<article>`, the published ta
 3. Write tests and run red: assert the published attributes, `src`, `url_map`, the found-image count, and object identity in the behavior list. Run those examples and see them fail. Then run the existing `.process_site` examples and keep them green, adjusting only the new `image_dimensions` stub if one of them needs the real method.
 4. Write code and run green: merge each `scan_html` return into one measurement hash. When `generate` returns a path, put the URL in `url_map` as today and set the served size from `Scanner.image_dimensions` on that path. Do not fill that URL from the measurement when identify returns nil. When `generate` returns nil, keep the warning and leave the URL out of `url_map`. For a measured URL that was not generated, the served size is the measurement. Pass the served hash as `sizes:` to `replace_urls`. Do not store it on `site.data`. Do not change the found-image log, which still counts `registry.entries`.
 
-### 4. Document the published pair — prose/policy
+### 4. [x] Document the published pair — prose/policy
 
 - Files: `README.md`, `memory-bank/systemPatterns.md`
 - No tests: prose/policy artifact
@@ -107,5 +107,5 @@ No new technology - validation not required
 - [x] Technology validation complete
 - [x] Pre-Mortem complete
 - [x] Preflight
-- [ ] Build
+- [x] Build
 - [ ] QA

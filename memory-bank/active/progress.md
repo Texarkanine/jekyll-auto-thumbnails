@@ -41,3 +41,17 @@ Write both `width` and `height` on every local image inside `<article>` that thi
 * Insights
     - All 18 planned test behaviors provide comprehensive coverage of edge cases (px suffixes, unsized max limits, identity returns, missing cache paths)
 
+## 2026-11-22 - BUILD - COMPLETE
+
+* Work completed
+    - Recorded measured file pixels from `scan_html` without changing thumbnail registration
+    - Wrote served `width` and `height` in `replace_urls`, including when `url_map` is empty
+    - `process_site` chooses the generated file's pixels when `src` changes, and the measurement otherwise
+    - Updated `README.md` and `memory-bank/systemPatterns.md`
+    - Full suite: 274 examples, 0 failures. RuboCop: no offenses
+* Decisions made
+    - A thumbnail whose pixels cannot be read does not receive the original file's size
+    - Hooks specs that stub `scan_html` return `{}`, because `process_site` merges that return value
+* Insights
+    - The preflight advisory to cache thumbnail pixels on the generator was left for a later task. This build identifies the generated file
+
