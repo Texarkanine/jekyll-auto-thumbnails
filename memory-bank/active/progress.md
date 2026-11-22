@@ -27,3 +27,17 @@ Write both `width` and `height` on every local image inside `<article>` that thi
 * Insights
     - `replace_urls` returns immediately when `url_map` is empty, which would skip every dimension-only update
     - ImageMagick geometry uses `>`, so the size passed to `generate` can differ from the file that is written
+
+## 2026-11-22 - PREFLIGHT - COMPLETE (PASS WITH ADVISORY)
+
+* Work completed
+    - Executed Level 2 preflight validation on implementation and test plan in `memory-bank/active/tasks.md`
+    - Verified strict TDD sequencing across executable units (Units 1-3) and justified test omission for prose/policy unit (Unit 4)
+    - Checked conventions, dependency impacts, and contract compatibility across `Scanner`, `Hooks`, and `HtmlParser`
+    - Formulated advisory finding on thumbnail artifact encapsulation and metadata caching in `Generator`
+    - Wrote validation result `PASS WITH ADVISORY` to `memory-bank/active/.preflight-status`
+* Decisions made
+    - Preflight passed with advisory: plan is approved as-is for build without blocking modifications
+* Insights
+    - All 18 planned test behaviors provide comprehensive coverage of edge cases (px suffixes, unsized max limits, identity returns, missing cache paths)
+
