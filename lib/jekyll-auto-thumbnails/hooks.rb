@@ -49,18 +49,21 @@ module JekyllAutoThumbnails
 
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-      # Scan all documents and pages
+      # Scan all documents and pages. Measurements are file pixels, not thumbnail requests.
+      measurements = {}
       (site.documents + site.pages).each do |doc|
         next unless doc.output
         next unless html_document?(doc)
 
-        Scanner.scan_html(doc.output, registry, config, site.source)
+        measurements.merge!(Scanner.scan_html(doc.output, registry, config, site.source))
       end
 
       Jekyll.logger.info "AutoThumbnails:", "Found #{registry.entries.size} images to optimize"
 
-      # Generate thumbnails
+      # Generate thumbnails. A served size is the thumbnail file when src changes,
+      # and the measured file when it does not.
       url_map = {}
+      served = {}
       registry.entries.each do |url, requirements|
         cached_path = generator.generate(url, requirements[:width], requirements[:height])
 
@@ -75,9 +78,17 @@ module JekyllAutoThumbnails
                         "#{url_dir}/#{thumb_filename}"
                       end
           url_map[url] = thumb_url
+          width, height = Scanner.image_dimensions(cached_path)
+          served[url] = { width: width, height: height } if width && height
         else
           Jekyll.logger.warn "AutoThumbnails:", "Failed to generate thumbnail for #{url}"
         end
+      end
+
+      measurements.each do |url, dims|
+        next if url_map.key?(url)
+
+        served[url] = dims
       end
 
       # Store url_map for post_write hook
@@ -88,7 +99,7 @@ module JekyllAutoThumbnails
         next unless doc.output
         next unless html_document?(doc)
 
-        doc.output = replace_urls(doc.output, url_map, parser: config.parser)
+        doc.output = replace_urls(doc.output, url_map, parser: config.parser, sizes: served)
       end
 
       elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started

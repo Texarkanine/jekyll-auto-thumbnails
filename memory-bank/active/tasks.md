@@ -56,7 +56,7 @@ When the scanner has measured a local image inside `<article>`, the published ta
 3. Write tests and run red: assert attribute values, unchanged `src` where required, and object identity where required. Run those examples and see them fail.
 4. Write code and run green: return the input object when `url_map` and `sizes` are both empty, or when the HTML has no `<img>`, or when no article image actually changes. For an article image whose `src` is in `sizes` with both integers, set `width` and `height` to those integer strings. Set `src` from `url_map` when present. Assign an attribute only when the new string differs. Leave images outside `article img` alone. A URL in `url_map` with no size entry changes `src` only.
 
-### 3. Choose the file the browser will load — executable
+### 3. [x] Choose the file the browser will load — executable
 
 - Files: `spec/hooks_spec.rb`, `lib/jekyll-auto-thumbnails/hooks.rb`
 

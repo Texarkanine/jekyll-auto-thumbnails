@@ -139,6 +139,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       allow(site).to receive(:pages).and_return([doc2])
       allow(generator).to receive(:imagemagick_available?).and_return(true)
       allow(generator).to receive(:generate).and_return(nil)
+      allow(JekyllAutoThumbnails::Scanner).to receive(:image_dimensions).and_return(nil)
       allow(doc1).to receive(:output=)
       allow(doc2).to receive(:output=)
     end
@@ -258,7 +259,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
     it "skips when config is missing" do
       site_data.delete("auto_thumbnails_config")
-      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
 
       described_class.process_site(site)
 
@@ -267,7 +268,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
     it "skips when config is disabled" do
       allow(config).to receive(:enabled?).and_return(false)
-      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
 
       described_class.process_site(site)
 
@@ -276,7 +277,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
     it "skips when ImageMagick is unavailable" do
       allow(generator).to receive(:imagemagick_available?).and_return(false)
-      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
 
       described_class.process_site(site)
 
@@ -286,7 +287,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
     it "skips documents without rendered output" do
       allow(doc1).to receive(:output).and_return(nil)
-      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
 
       described_class.process_site(site)
 
@@ -333,7 +334,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       allow(site).to receive(:documents).and_return([css_doc, html_doc])
       allow(site).to receive(:pages).and_return([])
       allow(html_doc).to receive(:output=)
-      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+      allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
       registry.register("/rewrite.jpg", 200, 200)
       allow(generator).to receive(:generate).with("/rewrite.jpg", 200, 200)
                                             .and_return("/cache/rewrite_thumb.jpg")
@@ -469,7 +470,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       it "skips CSS documents" do
         allow(site).to receive(:documents).and_return([css_doc])
         allow(site).to receive(:pages).and_return([])
-        allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+        allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
 
         described_class.process_site(site)
 
@@ -479,7 +480,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       it "skips SCSS documents" do
         allow(site).to receive(:documents).and_return([scss_doc])
         allow(site).to receive(:pages).and_return([])
-        allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+        allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
 
         described_class.process_site(site)
 
@@ -489,7 +490,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       it "skips JS documents" do
         allow(site).to receive(:documents).and_return([js_doc])
         allow(site).to receive(:pages).and_return([])
-        allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+        allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
 
         described_class.process_site(site)
 
@@ -499,7 +500,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
       it "processes HTML documents while skipping non-HTML" do
         allow(site).to receive(:documents).and_return([html_doc, css_doc])
         allow(site).to receive(:pages).and_return([scss_doc])
-        allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html)
+        allow(JekyllAutoThumbnails::Scanner).to receive(:scan_html).and_return({})
         allow(html_doc).to receive(:output=)
 
         described_class.process_site(site)
@@ -510,6 +511,128 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
                                                                                     anything)
         expect(JekyllAutoThumbnails::Scanner).not_to have_received(:scan_html).with(scss_doc.output, anything,
                                                                                     anything, anything)
+      end
+    end
+
+    context "with served image sizes" do
+      def article_img(html)
+        JekyllAutoThumbnails::HtmlParser.parse(html, :html5).at_css("article img")
+      end
+
+      def use_page(html)
+        doc = double("Document", output: html, path: "page.html", url: "/page.html")
+        allow(doc).to receive(:output=)
+        allow(site).to receive(:documents).and_return([doc])
+        allow(site).to receive(:pages).and_return([])
+        doc
+      end
+
+      def width_only_config
+        double(
+          "Configuration",
+          enabled?: true, max_width: 800, max_height: nil, cache_dir: "/cache", parser: :html5
+        )
+      end
+
+      it "writes the file size when the image is measured and no thumbnail is generated" do
+        html = "<article><img src='/fit.jpg'></article>"
+        fit_doc = double("Document", output: html, path: "page.html", url: "/fit.html")
+        allow(fit_doc).to receive(:output=)
+        allow(site).to receive(:documents).and_return([fit_doc])
+        allow(site).to receive(:pages).and_return([])
+        allow(File).to receive(:exist?).with("/test/site/fit.jpg").and_return(true)
+        allow(JekyllAutoThumbnails::Scanner).to receive(:image_dimensions)
+          .with("/test/site/fit.jpg").and_return([400, 300])
+
+        described_class.process_site(site)
+
+        expect(generator).not_to have_received(:generate)
+        expect(site.data["auto_thumbnails_url_map"]).not_to have_key("/fit.jpg")
+        expect(logger).to have_received(:info).with("AutoThumbnails:", a_string_matching(/Found\s+0\b/))
+        expect(fit_doc).to have_received(:output=) do |out|
+          img = article_img(out)
+          expect(img["src"]).to eq("/fit.jpg")
+          expect(img["width"]).to eq("400")
+          expect(img["height"]).to eq("300")
+        end
+      end
+
+      it "writes the identified thumbnail size, not the request or the original" do
+        big_doc = use_page("<article><img src='/big.jpg'></article>")
+        site_data["auto_thumbnails_config"] = width_only_config
+        allow(File).to receive(:exist?).with("/test/site/big.jpg").and_return(true)
+        allow(JekyllAutoThumbnails::Scanner).to receive(:image_dimensions) do |path|
+          case path
+          when "/test/site/big.jpg" then [2000, 1500]
+          when "/cache/big_thumb.jpg" then [640, 480]
+          end
+        end
+        allow(generator).to receive(:generate).with("/big.jpg", 800, nil).and_return("/cache/big_thumb.jpg")
+
+        described_class.process_site(site)
+
+        expect(big_doc).to have_received(:output=) do |out|
+          img = article_img(out)
+          expect(img["src"]).to include("big_thumb.jpg")
+          expect(img["width"]).to eq("640")
+          expect(img["height"]).to eq("480")
+        end
+      end
+
+      it "does not copy the original size onto a thumbnail identify could not read" do
+        big_doc = use_page("<article><img src='/big.jpg'></article>")
+        site_data["auto_thumbnails_config"] = width_only_config
+        allow(File).to receive(:exist?).with("/test/site/big.jpg").and_return(true)
+        allow(JekyllAutoThumbnails::Scanner).to receive(:image_dimensions) do |path|
+          path == "/test/site/big.jpg" ? [2000, 1500] : nil
+        end
+        allow(generator).to receive(:generate).with("/big.jpg", 800, nil).and_return("/cache/big_thumb.jpg")
+
+        described_class.process_site(site)
+
+        expect(big_doc).to have_received(:output=) do |out|
+          img = article_img(out)
+          expect(img["src"]).to include("big_thumb.jpg")
+          expect(img["width"]).to be_nil
+          expect(img["height"]).to be_nil
+        end
+      end
+
+      it "writes the measurement when generation fails" do
+        html = "<article><img src='/big.jpg'></article>"
+        big_doc = double("Document", output: html, path: "page.html", url: "/big.html")
+        allow(big_doc).to receive(:output=)
+        allow(site).to receive(:documents).and_return([big_doc])
+        allow(site).to receive(:pages).and_return([])
+        allow(File).to receive(:exist?).with("/test/site/big.jpg").and_return(true)
+        allow(JekyllAutoThumbnails::Scanner).to receive(:image_dimensions)
+          .with("/test/site/big.jpg").and_return([2000, 1500])
+        allow(generator).to receive(:generate).with("/big.jpg", 800, 600).and_return(nil)
+
+        described_class.process_site(site)
+
+        expect(logger).to have_received(:warn).with("AutoThumbnails:", a_string_including("/big.jpg"))
+        expect(site.data["auto_thumbnails_url_map"]).not_to have_key("/big.jpg")
+        expect(big_doc).to have_received(:output=) do |out|
+          img = article_img(out)
+          expect(img["src"]).to eq("/big.jpg")
+          expect(img["width"]).to eq("2000")
+          expect(img["height"]).to eq("1500")
+        end
+      end
+
+      it "assigns the original string when the only image is outside article" do
+        html = "<header><img src='/logo.jpg'></header>"
+        header_doc = double("Document", output: html, path: "page.html", url: "/page.html")
+        allow(header_doc).to receive(:output=)
+        allow(site).to receive(:documents).and_return([header_doc])
+        allow(site).to receive(:pages).and_return([])
+
+        described_class.process_site(site)
+
+        expect(header_doc).to have_received(:output=) do |out|
+          expect(out).to equal(html)
+        end
       end
     end
   end
