@@ -55,3 +55,14 @@ Write both `width` and `height` on every local image inside `<article>` that thi
 * Insights
     - The preflight advisory to cache thumbnail pixels on the generator was left for a later task. This build identifies the generated file
 
+## 2026-11-22 - QA - COMPLETE (PASS)
+
+* Work completed
+    - Semantic review of the build against the plan in `memory-bank/active/tasks.md`: KISS, DRY, YAGNI, completeness, regression, integrity, documentation
+    - Re-ran mechanical checks: 274 examples, 0 failures, 100% line coverage; RuboCop 24 files, no offenses
+    - Wrote validation status to `memory-bank/active/.qa-validation-status`
+* Decisions made
+    - PASS: no blocking findings; the unbuilt preflight advisory stays a later task, not a QA failure
+* Insights
+    - Measurements-out-of-registry and identify-the-generated-file decisions from planning held up under review
+

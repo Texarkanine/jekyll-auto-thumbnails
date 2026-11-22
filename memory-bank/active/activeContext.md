@@ -1,7 +1,7 @@
 # Active Context
 
 ## Current Task: Write width and height on measured article images
-**Phase:** BUILD - COMPLETE
+**Phase:** QA - COMPLETE (PASS)
 
 ## What Was Done
 - Confirmed intent: implement [issue 70](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/70) as written.
