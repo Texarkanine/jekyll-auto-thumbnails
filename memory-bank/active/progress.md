@@ -109,3 +109,16 @@ Rework: cut README text that does not belong, and use an already recorded measur
 * Insights
     - The decision tree splits this between a correction and a small enhancement. Scope, risk, and effort put it at Level 1.
 
+## 2026-11-22 - REWORK BUILD - COMPLETE
+
+* Work completed
+    - `dimensions_match_original?` uses a pair already recorded for that URL
+    - Restored the original README pass-through sentence and removed the two published-tag samples
+    - Full suite: 275 examples, 0 failures, 100% line coverage. RuboCop: no offenses
+* Decisions made
+    - The branch's re-serialization sentence does not belong in the README. The original sentence still matches the code.
+    - The published-tag samples do not belong. How It Works step 4 already states the write.
+    - A failed first identify still falls through to a second identify. No sentinel for that path.
+* Insights
+    - The new example failed with 2 identify calls, then passed with 1. The both-attributes "identify once" example was already one call and stayed green.
+

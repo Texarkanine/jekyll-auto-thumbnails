@@ -60,7 +60,7 @@ Set `parser: html4` to restore the previous behavior (the libxml2-based `Nokogir
 
 **JRuby note**: `Nokogiri::HTML5` is not available on JRuby. Under JRuby, you **must** explicitly set `parser: html4`; otherwise the plugin will raise a configuration error at build time.
 
-A page is re-serialized when this plugin measured a local image inside `<article>`, or when it changes an `<img src>` inside `<article>` to a thumbnail. A page with nothing to rewrite is passed through byte-for-byte, regardless of which parser is selected.
+Pages that contain no replaceable `<article><img>` are no longer re-serialized at all - they are passed through byte-for-byte, regardless of which parser is selected.
 
 ## How It Works
 
@@ -83,12 +83,6 @@ A page is re-serialized when this plugin measured a local image inside `<article
 </article>
 ```
 
-The published tag has both `width` and `height` for the file the browser loads. If the author wrote only one of them, the published tag still has both. When `src` is a thumbnail, the numbers are that thumbnail's pixels.
-
-```html
-<img src="/photo_thumb-abc123-300x200.jpg" width="300" height="200">
-```
-
 ### Automatic Optimization
 
 ```yaml
@@ -102,12 +96,6 @@ auto_thumbnails:
   <img src="/big-photo.jpg">
   <!-- If photo is 2000x1500, generates: big-photo_thumb-def456-800x600.jpg -->
 </article>
-```
-
-The published tag has both numbers for that thumbnail file:
-
-```html
-<img src="/big-photo_thumb-def456-800x600.jpg" width="800" height="600">
 ```
 
 ### With Markdown

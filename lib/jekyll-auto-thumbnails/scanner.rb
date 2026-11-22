@@ -134,7 +134,8 @@ module JekyllAutoThumbnails
       Integer(numeric)
     end
 
-    # Check if requested dimensions match original dimensions
+    # Check if requested dimensions match original dimensions.
+    # A pair already recorded for this URL is that file, so the match uses it.
     #
     # @param url [String] image URL
     # @param width [Integer] requested width
@@ -143,6 +144,10 @@ module JekyllAutoThumbnails
     # @param measurements [Hash, nil] url => {width:, height:} of files read during this scan
     # @return [Boolean] true if dimensions match original
     def self.dimensions_match_original?(url, width, height, site_source, measurements: nil)
+      if (known = measurements&.[](url))
+        return width == known[:width] && height == known[:height]
+      end
+
       file_path = UrlResolver.to_filesystem_path(url, site_source)
       return false unless file_path && File.exist?(file_path)
 

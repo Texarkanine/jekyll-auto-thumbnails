@@ -1,10 +1,12 @@
 # Active Context
 
 ## Current Task: Trim the README and the repeated identify
-**Phase:** COMPLEXITY-ANALYSIS - COMPLETE
+**Phase:** BUILD - COMPLETE
 
 ## What Was Done
-- Classified the rework as Level 1. One branch in `Scanner`, plus cuts in the README. No design choice left open.
+- A width-only scan identifies the file once. The match check uses the pair `calculate_dimensions` already recorded.
+- Restored the original README pass-through sentence. Removed the two published-tag samples. How It Works step 4 stays.
+- Full suite: 275 examples, 0 failures, 100% line coverage. RuboCop: no offenses.
 
 ## Next Step
-- Load the Level 1 workflow and build.
+- Level 1 QA.

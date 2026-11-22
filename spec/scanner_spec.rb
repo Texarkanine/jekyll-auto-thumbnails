@@ -475,6 +475,17 @@ RSpec.describe JekyllAutoThumbnails::Scanner do
         expect(measured["/photo.jpg"]).to eq({ width: 600, height: 400 })
       end
 
+      it "identifies a width-only image once" do
+        html = '<article><img src="/photo.jpg" width="300"></article>'
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
+        stub_identify("/site/photo.jpg", "600x400")
+
+        described_class.scan_html(html, registry, config, "/site")
+
+        expect(JekyllAutoThumbnails::ImageMagickWrapper).to have_received(:execute_identify)
+          .with("-format", "%wx%h", "/site/photo.jpg[0]").once
+      end
+
       it "returns the file size for a height-only request and registers the calculated size" do
         html = '<article><img src="/photo.jpg" height="200"></article>'
         allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
