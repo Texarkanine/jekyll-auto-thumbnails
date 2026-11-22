@@ -2,7 +2,9 @@
 
 Write both `width` and `height` on every local image inside `<article>` that this plugin has measured, matching the file the browser will load, as specified in [issue 70](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/70) and `memory-bank/active/projectbrief.md`.
 
-**Complexity:** Level 2
+Rework: cut README text that does not belong, and use an already recorded measurement for the one-sided match check.
+
+**Complexity:** Level 1
 
 ## 2026-11-22 - COMPLEXITY-ANALYSIS - COMPLETE
 
@@ -96,4 +98,14 @@ Write both `width` and `height` on every local image inside `<article>` that thi
     - Rework covers two trims from review: README text that does not belong, and the second identify on a one-sided scan
 * Insights
     - Operator: if the README text does not belong, cut it. Do not rewrite it into a corrected version.
+
+## 2026-11-22 - REWORK COMPLEXITY-ANALYSIS - COMPLETE
+
+* Work completed
+    - Classified the rework from the operator's request
+* Decisions made
+    - Level 1. The code change is one branch in `Scanner`. The README change is a cut. The approach is already chosen, and a wrong match check stays inside that one method.
+    - The earlier cycle on this task was Level 2. That record stays in the first complexity section above.
+* Insights
+    - The decision tree splits this between a correction and a small enhancement. Scope, risk, and effort put it at Level 1.
 
