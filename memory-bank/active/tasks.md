@@ -14,3 +14,10 @@ README cuts, no replacement text:
 - The published-tag samples repeated How It Works step 4, and the `max_width`-only sample named a file this config does not write. Both samples are removed. Step 4 stays.
 
 Files: `lib/jekyll-auto-thumbnails/scanner.rb`, `spec/scanner_spec.rb`, `README.md`
+
+## QA - COMPLETE (PASS)
+
+* `dimensions_match_original?` reuses the recorded pair; width-only spec asserts one identify call
+* README pass-through sentence restored verbatim from `main`; both published-tag samples removed, step 4 intact
+* Mechanical: 275 examples, 0 failures, 100% line coverage; RuboCop 24 files, no offenses
+* No blocking findings on KISS, DRY, YAGNI, completeness, regression, integrity, or documentation

@@ -122,3 +122,15 @@ Rework: cut README text that does not belong, and use an already recorded measur
 * Insights
     - The new example failed with 2 identify calls, then passed with 1. The both-attributes "identify once" example was already one call and stayed green.
 
+## 2026-11-22 - REWORK QA - COMPLETE (PASS)
+
+* Work completed
+    - Semantic review of the rework against the operator's two trims: KISS, DRY, YAGNI, completeness, regression, integrity, documentation
+    - Verified the restored README sentence matches `main` verbatim and both published-tag samples are gone with step 4 intact
+    - Re-ran mechanical checks: 275 examples, 0 failures, 100% line coverage; RuboCop 24 files, no offenses
+    - Wrote validation status to `memory-bank/active/.qa-validation-status`
+* Decisions made
+    - PASS: no blocking findings; the failed-first-identify fallthrough with no sentinel stands as decided in build
+* Insights
+    - The one-sided match check now reads the pair `calculate_dimensions` recorded, so the second identify only happens when the first read failed
+

@@ -1,0 +1,1 @@
+PASS — Rework QA 2026-11-22: `dimensions_match_original?` reuses the recorded pair (width-only identifies once, verified by new spec); README pass-through sentence restored verbatim from main and both published-tag samples removed with step 4 intact. Mechanical: 275 examples, 0 failures, 100% line coverage; RuboCop 24 files, no offenses. No blocking findings.
