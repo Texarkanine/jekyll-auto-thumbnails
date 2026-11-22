@@ -87,3 +87,13 @@ Write both `width` and `height` on every local image inside `<article>` that thi
     - The pull request title is the release-please message: `fix: write width and height on measured article images`
     - The pull request stays a draft until the operator marks it ready
 
+## 2026-11-22 - REWORK - INITIATED
+
+* Work completed
+    - Operator chose rework of `20261122-issue-70-image-dimensions` over archive
+* Decisions made
+    - Current complexity of the completed task: Level 2
+    - Rework covers two trims from review: README text that does not belong, and the second identify on a one-sided scan
+* Insights
+    - Operator: if the README text does not belong, cut it. Do not rewrite it into a corrected version.
+

@@ -36,3 +36,10 @@ Implement [issue 70](https://github.com/Texarkanine/jekyll-auto-thumbnails/issue
 1. A measured local image inside `<article>` has both `width` and `height` in the published HTML, including when the plugin does not change `src`.
 2. When `src` points at a thumbnail, `width` and `height` match that thumbnail, not the original file.
 3. An image outside `<article>`, and a remote image this plugin does not read, are unchanged.
+
+## Rework
+
+Operator review of the reflect-complete branch, kept as rework on this task:
+
+1. README text added for re-serialization and for a published tag under `max_width` only: if that information does not belong in the README, cut it. Do not replace it with a corrected write-up.
+2. A one-sided article image identifies the same file twice. When the scan has already recorded that file's pixels, the match check uses the recorded pair.
