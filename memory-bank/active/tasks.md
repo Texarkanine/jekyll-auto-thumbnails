@@ -38,7 +38,7 @@ When the scanner has measured a local image inside `<article>`, the published ta
 
 ## Implementation Plan
 
-### 1. Record file pixels from the scan — executable
+### 1. [x] Record file pixels from the scan — executable
 
 - Files: `spec/scanner_spec.rb`, `lib/jekyll-auto-thumbnails/scanner.rb`
 

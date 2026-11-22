@@ -14,7 +14,9 @@ module JekyllAutoThumbnails
     # @param registry [Registry] image registry
     # @param config [Configuration] configuration
     # @param site_source [String] Jekyll site source (optional, for unsized image checking)
+    # @return [Hash] url => {width:, height:} for each local article image whose file was read
     def self.scan_html(html, registry, config, site_source = nil)
+      measurements = {}
       doc = HtmlParser.parse(html, config.parser)
 
       # Only process images in <article> tags
@@ -29,17 +31,21 @@ module JekyllAutoThumbnails
 
         if width || height
           # Only identify for aspect-ratio fill when a dimension is missing
-          width, height = calculate_dimensions(src, width, height, site_source) if site_source && (!width || !height)
+          if site_source && (!width || !height)
+            width, height = calculate_dimensions(src, width, height, site_source, measurements: measurements)
+          end
 
           # Skip if dimensions match original (no thumbnail needed)
-          next if site_source && dimensions_match_original?(src, width, height, site_source)
+          next if site_source && dimensions_match_original?(src, width, height, site_source, measurements: measurements)
 
           registry.register(src, width, height)
         elsif site_source && (config.max_width || config.max_height)
           # Unsized but max config exists - check actual dimensions
-          check_and_register_oversized(src, registry, config, site_source)
+          check_and_register_oversized(src, registry, config, site_source, measurements: measurements)
         end
       end
+
+      measurements
     end
 
     # Check if image exceeds max dimensions and register if so
@@ -48,12 +54,15 @@ module JekyllAutoThumbnails
     # @param registry [Registry] image registry
     # @param config [Configuration] configuration
     # @param site_source [String] site source directory
-    def self.check_and_register_oversized(url, registry, config, site_source)
+    # @param measurements [Hash, nil] url => {width:, height:} of files read during this scan
+    def self.check_and_register_oversized(url, registry, config, site_source, measurements: nil)
       file_path = UrlResolver.to_filesystem_path(url, site_source)
       return unless file_path && File.exist?(file_path)
 
       actual_width, actual_height = image_dimensions(file_path)
       return unless actual_height
+
+      record_measurement(measurements, url, actual_width, actual_height)
 
       # Check if exceeds max dimensions
       exceeds_width = config.max_width && actual_width > config.max_width
@@ -88,13 +97,16 @@ module JekyllAutoThumbnails
     # @param width [Integer, nil] specified width
     # @param height [Integer, nil] specified height
     # @param site_source [String] site source directory
+    # @param measurements [Hash, nil] url => {width:, height:} of files read during this scan
     # @return [Array<Integer, Integer>] [width, height] with calculated dimension
-    def self.calculate_dimensions(url, width, height, site_source)
+    def self.calculate_dimensions(url, width, height, site_source, measurements: nil)
       file_path = UrlResolver.to_filesystem_path(url, site_source)
       return [width, height] unless file_path && File.exist?(file_path)
 
       actual_width, actual_height = image_dimensions(file_path)
       return [width, height] unless actual_height
+
+      record_measurement(measurements, url, actual_width, actual_height)
 
       # Calculate missing dimension preserving aspect ratio
       if width && !height
@@ -128,14 +140,29 @@ module JekyllAutoThumbnails
     # @param width [Integer] requested width
     # @param height [Integer] requested height
     # @param site_source [String] site source directory
+    # @param measurements [Hash, nil] url => {width:, height:} of files read during this scan
     # @return [Boolean] true if dimensions match original
-    def self.dimensions_match_original?(url, width, height, site_source)
+    def self.dimensions_match_original?(url, width, height, site_source, measurements: nil)
       file_path = UrlResolver.to_filesystem_path(url, site_source)
       return false unless file_path && File.exist?(file_path)
 
       actual_width, actual_height = image_dimensions(file_path)
+      record_measurement(measurements, url, actual_width, actual_height)
 
       width == actual_width && height == actual_height
     end
+
+    # Remember a file's pixels. Direct callers omit the hash, and a failed read has no pair.
+    #
+    # @param measurements [Hash, nil]
+    # @param url [String]
+    # @param width [Integer, nil]
+    # @param height [Integer, nil]
+    def self.record_measurement(measurements, url, width, height)
+      return unless measurements && width && height
+
+      measurements[url] = { width: width, height: height }
+    end
+    private_class_method :record_measurement
   end
 end

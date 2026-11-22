@@ -462,6 +462,154 @@ RSpec.describe JekyllAutoThumbnails::Scanner do
         expect(registry.registered?("/legacy.jpg")).to be true
       end
     end
+
+    context "with measured file pixels" do
+      it "returns the file size for a width-only request and registers the calculated size" do
+        html = '<article><img src="/photo.jpg" width="300"></article>'
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
+        stub_identify("/site/photo.jpg", "600x400")
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.requirements_for("/photo.jpg")).to eq({ width: 300, height: 200 })
+        expect(measured["/photo.jpg"]).to eq({ width: 600, height: 400 })
+      end
+
+      it "returns the file size for a height-only request and registers the calculated size" do
+        html = '<article><img src="/photo.jpg" height="200"></article>'
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
+        stub_identify("/site/photo.jpg", "600x400")
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.requirements_for("/photo.jpg")).to eq({ width: 300, height: 200 })
+        expect(measured["/photo.jpg"]).to eq({ width: 600, height: 400 })
+      end
+
+      it "returns the file size when both HTML dimensions differ from the file" do
+        html = '<article><img src="/photo.jpg" width="300" height="250"></article>'
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
+        stub_identify("/site/photo.jpg", "600x400")
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.requirements_for("/photo.jpg")).to eq({ width: 300, height: 250 })
+        expect(measured["/photo.jpg"]).to eq({ width: 600, height: 400 })
+      end
+
+      it "returns the file size when both HTML dimensions match the file" do
+        html = '<article><img src="/photo.jpg" width="300" height="200"></article>'
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
+        stub_identify("/site/photo.jpg", "300x200")
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.registered?("/photo.jpg")).to be false
+        expect(measured["/photo.jpg"]).to eq({ width: 300, height: 200 })
+      end
+
+      it "returns the file size when a width-only request matches the file" do
+        html = '<article><img src="/photo.jpg" width="300"></article>'
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
+        stub_identify("/site/photo.jpg", "300x200")
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.registered?("/photo.jpg")).to be false
+        expect(measured["/photo.jpg"]).to eq({ width: 300, height: 200 })
+      end
+
+      it "returns the file size for an unsized image over the max and registers the max" do
+        html = '<article><img src="/big-photo.jpg"></article>'
+        allow(File).to receive(:exist?).with("/site/big-photo.jpg").and_return(true)
+        stub_identify("/site/big-photo.jpg", "1200x900")
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.requirements_for("/big-photo.jpg")).to eq({ width: 800, height: 600 })
+        expect(measured["/big-photo.jpg"]).to eq({ width: 1200, height: 900 })
+      end
+
+      it "returns the file size when only max width is set and keeps the nil side in the registry" do
+        html = '<article><img src="/big-photo.jpg"></article>'
+        width_only = double("Configuration", max_width: 800, max_height: nil, parser: :html5)
+        allow(File).to receive(:exist?).with("/site/big-photo.jpg").and_return(true)
+        stub_identify("/site/big-photo.jpg", "1200x500")
+
+        measured = described_class.scan_html(html, registry, width_only, "/site")
+
+        expect(registry.requirements_for("/big-photo.jpg")).to eq({ width: 800, height: nil })
+        expect(measured["/big-photo.jpg"]).to eq({ width: 1200, height: 500 })
+      end
+
+      it "returns the file size for an unsized image within the max without registering it" do
+        html = '<article><img src="/big-photo.jpg"></article>'
+        allow(File).to receive(:exist?).with("/site/big-photo.jpg").and_return(true)
+        stub_identify("/site/big-photo.jpg", "400x300")
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.registered?("/big-photo.jpg")).to be false
+        expect(measured["/big-photo.jpg"]).to eq({ width: 400, height: 300 })
+      end
+
+      it "omits an image when identify fails" do
+        html = '<article><img src="/photo.jpg"></article>'
+        failed = instance_double(Process::Status, success?: false)
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(true)
+        allow(JekyllAutoThumbnails::ImageMagickWrapper).to receive(:execute_identify)
+          .and_return(["", failed])
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(measured).not_to have_key("/photo.jpg")
+      end
+
+      it "omits an image when the file is missing" do
+        html = '<article><img src="/photo.jpg" width="300"></article>'
+        allow(File).to receive(:exist?).with("/site/photo.jpg").and_return(false)
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(registry.requirements_for("/photo.jpg")).to eq({ width: 300, height: nil })
+        expect(measured).not_to have_key("/photo.jpg")
+      end
+
+      it "omits an external image" do
+        html = '<article><img src="https://example.com/photo.jpg" width="300"></article>'
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(measured).not_to have_key("https://example.com/photo.jpg")
+      end
+
+      it "omits an image outside article" do
+        html = '<header><img src="/logo.jpg" width="100"></header>'
+        allow(File).to receive(:exist?).with("/site/logo.jpg").and_return(true)
+        stub_identify("/site/logo.jpg", "100x40")
+
+        measured = described_class.scan_html(html, registry, config, "/site")
+
+        expect(measured).not_to have_key("/logo.jpg")
+      end
+
+      it "omits an unsized image when max dimensions are unset and does not identify it" do
+        html = '<article><img src="/photo.jpg"></article>'
+        bare = double("Configuration", max_width: nil, max_height: nil, parser: :html5)
+        allow(JekyllAutoThumbnails::ImageMagickWrapper).to receive(:execute_identify)
+
+        measured = described_class.scan_html(html, registry, bare, "/site")
+
+        expect(measured).to eq({})
+        expect(JekyllAutoThumbnails::ImageMagickWrapper).not_to have_received(:execute_identify)
+      end
+
+      it "returns an empty hash when the document has no images" do
+        measured = described_class.scan_html("<article><p>none</p></article>", registry, config, "/site")
+
+        expect(measured).to eq({})
+      end
+    end
   end
 
   describe ".image_dimensions" do
