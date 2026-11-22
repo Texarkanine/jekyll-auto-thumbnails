@@ -25,6 +25,7 @@ Jekyll site authors who want automatic image optimization without manually produ
 ## Success Criteria
 
 - Images inside `<article>` tags with width/height attributes or exceeding configured caps are replaced with correctly-sized thumbnails in the published site.
+- A measured local image inside an article publishes both width and height for the file the browser loads, including when the image address does not change.
 - Builds remain correct and fast across repeated runs: unchanged inputs should not regenerate thumbnails.
 - The plugin does not break site output for pages that contain no replaceable images (no spurious markup changes, no invalid HTML).
 - Output markup remains valid HTML5 on modern themes.

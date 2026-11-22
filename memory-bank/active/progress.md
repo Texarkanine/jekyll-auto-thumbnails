@@ -66,3 +66,16 @@ Write both `width` and `height` on every local image inside `<article>` that thi
 * Insights
     - Measurements-out-of-registry and identify-the-generated-file decisions from planning held up under review
 
+## 2026-11-22 - REFLECT - COMPLETE
+
+* Work completed
+    - Compared the issue, the plan, and the build
+    - Wrote `memory-bank/active/reflection/reflection-20261122-issue-70-image-dimensions.md`
+    - Added the published width and height pair to the product success criteria
+    - Recorded that an unreadable thumbnail does not receive the original size
+* Decisions made
+    - techContext needs no change: the tools and commands are the same
+* Insights
+    - `scan_html` returned the Nokogiri node set, so stubs had to start returning a hash once `process_site` merged that return
+    - `generate` still returns only a path. Returning pixels with the path is a later change
+
