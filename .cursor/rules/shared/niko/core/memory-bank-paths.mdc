@@ -27,7 +27,7 @@ These files are scoped to the current task, will be updated as the task progress
 * **Progress File:** `memory-bank/active/progress.md` - Implementation progress: history of completed work and phase transitions.
 * **Creative Phase Docs:** `memory-bank/active/creative/creative-[feature_name].md`
 * **Reflection Docs:** `memory-bank/active/reflection/reflection-<task-id>.md`
-* **Preflight Status:** `memory-bank/active/.preflight-status` - Task-specific preflight validation status file (created by `/niko-preflight`, gates `/niko-build` for L3+ tasks)
+* **Preflight Status:** `memory-bank/active/.preflight-status` - First line is this Preflight's result (gates Build); the rest is this run's findings. Deleted at archive.
 * **QA Validation Status:** `memory-bank/active/.qa-validation-status` - Task-specific QA validation status file (created by `/niko-qa`, gates `/niko-reflect` for L2+ tasks)
 * **L4 Milestone List:** `memory-bank/active/milestones.md` - L4-only. Ordered checklist of milestones for the current L4 project, each of which will be handled by separate L1/L2/L3 sub-runs. Deleted by the capstone archive phase when all milestones are done.
 * **Troubleshooting Docs:** `memory-bank/active/troubleshooting/troubleshooting-<YYYYMMDD-HHmmss>.md` - Diagnostic scratch notes from `/nk-refresh`. Deleted (not inlined) during archive; distilled learning belongs in the reflection.

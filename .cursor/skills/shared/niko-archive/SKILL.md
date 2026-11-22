@@ -14,7 +14,11 @@ Read:
 - `memory-bank/active/activeContext.md`
 - `memory-bank/active/progress.md`
 
+The task is every cycle `progress.md` records, reworks included. `tasks.md` and `activeContext.md` hold only the latest cycle.
+
 ## Step 2: Determine Complexity Level
+
+The task's complexity level is the highest level any of its cycles was classified at. A rework can lower the `**Complexity:**` header, so the header alone is not enough.
 
 If no complexity level is set, or `memory-bank/active/progress.md` does not exist: 🛑 STOP! It doesn't make sense to archive before a task has been completed.
 

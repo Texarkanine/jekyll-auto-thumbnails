@@ -41,7 +41,7 @@ When QA has passed and you are done:
 
 1. Load `.cursor/skills/shared/niko/references/core/reconcile-persistent.md` and follow its instructions.
 2. Commit all changes - memory bank *and* other resources - to source control using a conventional commit in the following format: `chore: completed [task-id]`.
-3. Check whether `memory-bank/active/milestones.md` exists:
+3. Check whether `memory-bank/active/milestones.md` exists, then whether `memory-bank/active/progress.md` records an earlier cycle classified above Level 1:
 
 **milestones.md exists** (L4 sub-run): Print the following, then STOP and wait for operator input.
 
@@ -51,7 +51,15 @@ When QA has passed and you are done:
 Run `/niko` to continue to the next milestone.
 ~~~
 
-**milestones.md does not exist** (standalone task): Print the following, then STOP and wait for operator input.
+**An earlier cycle was above Level 1** (rework of a larger task): Print the following, then STOP and wait for operator input.
+
+~~~markdown
+✅ **Level 1 rework complete.**
+
+Run `/niko-archive` to archive the whole task.
+~~~
+
+**Neither** (standalone task): Print the following, then STOP and wait for operator input.
 
 ~~~markdown
 ✅ **Level 1 task complete.**

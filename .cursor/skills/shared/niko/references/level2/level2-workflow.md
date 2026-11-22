@@ -10,8 +10,9 @@ Level 2 tasks are simple enhancements that require a structured approach with mo
 graph TD
     Start(("Complexity Analysis")) --> NikoPlan["🐱 plan"]
     NikoPlan ==Spawn==> NikoPreflight[["🐈 Preflight"]]
-    NikoPreflight -->|"PASS"| NikoBuild["🐱 build"]
-    NikoPreflight -.->|"FAIL"| ManualPlan[/"🧑‍💻 /niko-plan"/]
+    NikoPreflight -->|"PASS / PASS WITH ADVISORY"| NikoBuild["🐱 build"]
+    NikoPreflight -->|"FAIL (fixable)"| NikoPlan
+    NikoPreflight -.->|"FAIL (blocking)"| ManualPlan[/"🧑‍💻 /niko-plan"/]
 
     NikoBuild ==Spawn==> NikoQA[["🐈 QA"]]
     NikoQA -->|"PASS"| NikoReflect["🐱 reflect"]
@@ -35,7 +36,7 @@ A node with no outbound solid edges is a **terminal node**.
 The following phase transitions require operator input; if you have arrived at one of these transitions, STOP and wait! You're done for now.
 
 - Reflect -> Archive
-- Preflight FAIL -> Plan
+- Preflight FAIL (blocking) -> Plan
 - QA FAIL (rearchitect) -> Plan
 
 ## Phase Mappings

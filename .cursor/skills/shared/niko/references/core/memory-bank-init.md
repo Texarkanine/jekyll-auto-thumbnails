@@ -27,20 +27,11 @@ If the memory bank is completely uninitialized, the following persistent files m
 
 **🚨 CRITICAL:** Before writing persistent files, scan for existing AI-facing documentation (`.cursor/rules/`, `.claude/`, `AGENTS.md`, `CLAUDE.md`, or equivalent). Persistent files must not duplicate information already present in these files - they serve different purposes. Persistent files capture *project knowledge* (business context, non-obvious architecture, tech stack orientation). Rule files capture *working instructions* (how to test, how to format output, coding conventions). If a fact is already in a rule file, omit it from the persistent file or reference the rule file instead.
 
-### Root bootstrap files
+### Root bootstrap file
 
-After the persistent files exist, install a thin root bootstrap pair **only when both** repo-root `AGENTS.md` and `CLAUDE.md` are absent. Presence means the path exists at the repo root (regular file or symlink). Do not follow symlinks to edit through them.
+After the persistent files exist, install a thin root `AGENTS.md` from the template below **only when** repo-root `AGENTS.md` is absent. Presence means the path exists at the repo root (regular file or symlink). Do not follow symlinks to edit through them.
 
-| Root `AGENTS.md` | Root `CLAUDE.md` | Action |
-| --- | --- | --- |
-| absent | absent | Create both from the templates below |
-| absent | present | Create neither |
-| present | absent | Create neither |
-| present | present | Create neither |
-
-When either file is already present: create neither bootstrap file; do not append to, rewrite, or symlink-replace the existing one(s); print a brief advisory that existing bootstrap file(s) were found and left alone, that `memory-bank/` is the preferred GlobalPrompt, and that cleaning house is the operator's choice — do not invoke a migration skill.
-
-Do not create one file when the other already exists. Do not inline or `@`-import persistent file bodies into the bootstrap files. Keep the templates generic (roles and backtick paths only) so they survive rare layout changes.
+When `AGENTS.md` is already present: create nothing; do not append to, rewrite, or symlink-replace it; print a brief advisory that an existing `AGENTS.md` was found and left alone.
 
 #### `AGENTS.md` template
 
@@ -70,15 +61,7 @@ Completed work is summarized under `memory-bank/archive/<kind>/YYYYMMDD-<task-id
 When the task needs project, architecture, or stack context, read the relevant persistent file(s). Do not load every memory-bank file on every chat.
 ~~~
 
-#### `CLAUDE.md` template
-
-Write exactly:
-
-~~~markdown
-@AGENTS.md
-~~~
-
-Once the persistent files (and, when applicable, the root bootstrap pair) have been created, the memory bank is partially initialized, and ready for new work.
+Once the persistent files (and, when applicable, the root `AGENTS.md`) have been created, the memory bank is partially initialized, and ready for new work.
 
 ### Output to User:
 

@@ -10,8 +10,10 @@ Level 4 tasks are too large to plan and execute in one pass. They are decomposed
 graph TD
     Start(("Complexity Analysis")) --> NikoPlan["🐱 plan<br>(generate milestones)"]
     NikoPlan ==Spawn==> NikoPreflight[["🐈 Preflight"]]
-    NikoPreflight -->|"FAIL"| NikoPlan
-    NikoPreflight -.->|"PASS"| ManualReview["🧑‍💻 review plan"]
+    NikoPreflight -.->|"PASS / PASS WITH ADVISORY"| ManualReview["🧑‍💻 review plan"]
+    NikoPreflight -->|"FAIL (fixable)"| NikoPlan
+    NikoPreflight -.->|"FAIL (blocking)"| ManualPlan[/"🧑‍💻 /niko-plan"/]
+    ManualPlan -.-> NikoPlan
     ManualReview -.->|"🧑‍💻 /niko"| Niko
     subgraph SubWorkflow["L1-L3 Workflow"]
         Niko(("Milestone Execution"))

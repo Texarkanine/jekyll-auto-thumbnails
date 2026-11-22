@@ -8,20 +8,32 @@ Level 3 tasks are intermediate features that require a structured approach with 
 
 ```mermaid
 graph TD
-    Start(("Complexity Analysis")) --> NikoPlan["🐱 plan"]
-    NikoPlan ==Spawn==> NikoPreflight[["🐈 Preflight"]]
-    NikoPreflight -.->|"PASS"| ManualBuild[/"🧑‍💻 /niko-build"/]
-    NikoPreflight -.->|"FAIL"| ManualPlan[/"🧑‍💻 /niko-plan"/]
+    Start(("Complexity Analysis"))
+    NikoPlan["🐱 plan"]
+    NikoPreflight[["🐈 Preflight"]]
+    ManualBuild[/"🧑‍💻 /niko-build"/]
+    ManualPlan[/"🧑‍💻 /niko-plan"/]
+    NikoQA[["🐈 QA"]]
+    NikoReflect["🐱 reflect"]
+    ManualArchive[/"🧑‍💻 /niko-archive"/]
+    NikoCreative{"🐱 creative"}
+    
+    Start --> NikoPlan
+    NikoPlan ==Spawn==> NikoPreflight
+    NikoPreflight -.->|"PASS / PASS WITH ADVISORY"| ManualBuild
+    NikoPreflight -->|"FAIL (fixable)"| NikoPlan
 
-    NikoPlan -->|"Open Questions"| NikoCreative{"🐱 creative"}
-    NikoCreative -->|"High Confidence"| NikoPlan
-    NikoCreative -.->|"Low Confidence"| ManualPlan
-
-    ManualBuild ==Spawn==> NikoQA[["🐈 QA"]]
-    NikoQA -->|"PASS"| NikoReflect["🐱 reflect"]
-    NikoReflect -.-> ManualArchive[/"🧑‍💻 /niko-archive"/]
+    ManualBuild ==Spawn==> NikoQA
+    NikoQA -->|"PASS"| NikoReflect
+    NikoReflect -.-> ManualArchive
     NikoQA -->|"FAIL (fixable)"| ManualBuild
     NikoQA -.->|"FAIL (rearchitect)"| ManualPlan
+
+    NikoPreflight -.->|"FAIL (blocking)"| ManualPlan
+
+    NikoPlan -->|"Open Questions"| NikoCreative
+    NikoCreative -->|"High Confidence"| NikoPlan
+    NikoCreative -.->|"Low Confidence"| ManualPlan
 
     ManualPlan -.-> NikoPlan
 ```
@@ -40,8 +52,8 @@ The following phase transitions require operator input; if you have arrived at o
 
 - Creative (Low Confidence) -> Plan
 - Reflect -> Archive
-- Preflight FAIL -> Plan
-- Preflight PASS -> Build
+- Preflight FAIL (blocking) -> Plan
+- Preflight PASS / PASS WITH ADVISORY -> Build
 - QA FAIL (rearchitect) -> Plan
 
 ## Phase Mappings

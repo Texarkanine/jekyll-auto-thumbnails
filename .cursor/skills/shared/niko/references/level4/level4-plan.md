@@ -25,10 +25,8 @@ Decompose the overall task into an appropriate, optimal number of milestones. Ap
 - Each milestone is concrete enough that a future agent can classify it without additional context beyond the milestone + the memory bank files.
 - Milestones cover the full project scope - no gaps, no overlap
 - Milestones that change documented behavior must include documentation updates in their scope (README files, doc comments, configuration docs, user-facing guides)
-- Sequence in dependency order: milestone N must not require work from milestone N+1
-- If milestones have opportunities for parallelization
-    - Add a flowchart at the top of the `memory-bank/active/milestones.md` file to show the dependency relationships between the milestones.
-    - Create the milestone checklist in an order that is compatible with serial execution.
+- Sequence in dependency order: milestone N must not require work from milestone N+1. The checklist is always a serial-safe walk.
+- If milestones have opportunities for parallelization, add a flowchart under Execution Order in `memory-bank/active/milestones.md` that shows which milestones may run in parallel.
 
 For each milestone, estimate its complexity level (L1/L2/L3) using the decision tree in `.cursor/skills/shared/niko/references/core/complexity-analysis.md`. This estimate is advisory - the actual classification happens at the start of each sub-run - but a milestone estimated as L4 is a signal it needs to be split further.
 
@@ -47,26 +45,33 @@ Write `memory-bank/active/milestones.md` following the format in `.cursor/rules/
 
 ## Cross-milestone invariants & constraints
 
+[properties no milestone may violate. When two milestones share an artifact, state the handoff rule.]
+
 ## Execution Order
 
-[optional dependency flowchart to illustrate parallelization opportunities]
+[optional dependency flowchart — omit if all milestones are sequential]
 
-- [ ] <Milestone 1 description>
-- [ ] <Milestone 2 description>
-- [ ] <Milestone 3 description>
+- [ ] <Milestone 1 description, optional existing ticket>
+- [ ] <Milestone 2 description, optional existing ticket>
+- [ ] <Milestone 3 description, optional existing ticket>
+
+## Per-milestone done and risks
+
+### <exact checkbox text>
+- Done: <what shipped looks like>
+- Risks: <what this sub-run must not lose, or "see invariants">
 ```
+
+Write estimates in the plan result, not on checkbox lines. Do not create tickets. If a ticket exists, put it on the checkbox line.
 
 ## Step 5: Update Memory Bank
 
-Update `memory-bank/active/milestones.md`:
-   - List each milestone with its estimated scope (L1/L2/L3) & a one-line rationale for the scope estimate.
+Update `memory-bank/active/progress.md` to record completion of the L4 plan phase, including each milestone's advisory L1/L2/L3 estimate and a one-line rationale. Do **not** write those estimates onto checkbox lines in `milestones.md`.
 
 Update `memory-bank/active/activeContext.md`:
    - Phase: `PLAN - COMPLETE`
    - What was done: milestone list generated (N milestones)
    - Next step: preflight to validate the milestone list
-
-Update `memory-bank/active/progress.md` to record completion of the L4 plan phase.
 
 ## Step 6: Log Progress
 

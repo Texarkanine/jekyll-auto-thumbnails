@@ -10,6 +10,7 @@ Read:
 - `memory-bank/systemPatterns.md`
 - `memory-bank/active/activeContext.md`
 - `memory-bank/techContext.md`
+- `.cursor/rules/shared/always-tdd.mdc`
 
 ## Step 2: Verify Prerequisites
 
@@ -21,7 +22,7 @@ Read:
 
 ## Step 3: Test Planning (TDD)
 
-- **Behavior Identification**: Enumerate the specific, observable behaviors this enhancement must exhibit when complete. Each behavior is a testable assertion, not a vague description. Frame as `[input/action] → [expected outcome]`.
+- **Behavior Identification**: Enumerate the specific, observable behaviors this enhancement must exhibit when complete. Each behavior is a testable assertion, not a vague description. Frame as `[input/action] → [expected outcome]`. List behaviors only for executable work; do not invent tests for prose/policy units.
 - **Edge Cases**: Identify at minimum: invalid input, boundary values, empty/null states, and interaction with existing behavior that must not regress.
 - **Test Infrastructure Survey**: Locate the project's existing test framework, runner, conventions, and directory structure. New tests must conform to established patterns - do not introduce a parallel test infrastructure. If no test infrastructure can be located, flag this as a blocking question for the operator.
 - **Test File Mapping**: For each behavior identified, specify the exact test file (existing or new) and describe the test case. If a new test file is needed, its name and location must follow existing conventions.
@@ -35,10 +36,10 @@ Read:
 ## Step 5: Create Implementation Plan
 
 - Produce a **linear, ordered** list of implementation steps. Each step must name concrete files and functions - not abstractions.
-- Each step should map to roughly one TDD cycle: write failing test → implement to pass → refactor.
-- Carve-out definition: `.cursor/rules/shared/always-tdd.mdc` (Niko ships it always-on). Entirely prose/policy steps use `N/A for prose & policy artifacts` under Tests first.
+- Classify each step as **executable** or **prose/policy**.
+- For an **executable** step, numbered substeps are the always-tdd stages in order: stub tests, stub interface, write tests and run red, write code and run green. Put the specific changes (new functions, modified signatures, added exports, config changes) in those substeps. If the substeps can be reordered and still read correctly, the step is not planned yet.
+- For a **prose/policy** step, use ordered work steps plus `No tests: prose/policy artifact`. Never schedule a change-detector.
 - Steps must be sequenced so that each builds on the last; no step should require backtracking.
-- Document the specific changes per file: new functions, modified signatures, added exports, config changes.
 - Include documentation update steps for any project documentation (README files, doc comments, configuration docs, user-facing guides) that would be affected by the implementation. Documentation changes are implementation work, not an afterthought.
 
 ## Step 6: Identify Challenges & Mitigations
@@ -86,6 +87,8 @@ After Challenges & Mitigations are recorded, run Pre-Mortem on the whole plan:
 - [Behavior 2]: [input/action] → [expected outcome]
 - [Edge case 1]: [input/action] → [expected outcome]
 
+(or "No new executable behavior." if the task is entirely prose/policy — do not invent behaviors)
+
 ### Test Infrastructure
 
 - Framework: [existing framework name]
@@ -95,14 +98,22 @@ After Challenges & Mitigations are recorded, run Pre-Mortem on the whole plan:
 
 ## Implementation Plan
 
-1. [Step 1 - maps to TDD cycle]
-   - Files: [file paths]
-   - Tests first: [test file + case(s) to write and watch fail; or `N/A for prose & policy artifacts`]
-   - Changes: [specific changes]
-2. [Step 2]
-   - Files: [file paths]
-   - Tests first: [test file + case(s) to write and watch fail; or `N/A for prose & policy artifacts`]
-   - Changes: [specific changes]
+### 1. [Unit name] — executable
+
+- Files: [file paths]
+
+1. Stub tests: [test file + empty cases]
+2. Stub interface: [signatures to add]
+3. Write tests and run red: [assertions]
+4. Write code and run green: [production changes]
+
+### 2. [Unit name] — prose/policy
+
+- Files: [file paths]
+- No tests: prose/policy artifact
+
+1. [Work step]
+2. [Work step]
 
 ## Technology Validation
 

@@ -4,7 +4,7 @@ Determine the appropriate complexity level (1-4) for a task, then write the dete
 
 ## Step 1: Classification Target
 
-Determine what to classify. If `memory-bank/active/milestones.md` exists, read it - the classification target is the description of the first unchecked (`- [ ]`) milestone. Otherwise, the classification target is the user's task input.
+Determine what to classify. If `memory-bank/active/milestones.md` exists, read it — the classification target is the description of the first unchecked (`- [ ]`) milestone plus that milestone's Per-milestone done and risks heading block if present. Otherwise, the classification target is the user's task input.
 
 ## Step 2: Decision Tree
 

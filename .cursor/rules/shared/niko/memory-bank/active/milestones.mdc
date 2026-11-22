@@ -4,40 +4,57 @@ globs: memory-bank/active/milestones.md
 
 # L4 Milestone List
 
-`memory-bank/active/milestones.md` is the L4 project's plan and state tracker. It serves two purposes simultaneously:
+`memory-bank/active/milestones.md` is the L4 plan and state tracker.
 
-1. **In-flight signal**: its presence tells `/niko` that an L4 project is active, triggering milestone transition routing instead of normal state handling.
-2. **State tracker**: the checklist records which milestones are complete and which remain.
+1. **In-flight signal**: its presence tells `/niko` that an L4 project is active.
+2. **State tracker**: the checklist records which milestones are complete.
+
+Put requirements in `memory-bank/active/projectbrief.md`. Put sequence, invariants, done, and risks in this file.
 
 ## File Format
 
 ```markdown
 # Milestones: <task-id>
 
-[optional Mermaid flowchart showing dependency relationships between milestones - omit if all milestones are sequential]
+## Cross-milestone invariants & constraints
 
-- [ ] <Milestone 1: one-line description of the deliverable>
-- [ ] <Milestone 2: one-line description of the deliverable>
-- [ ] <Milestone 3: one-line description of the deliverable>
+[Properties no milestone may violate. If two milestones share an artifact, state who may touch it and when.]
+
+## Execution Order
+
+[Optional Mermaid flowchart. Omit if all milestones are sequential.]
+
+- [ ] <Deliverable. Include an existing ticket id or URL if one exists.>
+- [ ] <Deliverable>
+- [ ] <Deliverable>
+
+## Per-milestone done and risks
+
+### <exact checkbox text>
+- Done: <what shipped looks like>
+- Risks: <what this sub-run must not lose, or "see invariants">
 ```
 
 Rules:
-- Header must be `# Milestones: <task-id>` where `task-id` matches the active task's ID in `memory-bank/active/tasks.md`
-- Each milestone is a standard GFM checkbox: `- [ ]` (unchecked) or `- [x]` (complete)
-- One milestone per line - no sub-bullets, no notes inline
-- Description is a single line: concise, action-oriented, specific enough that a future agent can classify it as L1/L2/L3 without additional context
-- The optional dependency flowchart (if present) precedes the checklist and is not a milestone - complexity analysis identifies milestones by the `- [ ]` / `- [x]` markers only
+- Header: `# Milestones: <task-id>` matching the task ID in `memory-bank/active/tasks.md`
+- One GFM checkbox per milestone (`- [ ]` or `- [x]`). No sub-bullets. No second sentence. No file lists.
+- Do not create tickets. If a ticket already exists, put its id or URL on that checkbox line.
+- Only the Execution Order checklist may use `- [ ]` / `- [x]`. Those markers are the milestone list.
+- The checklist is serial-safe: walking it one at a time never requires a later milestone.
+- When the work is not a straight line, the flowchart shows which milestones may run in parallel. One-at-a-time follows the list. Parallel follows the DAG. The two must agree so a switch mid-project does not conflict.
+- The flowchart is not a milestone.
 
 ## What Makes a Good Milestone
 
 Each milestone must satisfy all of these:
 
-- **Independently deliverable** - can be planned, built, tested, and committed as a self-contained sub-run with no dependency on future milestones
-- **L1/L2/L3 scoped** - small enough to pass through the complexity analysis decision tree without itself being classified L4
-- **Concrete** - the description names what is being built, not the activity ("Add user authentication flow" not "Work on auth")
-- **Non-overlapping** - milestones cover distinct ground; no two milestones should touch the same files for the same purpose
+- **Independently deliverable** — plan, build, test, and commit with no need for a later milestone
+- **L1/L2/L3 scoped** — not itself L4
+- **Concrete** — names the deliverable ("Add user authentication flow", not "Work on auth")
+- **Non-overlapping** — no two milestones do the same work to the same files
+- **Done** — the heading block (or a covering invariant) states what shipped looks like
 
-If a milestone fails any of these criteria during preflight, it should be split, merged, or rewritten before sub-runs begin.
+If a milestone fails these, split, merge, or rewrite it before sub-runs begin.
 
 ## Lifecycle
 
@@ -49,4 +66,4 @@ If a milestone fails any of these criteria during preflight, it should be split,
 | `/niko` re-entry - all `- [x]` | `/niko` Step 2a | Routes to capstone archive |
 | Capstone archive | `.cursor/skills/shared/niko/references/level4/level4-archive.md` | Deletes `memory-bank/active/milestones.md` |
 
-🚨 **Do not create or modify `memory-bank/active/milestones.md` outside of these lifecycle events.** Its presence is used as a binary signal by `/niko` — creating it manually will cause `/niko` to enter L4 milestone transition routing on the next invocation.
+🚨 **Do not create or modify `memory-bank/active/milestones.md` outside of these lifecycle events.** Its presence is a binary signal for `/niko`. A manual create will send the next `/niko` into L4 routing.

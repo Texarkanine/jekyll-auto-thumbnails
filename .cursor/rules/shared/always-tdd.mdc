@@ -9,15 +9,15 @@ All changes to **executable behavior** (defined below) must be made according to
 
 ## What TDD Governs
 
-In scope: executable behavior — code, schemas, parsers, CLIs, and any configuration or workflow the product runs, etc. If something executes it, it is in scope, whatever its file extension.
+In scope: behavior a user of this product can observe breaking. File extension does not decide.
 
-Out of scope: user-facing prose and policy — docs content, PR and issue templates, CONTRIBUTING, instructional comments, project narrative, rule and skill wording, etc.
+Out of scope: user-facing prose and policy — docs content, PR and issue templates, CONTRIBUTING, instructional comments, project narrative, rule and skill wording, etc. Repository bootstrap (AGENTS.md, CLAUDE.md, copied init text, etc.), vendored third-party tools, gitignore lines, etc. are out of scope even when an agent or a developer tool invokes them.
 
 Before writing a test that asserts on a document's contents, ask what makes the test fail:
 
 > If it can only go red when someone deliberately edits the artifact it asserts on, it is a **change-detector**, not a test: it fires on intended edits and stays silent when the product breaks.
 
-Delete change-detectors; write none. The failure mode decides, not the format. A test that locks a contract across files (manifest/version lockstep, dual plugin manifests, etc.) is not a change-detector: it goes red when the contract breaks for a user, not when content is merely edited. Enforce out-of-scope artifacts with review, a purpose-built gate (commit-title lint, link checker, schema validator), or nothing at all.
+Delete change-detectors; write none. The failure mode decides, not the format. A test that locks a contract across files (manifest/version lockstep, dual plugin manifests, etc.) is a contract test only when that lockstep is the published contract of this product: it goes red when the contract breaks for a user of this product, not when content is merely edited. If semantic versioning already signals the expectation, do not add the test. Enforce out-of-scope artifacts with review, a purpose-built gate (commit-title lint, link checker, schema validator), or nothing at all.
 
 ## 1. Determine Scope
 
