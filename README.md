@@ -69,7 +69,7 @@ Pages that contain no replaceable `<article><img>` are no longer re-serialized a
    - Images with `width` or `height` attributes → uses those dimensions
    - Unsized images exceeding max config → thumbnails to max dimensions
 3. **Generation**: Creates thumbnails with MD5-based caching in `.jekyll-cache/`
-4. **URL Replacement**: Updates `<img src>` to point to thumbnails
+4. **Rewrite**: Points `<img src>` at a thumbnail when one was made, and writes `width` and `height` for the file the browser will load. A measured image whose `src` does not change still gets both numbers.
 5. **File Copying**: Copies thumbnails to `_site/` after build
 
 ## Usage Examples
