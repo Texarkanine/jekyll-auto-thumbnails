@@ -1,6 +1,0 @@
-PASS
-
-## QA Findings (2026-11-23)
-
-- **KISS / YAGNI / Completeness / Integrity**: Clean. A single `git config --global --add safe.directory '*'` at the start of the `nick-fields/retry@v4` command block resolves the dubious-ownership error inside the container job without touching container user settings, adding unnecessary `chown` operations, or altering repository blobs.
-- **Advisory (Commit Type vs. Release Please)**: Commit `b7653d6` uses the `fix(ci):` conventional commit prefix. Under `release-please-config.json` and `CONTRIBUTING.md`, `fix` triggers a gem release and CHANGELOG entry on `main` (whereas CI changes in this repo such as `a2f92d1` and `4e10369` use `chore(ci):` / `chore:`). Non-blocking for the implementation under review, as release-please keys off the squash-merged PR title on `main` rather than branch commits; ensure the PR title uses `chore(ci):` if a new gem release is not intended solely for this workflow fix.
