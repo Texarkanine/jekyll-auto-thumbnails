@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.2.1](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.2.0...v2.2.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **ci:** let the lockfile job commit inside the Ruby image ([#73](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/73)) ([7464ef4](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/7464ef4937ce231de4f1ffa8fad162291ef10212))
+* **deps:** bump nokogiri ([bc4c2a2](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/bc4c2a2bff998762f33c72b4909f65bbacb51238))
+* **deps:** bump nokogiri from 1.19.4 to 1.19.7 in the production-deps group ([#68](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/68)) ([bc4c2a2](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/bc4c2a2bff998762f33c72b4909f65bbacb51238))
+* write width and height on measured article images ([#71](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/71)) ([27d29c0](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/27d29c07d893f90cf30f3ce2d09f6c3f2d22368b))
+
 ## [2.2.0](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.1.0...v2.2.0) (2026-08-13)
 
 
