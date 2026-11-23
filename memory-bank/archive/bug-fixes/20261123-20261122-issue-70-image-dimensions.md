@@ -9,7 +9,7 @@ status: completed
 
 ## SUMMARY
 
-Measured local images inside `<article>` now publish both `width` and `height` for the file the browser loads, including when no thumbnail is produced. This closes [issue 70](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/70). The first cycle was Level 2. A later review reworked the same task at Level 1: the one-sided match check uses a pair the scan already recorded, and README text that did not belong was cut. QA passed both cycles. Draft pull request [#71](https://github.com/Texarkanine/jekyll-auto-thumbnails/pull/71) is the pull request for this work.
+Measured local images inside `<article>` now publish both `width` and `height` for the file the browser loads, including when no thumbnail is produced. This closes [issue 70](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/70). The first cycle was Level 2. A later review reworked the same task at Level 1: the one-sided match check uses a pair the scan already recorded, and README text that did not belong was cut. QA passed both cycles. Pull request [#71](https://github.com/Texarkanine/jekyll-auto-thumbnails/pull/71) is the pull request for this work. It was opened as a draft and is open for review.
 
 ## REQUIREMENTS
 
@@ -57,7 +57,7 @@ The reflection recorded nothing notable about the Level 2 process. The review af
 
 ## NEXT STEPS
 
-None for this task. Draft pull request #71 is the pull request. The operator marks it ready. Returning pixels from `generate` is a separate change.
+None for this task. Pull request #71 is open. Returning pixels from `generate` is a separate change.
 
 ## CREATIVE / TROUBLESHOOTING
 
