@@ -790,6 +790,49 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
         expect(img["height"]).to eq("480")
       end
 
+      # Width and height attributes reserve the ratio, and they also act as a
+      # fixed CSS height. A theme that only sets max-width: 100% then stretches
+      # the picture whenever the column is narrower than that width. :where()
+      # has zero specificity: it beats the attribute and loses to any author
+      # rule that sets height.
+      it "releases the used height when it writes width and height" do
+        html = "<!DOCTYPE html><html><head><meta charset='utf-8'>" \
+               "<style>article img { height: 12px }</style></head>" \
+               "<body><article><img src='/photo.jpg'></article></body></html>"
+        sizes = { "/photo.jpg" => { width: 640, height: 480 } }
+
+        out = described_class.replace_urls(html, {}, sizes: sizes)
+        doc = JekyllAutoThumbnails::HtmlParser.parse(out, :html5)
+        img = doc.at_css("article img")
+        rules = doc.css("head style").map { |node| node.content.gsub(/\s+/, "") }
+
+        expect(img["width"]).to eq("640")
+        expect(img["height"]).to eq("480")
+        expect(rules).to include(":where(article img){height:auto}")
+        expect(rules.first).to eq(":where(article img){height:auto}")
+        expect(rules).to include("articleimg{height:12px}")
+      end
+
+      it "emits the height rule once when the document already has it" do
+        html = "<!DOCTYPE html><html><head><style>:where(article img){height:auto}</style>" \
+               "</head><body><article><img src='/photo.jpg'></article></body></html>"
+        sizes = { "/photo.jpg" => { width: 640, height: 480 } }
+
+        out = described_class.replace_urls(html, {}, sizes: sizes)
+
+        expect(out.scan(":where(article img){height:auto}").size).to eq(1)
+      end
+
+      it "emits the height rule when the only change is the thumbnail src" do
+        html = "<!DOCTYPE html><html><head><meta charset='utf-8'></head>" \
+               "<body><article><img src='/a.jpg'></article></body></html>"
+
+        out = described_class.replace_urls(html, { "/a.jpg" => "/a_thumb.jpg" })
+
+        expect(out).to include("/a_thumb.jpg")
+        expect(out.scan(":where(article img){height:auto}").size).to eq(1)
+      end
+
       it "returns the input object when the attributes already match and src is unchanged" do
         html = "<article><img src='/photo.jpg' width='640' height='480'></article>"
         sizes = { "/photo.jpg" => { width: 640, height: 480 } }

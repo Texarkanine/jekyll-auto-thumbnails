@@ -1,7 +1,7 @@
 # Active Context
 
 ## Current Task: article-image-height
-**Phase:** CREATIVE - COMPLETE
+**Phase:** BUILD - IN-PROGRESS
 
 ## What Was Done
 

@@ -26,3 +26,12 @@ Keep the width and height written for measured article images, and stop those at
 * Insights
     - Inline style fixes the blog and breaks class heights. `:where()` fixes the blog and loses to those heights.
     - Browsers that ignore `:where()`, and pages we do not rewrite, keep today's behavior.
+
+## 2026-11-27 - PLAN - SKIPPED
+
+* Work completed
+    - Level 1 has no plan phase. `/niko-plan` routes to build.
+* Decisions made
+    - The creative decision is the implementation: prepend `:where(article img){height:auto}` only when the page is already rewritten.
+* Insights
+    - No further design choice is open.
