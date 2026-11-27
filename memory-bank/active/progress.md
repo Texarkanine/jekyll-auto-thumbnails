@@ -14,3 +14,15 @@ Keep the width and height written for measured article images, and stop those at
     - The release is a zero-specificity `height: auto` on article images, so a real author `height` still wins.
 * Insights
     - `max_width` is the widest file, not the used width on a phone. The theme already shrinks the width. The gem's new height attribute is what stopped the height from following.
+
+## 2026-11-27 - CREATIVE - COMPLETE
+
+* Work completed
+    - Compared a `:where()` rule, an inline style, a normal `article img` rule, and docs-only.
+    - Listed the shapes the winner covers and the shapes the author still owns.
+* Decisions made
+    - Prepend `:where(article img){height:auto}` when the rewrite already changes the page.
+    - Do not set `object-fit`. Do not inject the rule on a page we do not already rewrite.
+* Insights
+    - Inline style fixes the blog and breaks class heights. `:where()` fixes the blog and loses to those heights.
+    - Browsers that ignore `:where()`, and pages we do not rewrite, keep today's behavior.

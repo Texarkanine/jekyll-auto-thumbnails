@@ -1,14 +1,15 @@
 # Active Context
 
 ## Current Task: article-image-height
-**Phase:** COMPLEXITY-ANALYSIS - COMPLETE
+**Phase:** CREATIVE - COMPLETE
 
 ## What Was Done
 
-- Level 1. One bug in the article-image rewrite.
-- The blog's `max_width: 640` matches the column ceiling. The theme's `img { max-width: 100% }` was stable before width and height were written. The height attribute is what locks the used height.
-- The fix stays in this gem: keep both attributes, and add a zero-specificity `height: auto` for article images so author CSS can still set height.
+- Surveyed the attribute and CSS shapes that meet the width and height rewrite.
+- Chose a zero-specificity `height: auto` on `article img`, injected only when the page is already rewritten.
+- Rejected an inline style and a normal `article img` rule because both override heights people set on purpose.
+- Wrote down the shapes this does not cover, and what the author adds for each.
 
 ## Next Step
 
-- Load the Level 1 build workflow and fix the rewrite.
+- Build that rule in the rewrite. Keep both attributes. Document the exceptions in the README.
