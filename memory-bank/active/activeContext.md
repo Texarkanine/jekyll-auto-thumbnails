@@ -1,15 +1,15 @@
 # Active Context
 
 ## Current Task: article-image-height
-**Phase:** BUILD - IN-PROGRESS
+**Phase:** BUILD - COMPLETE
 
 ## What Was Done
 
-- Surveyed the attribute and CSS shapes that meet the width and height rewrite.
-- Chose a zero-specificity `height: auto` on `article img`, injected only when the page is already rewritten.
-- Rejected an inline style and a normal `article img` rule because both override heights people set on purpose.
-- Wrote down the shapes this does not cover, and what the author adds for each.
+- A rewritten page prepends `:where(article img){height:auto}` and still writes both attributes.
+- Unchanged pages stay the same object. The rule is not duplicated.
+- README lists the shapes the rule does not cover and what the author adds.
+- Full suite: 278 examples, 0 failures. RuboCop clean on the rewrite and its spec.
 
 ## Next Step
 
-- Build that rule in the rewrite. Keep both attributes. Document the exceptions in the README.
+- QA reviews the build against the creative decision.

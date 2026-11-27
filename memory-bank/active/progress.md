@@ -35,3 +35,14 @@ Keep the width and height written for measured article images, and stop those at
     - The creative decision is the implementation: prepend `:where(article img){height:auto}` only when the page is already rewritten.
 * Insights
     - No further design choice is open.
+
+## 2026-11-27 - BUILD - COMPLETE
+
+* Work completed
+    - Prepend `:where(article img){height:auto}` only when `replace_urls` already changes the page.
+    - Documented the shapes that stay with the author, in the README.
+    - 278 examples, 0 failures. RuboCop reported no offenses on the rewrite and its spec.
+* Decisions made
+    - Duplicate detection compares the rule with whitespace removed, because the needle itself contains a space.
+* Insights
+    - Stripping spaces on the page and then searching for the spaced rule never matches, so the tag would be added twice.
