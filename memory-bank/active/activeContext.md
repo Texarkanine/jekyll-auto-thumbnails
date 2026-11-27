@@ -1,7 +1,7 @@
 # Active Context
 
 ## Current Task: article-image-height
-**Phase:** BUILD - COMPLETE
+**Phase:** QA - COMPLETE (PASS)
 
 ## What Was Done
 
@@ -12,4 +12,4 @@
 
 ## Next Step
 
-- QA reviews the build against the creative decision.
+- Task complete. The operator deletes `memory-bank/active/` when satisfied.

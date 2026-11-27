@@ -46,3 +46,13 @@ Keep the width and height written for measured article images, and stop those at
     - Duplicate detection compares the rule with whitespace removed, because the needle itself contains a space.
 * Insights
     - Stripping spaces on the page and then searching for the spaced rule never matches, so the tag would be added twice.
+
+## 2026-11-27 - QA - COMPLETE (PASS)
+
+* Work completed
+    - Reviewed the diff from `a96a342` to HEAD against the brief and the creative decision. Reran the full suite (278 examples, 0 failures, 100% lines) and RuboCop (clean).
+    - Ran `replace_urls` on a full page, a fragment, and a page with no head, under both parsers.
+* Decisions made
+    - PASS. Every requirement and acceptance criterion is met. Four advisories are recorded in `tasks.md`, and none of them blocks.
+* Insights
+    - Under HTML4, a page with no `<head>` gets the attributes but not the rule. HTML5 always creates a head.
