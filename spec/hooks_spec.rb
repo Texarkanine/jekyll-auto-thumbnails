@@ -790,11 +790,6 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
         expect(img["height"]).to eq("480")
       end
 
-      # Width and height attributes reserve the ratio, and they also act as a
-      # fixed CSS height. A theme that only sets max-width: 100% then stretches
-      # the picture whenever the column is narrower than that width. :where()
-      # has zero specificity: it beats the attribute and loses to any author
-      # rule that sets height.
       it "releases the used height when it writes width and height" do
         html = "<!DOCTYPE html><html><head><meta charset='utf-8'>" \
                "<style>article img { height: 12px }</style></head>" \
@@ -808,7 +803,6 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
         expect(img["width"]).to eq("640")
         expect(img["height"]).to eq("480")
-        expect(rules).to include(":where(articleimg){height:auto}")
         expect(rules.first).to eq(":where(articleimg){height:auto}")
         expect(rules).to include("articleimg{height:12px}")
       end
