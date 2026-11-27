@@ -808,8 +808,8 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
         expect(img["width"]).to eq("640")
         expect(img["height"]).to eq("480")
-        expect(rules).to include(":where(article img){height:auto}")
-        expect(rules.first).to eq(":where(article img){height:auto}")
+        expect(rules).to include(":where(articleimg){height:auto}")
+        expect(rules.first).to eq(":where(articleimg){height:auto}")
         expect(rules).to include("articleimg{height:12px}")
       end
 

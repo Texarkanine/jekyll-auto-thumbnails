@@ -145,6 +145,12 @@ module JekyllAutoThumbnails
     # page through libxml2's serializer, which injects a spurious
     # `<meta http-equiv="Content-Type">` on HTML5 sites.
     #
+    # A rewritten page also gets {ARTICLE_IMAGE_HEIGHT_RULE} at the start of
+    # `head`. Width and height attributes reserve the ratio and act as a fixed
+    # CSS height. `:where()` has zero specificity, so the rule beats that
+    # height and loses to any author rule that sets one. Unchanged pages do
+    # not get the tag.
+    #
     # @param html [String] HTML content
     # @param url_map [Hash] original URL => thumbnail URL
     # @param parser [Symbol] :html5 (default) or :html4
@@ -181,8 +187,39 @@ module JekyllAutoThumbnails
         end
       end
 
-      modified ? doc.to_html : html
+      return html unless modified
+
+      release_article_image_height(doc)
+      doc.to_html
     end
+
+    # Zero-specificity height release for article images. See {replace_urls}.
+    ARTICLE_IMAGE_HEIGHT_RULE = ":where(article img){height:auto}"
+
+    # Prepend {ARTICLE_IMAGE_HEIGHT_RULE} unless a style element already has it.
+    #
+    # @param doc [Nokogiri::XML::Document] parsed page
+    # @return [void]
+    def self.release_article_image_height(doc)
+      return if article_image_height_rule?(doc)
+
+      head = doc.at_css("head")
+      return unless head
+
+      style = doc.create_element("style")
+      style.content = ARTICLE_IMAGE_HEIGHT_RULE
+      head.prepend_child(style)
+    end
+
+    # @param doc [Nokogiri::XML::Document] parsed page
+    # @return [Boolean] true when the height rule is already present
+    def self.article_image_height_rule?(doc)
+      needle = ARTICLE_IMAGE_HEIGHT_RULE.gsub(/\s+/, "")
+      doc.css("style").any? do |node|
+        node.content.gsub(/\s+/, "").include?(needle)
+      end
+    end
+    private_class_method :release_article_image_height, :article_image_height_rule?
 
     # Check if a document outputs HTML (not CSS, JS, etc.)
     #

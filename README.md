@@ -69,7 +69,7 @@ Pages that contain no replaceable `<article><img>` are no longer re-serialized a
    - Images with `width` or `height` attributes → uses those dimensions
    - Unsized images exceeding max config → thumbnails to max dimensions
 3. **Generation**: Creates thumbnails with MD5-based caching in `.jekyll-cache/`
-4. **Rewrite**: Points `<img src>` at a thumbnail when one was made, and writes `width` and `height` for the file the browser will load. A measured image whose `src` does not change still gets both numbers.
+4. **Rewrite**: Points `<img src>` at a thumbnail when one was made, and writes `width` and `height` for the file the browser will load. A measured image whose `src` does not change still gets both numbers. A page this step changes also gets a `<style>:where(article img){height:auto}</style>` at the start of `<head>`, so those attributes do not lock the height when the column is narrower than the image.
 5. **File Copying**: Copies thumbnails to `_site/` after build
 
 ## Usage Examples
@@ -106,6 +106,19 @@ Works automatically with any Markdown processor, because it checks the rendered 
 ![Photo](photo.jpg)  <!-- Auto-detects size -->
 ```
 
+## Narrow columns
+
+`width` and `height` reserve the image's ratio, and they also act as a CSS height. The style rule above sets `height: auto` at zero specificity, so a theme that only has `max-width: 100%` or `width: 100%` keeps the ratio when the column shrinks. A stylesheet or inline style that sets `height` still wins.
+
+The rule is not added, or does not apply, in these cases. Add the same rule to your stylesheet, or the extra declaration named here:
+
+- You set a CSS `height` other than `auto` (a class, an `img` rule, or an inline style). That height wins. If the width also shrinks, set `height: auto`, or set `object-fit: contain` or `cover` when the box is capped on both axes.
+- `max-width` and `max-height` both limit the box. The bitmap can still stretch, because the default fit is fill. Set `object-fit`. This gem does not.
+- The page already has the served `width`, `height`, and `src`, so nothing is rewritten and no style tag is added. Put the rule in your stylesheet.
+- Your site blocks inline `<style>`, or a later plugin strips it. Put the rule in a stylesheet the policy allows.
+- The browser does not understand `:where()`. It ignores the rule.
+- The image is outside `<article>`. It is not rewritten, and the rule does not apply to it.
+- You used a mismatched `width` and `height` to stretch the picture, on a page that is rewritten. The picture keeps the file's ratio. Set the box in CSS and set `object-fit`.
 
 ## Cache Behavior
 
