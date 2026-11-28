@@ -66,3 +66,14 @@ Keep the width and height written for measured article images, and stop those at
     - The devblog preview uses a local `path:` gem and stays uncommitted.
 * Insights
     - The saucer thumbnail was larger than the source, so the page keeps the original 1193 by 471 file and still writes both attributes.
+
+## 2026-11-27 - REWORK - INITIATED
+
+* Work completed
+    - Started rework of article-image-height. The previous cycle was Level 1 and QA PASS, and it was not archived.
+* Decisions made
+    - Operator chose rework, then a push to the PR branch.
+    - How It Works step 4 must say why a changed page gets `:where(article img){height:auto}`.
+    - Narrow columns must name the `width` and `height` attributes. "Those attributes" does not.
+* Insights
+    - Narrow columns already states the stretch reason. The step list does not point at it, and the section's first words have no referent.

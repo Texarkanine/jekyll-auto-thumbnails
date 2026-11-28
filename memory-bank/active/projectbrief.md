@@ -33,3 +33,10 @@ A Markdown image is marked with a width only (`=640x`). The gem fills in the ser
 1. When a rewrite writes width and height, the document also carries a zero-specificity rule that sets `height: auto` on article images.
 2. An author rule that sets `height` still overrides that rule.
 3. Existing served-size behavior, and the unchanged-input identity return, still hold.
+
+## Rework
+
+PR 74 review 6094664558, both comments on `README.md`. The requirements above still hold. This rework changes that README prose only.
+
+1. How It Works step 4 names `<style>:where(article img){height:auto}</style>` and does not say why. Say why there, in one clause: the `width` and `height` attributes also set a CSS height, and `height: auto` keeps a theme with `max-width: 100%` from stretching the picture. A pointer to Narrow columns is enough if the clause would repeat that section.
+2. Narrow columns opens with "Those attributes" and never names them. Name the `width` and `height` attributes.
