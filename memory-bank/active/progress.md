@@ -56,3 +56,13 @@ Keep the width and height written for measured article images, and stop those at
     - PASS. Every requirement and acceptance criterion is met. Four advisories are recorded in `tasks.md`, and none of them blocks.
 * Insights
     - Under HTML4, a page with no `<head>` gets the attributes but not the rule. HTML5 always creates a head.
+
+## 2026-11-27 - POST-QA TRIM
+
+* Work completed
+    - Cut the repeated comments and the long README exception list down to one line on the rule and one sentence on when the style is absent.
+    - Rewrote PR 74 as one story and pushed `7edd0ac`.
+* Decisions made
+    - The devblog preview uses a local `path:` gem and stays uncommitted.
+* Insights
+    - The saucer thumbnail was larger than the source, so the page keeps the original 1193 by 471 file and still writes both attributes.
