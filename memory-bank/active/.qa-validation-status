@@ -1,5 +1,0 @@
-PASS
-Task: article-image-height (rework, Level 1)
-Reviewed: README.md diff 4189092..HEAD against projectbrief.md Rework items 1 and 2.
-Suite: 278 examples, 0 failures, 100% lines.
-Advisory: How It Works step 4's new clause repeats the Narrow columns stretch sentence almost word for word; the brief allowed a pointer instead. Not blocking.
