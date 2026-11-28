@@ -69,7 +69,7 @@ Pages that contain no replaceable `<article><img>` are no longer re-serialized a
    - Images with `width` or `height` attributes → uses those dimensions
    - Unsized images exceeding max config → thumbnails to max dimensions
 3. **Generation**: Creates thumbnails with MD5-based caching in `.jekyll-cache/`
-4. **Rewrite**: Points `<img src>` at a thumbnail when one was made, and writes `width` and `height` for the file the browser will load. A measured image whose `src` does not change still gets both numbers. A changed page also gets `<style>:where(article img){height:auto}</style>` in `<head>`.
+4. **Rewrite**: Points `<img src>` at a thumbnail when one was made, and writes `width` and `height` for the file the browser will load. A measured image whose `src` does not change still gets both numbers. A changed page also gets `<style>:where(article img){height:auto}</style>` in `<head>`, because the `width` and `height` attributes also set a CSS height, and `height: auto` keeps a theme with `max-width: 100%` from stretching the picture.
 5. **File Copying**: Copies thumbnails to `_site/` after build
 
 ## Usage Examples
@@ -108,7 +108,7 @@ Works automatically with any Markdown processor, because it checks the rendered 
 
 ## Narrow columns
 
-Those attributes keep the image's shape, and they also set a CSS height. The style sets `height: auto`, so a theme with `max-width: 100%` does not stretch the picture. Your own CSS `height` still wins. The style is absent when the page is not rewritten, when the page has no `head`, or when the browser ignores `:where()`.
+The `width` and `height` attributes keep the image's shape, and they also set a CSS height. The style sets `height: auto`, so a theme with `max-width: 100%` does not stretch the picture. Your own CSS `height` still wins. The style is absent when the page is not rewritten, when the page has no `head`, or when the browser ignores `:where()`.
 
 ## Cache Behavior
 

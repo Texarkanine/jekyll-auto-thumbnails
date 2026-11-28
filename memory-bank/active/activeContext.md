@@ -1,12 +1,14 @@
 # Active Context
 
 ## Current Task: article-image-height
-**Phase:** COMPLEXITY-ANALYSIS - COMPLETE
+**Phase:** BUILD - COMPLETE
 
 ## What Was Done
 
-- Rework classified as Level 1. It corrects two sentences in `README.md`. The rewrite behavior stays as it is.
+- How It Works step 4 says why a changed page gets `:where(article img){height:auto}`.
+- Narrow columns names the `width` and `height` attributes.
+- Full suite: 278 examples, 0 failures.
 
 ## Next Step
 
-- Load the Level 1 workflow and build.
+- Level 1 QA.

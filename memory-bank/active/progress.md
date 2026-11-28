@@ -86,3 +86,14 @@ Keep the width and height written for measured article images, and stop those at
     - One file, prose only. The bug-fix path and the single-component check both land on Level 1.
 * Insights
     - A test that locks README sentences fails only when someone edits that prose on purpose. The build will change the README and will not add that test.
+
+## 2026-11-27 - BUILD - COMPLETE
+
+* Work completed
+    - How It Works step 4 now says the `width` and `height` attributes also set a CSS height, and that `height: auto` keeps a `max-width: 100%` theme from stretching the picture.
+    - Narrow columns names those attributes.
+    - Full suite: 278 examples, 0 failures.
+* Decisions made
+    - No spec. The sentences are README prose, and a test of their wording would be a change-detector.
+* Insights
+    - The stretch sentence now sits in both places. Step 4 answers "why" where the tag is introduced. Narrow columns still stands on its own.
