@@ -97,3 +97,12 @@ Keep the width and height written for measured article images, and stop those at
     - No spec. The sentences are README prose, and a test of their wording would be a change-detector.
 * Insights
     - The stretch sentence now sits in both places. Step 4 answers "why" where the tag is introduced. Narrow columns still stands on its own.
+
+## 2026-11-27 - QA - COMPLETE (PASS)
+
+* Work completed
+    - Reviewed the README diff from `4189092` to HEAD against both rework items in the brief. Reran the full suite: 278 examples, 0 failures, 100% lines.
+* Decisions made
+    - PASS. Both review comments are addressed, and the change is limited to `README.md` prose.
+* Insights
+    - Advisory: step 4 and Narrow columns now give the same stretch reason. The brief allowed a pointer instead of the repeat. It did not require one.

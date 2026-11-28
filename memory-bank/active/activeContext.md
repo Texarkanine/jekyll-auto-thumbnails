@@ -1,7 +1,7 @@
 # Active Context
 
 ## Current Task: article-image-height
-**Phase:** BUILD - COMPLETE
+**Phase:** QA - COMPLETE (PASS)
 
 ## What Was Done
 
@@ -11,4 +11,4 @@
 
 ## Next Step
 
-- Level 1 QA.
+- Level 1 rework is complete. When satisfied, delete `memory-bank/active/` and commit that cleanup.
