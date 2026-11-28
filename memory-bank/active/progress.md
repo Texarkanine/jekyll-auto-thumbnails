@@ -77,3 +77,12 @@ Keep the width and height written for measured article images, and stop those at
     - Narrow columns must name the `width` and `height` attributes. "Those attributes" does not.
 * Insights
     - Narrow columns already states the stretch reason. The step list does not point at it, and the section's first words have no referent.
+
+## 2026-11-27 - COMPLEXITY-ANALYSIS - COMPLETE
+
+* Work completed
+    - Classified the README rework as Level 1.
+* Decisions made
+    - One file, prose only. The bug-fix path and the single-component check both land on Level 1.
+* Insights
+    - A test that locks README sentences fails only when someone edits that prose on purpose. The build will change the README and will not add that test.
