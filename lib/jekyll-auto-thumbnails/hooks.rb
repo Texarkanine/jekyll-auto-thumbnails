@@ -5,8 +5,9 @@ require_relative "html_parser"
 module JekyllAutoThumbnails
   # Jekyll hook integration
   module Hooks
-    # Specificity 0: beats the height attribute, loses to an author height.
-    ARTICLE_IMAGE_HEIGHT_RULE = ":where(article img){height:auto}"
+    # Anonymous layer, declared first. Beats the height attribute.
+    # Loses to a later author layer and to unlayered author height.
+    ARTICLE_IMAGE_HEIGHT_RULE = "@layer{:where(article img){height:auto}}"
 
     # Format a duration for Jekyll log suffixes.
     #

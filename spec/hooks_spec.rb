@@ -803,18 +803,33 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
 
         expect(img["width"]).to eq("640")
         expect(img["height"]).to eq("480")
-        expect(rules.first).to eq(":where(articleimg){height:auto}")
+        expect(rules.first).to eq("@layer{:where(articleimg){height:auto}}")
         expect(rules).to include("articleimg{height:12px}")
       end
 
+      it "emits an anonymous layer when the author height is in a cascade layer" do
+        html = "<!DOCTYPE html><html><head><meta charset='utf-8'>" \
+               "<style>@layer theme { article img { height: 12px } }</style></head>" \
+               "<body><article><img src='/photo.jpg'></article></body></html>"
+        sizes = { "/photo.jpg" => { width: 640, height: 480 } }
+
+        out = described_class.replace_urls(html, {}, sizes: sizes)
+        rules = JekyllAutoThumbnails::HtmlParser.parse(out, :html5).css("head style").map do |node|
+          node.content.gsub(/\s+/, "")
+        end
+
+        expect(rules.first).to eq("@layer{:where(articleimg){height:auto}}")
+        expect(rules).to include("@layertheme{articleimg{height:12px}}")
+      end
+
       it "emits the height rule once when the document already has it" do
-        html = "<!DOCTYPE html><html><head><style>:where(article img){height:auto}</style>" \
+        html = "<!DOCTYPE html><html><head><style>@layer{:where(article img){height:auto}}</style>" \
                "</head><body><article><img src='/photo.jpg'></article></body></html>"
         sizes = { "/photo.jpg" => { width: 640, height: 480 } }
 
         out = described_class.replace_urls(html, {}, sizes: sizes)
 
-        expect(out.scan(":where(article img){height:auto}").size).to eq(1)
+        expect(out.scan("@layer{:where(article img){height:auto}}").size).to eq(1)
       end
 
       it "emits the height rule when the only change is the thumbnail src" do
@@ -824,7 +839,7 @@ RSpec.describe JekyllAutoThumbnails::Hooks do
         out = described_class.replace_urls(html, { "/a.jpg" => "/a_thumb.jpg" })
 
         expect(out).to include("/a_thumb.jpg")
-        expect(out.scan(":where(article img){height:auto}").size).to eq(1)
+        expect(out.scan("@layer{:where(article img){height:auto}}").size).to eq(1)
       end
 
       it "returns the input object when the attributes already match and src is unchanged" do

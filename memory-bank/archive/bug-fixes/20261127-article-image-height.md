@@ -27,7 +27,7 @@ Both cycles were classified Level 1. The first cycle chose the mechanism, built 
 
 ## IMPLEMENTATION
 
-`Hooks.replace_urls` still writes the served `width` and `height`, and still returns the input object when nothing changed. When the document did change, `release_article_image_height` prepends one `<style>` whose content is `:where(article img){height:auto}`. It skips the tag when a style node already contains that rule with whitespace removed, and it returns without adding a tag when the document has no `head`. `object-fit` is not set.
+`Hooks.replace_urls` still writes the served `width` and `height`, and still returns the input object when nothing changed. When the document did change, `release_article_image_height` prepends one `<style>` whose content is `@layer{:where(article img){height:auto}}`. The anonymous layer is declared first, so it beats the height attribute and loses to a later author layer and to unlayered author height. It skips the tag when a style node already contains that rule with whitespace removed, and it returns without adding a tag when the document has no `head`. `object-fit` is not set.
 
 The creative phase compared four mechanisms and selected the zero-specificity rule. An inline `height: auto` would fix the blog and override class heights. A normal `article img` rule would beat `img { height: ... }`. Docs-only would leave the blog stretched until the theme changed. `:where()` fixes the blog and loses to any real height selector. The cost is browsers that ignore `:where()`, a policy that drops inline `<style>`, and pages this plugin does not already rewrite. Those keep today's behavior.
 
