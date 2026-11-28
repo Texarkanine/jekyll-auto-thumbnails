@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.2.1...v2.2.2) (2026-11-28)
+
+
+### Bug Fixes
+
+* keep article image ratio when the column shrinks ([#74](https://github.com/Texarkanine/jekyll-auto-thumbnails/issues/74)) ([e30d5bc](https://github.com/Texarkanine/jekyll-auto-thumbnails/commit/e30d5bc24b65bd5d8ddc06c9b939cbbdda6eeca4))
+
 ## [2.2.1](https://github.com/Texarkanine/jekyll-auto-thumbnails/compare/v2.2.0...v2.2.1) (2026-11-23)
 
 
