@@ -5,6 +5,10 @@ require_relative "html_parser"
 module JekyllAutoThumbnails
   # Jekyll hook integration
   module Hooks
+    # Anonymous layer, declared first. Beats the height attribute.
+    # Loses to a later author layer and to unlayered author height.
+    ARTICLE_IMAGE_HEIGHT_RULE = "@layer{:where(article img){height:auto}}"
+
     # Format a duration for Jekyll log suffixes.
     #
     # @param seconds [Numeric] elapsed seconds
@@ -181,8 +185,30 @@ module JekyllAutoThumbnails
         end
       end
 
-      modified ? doc.to_html : html
+      return html unless modified
+
+      release_article_image_height(doc)
+      doc.to_html
     end
+
+    def self.release_article_image_height(doc)
+      return if article_image_height_rule?(doc)
+
+      head = doc.at_css("head")
+      return unless head
+
+      style = doc.create_element("style")
+      style.content = ARTICLE_IMAGE_HEIGHT_RULE
+      head.prepend_child(style)
+    end
+
+    def self.article_image_height_rule?(doc)
+      needle = ARTICLE_IMAGE_HEIGHT_RULE.gsub(/\s+/, "")
+      doc.css("style").any? do |node|
+        node.content.gsub(/\s+/, "").include?(needle)
+      end
+    end
+    private_class_method :release_article_image_height, :article_image_height_rule?
 
     # Check if a document outputs HTML (not CSS, JS, etc.)
     #
